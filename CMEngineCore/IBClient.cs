@@ -497,8 +497,6 @@ namespace CMEngineCore
             order.ModelCode = "";
             order.Tif = "DAY";
             return order;
-
-            return order;
         }
 
         private Contract CreateContract(string symbol, string exchange)
