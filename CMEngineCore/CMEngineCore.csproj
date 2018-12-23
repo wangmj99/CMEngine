@@ -33,6 +33,10 @@
     <Reference Include="CSharpAPI">
       <HintPath>..\Dependency\CSharpAPI.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependency\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,7 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="CSVManager.cs" />
+    <Compile Include="IBClient.cs" />
+    <Compile Include="Models\ExecutionMessage.cs" />
+    <Compile Include="Models\Model.cs" />
+    <Compile Include="Models\OrderMessage.cs" />
+    <Compile Include="Models\OrderStatusMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
