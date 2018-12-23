@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CMEngineCore.Models
 {
-    class ExecutionMessage
+    public class ExecutionMessage
     {
         public int ReqId { get; set; }
         public Contract Contract { get; set; }

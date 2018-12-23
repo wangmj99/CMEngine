@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CMEngineCore.Models
 {
-    class OrderStatusMessage : OrderMessage
+    public class OrderStatusMessage : OrderMessage
     {
         public string Status { get; private set; }
         public double Filled { get; private set; }

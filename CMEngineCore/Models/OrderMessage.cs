@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace CMEngineCore.Models
 {
-    abstract class OrderMessage
+    public abstract class OrderMessage
     {
         public int OrderId { get; set; }
     }
 
-    class OpenOrderMessage : OrderMessage
+    public class OpenOrderMessage : OrderMessage
     {
         public Contract Contract { get; set; }
         public Order Order { get; set; }
