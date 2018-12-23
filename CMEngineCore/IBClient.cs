@@ -12,7 +12,7 @@ using CMEngineCore.Models;
 
 namespace CMEngineCore
 {
-    class IBClient : EWrapper
+    public class IBClient : EWrapper
     {
         public EClientSocket ClientSocket { get; set; }
         public int NextOrderId { get; set; }
