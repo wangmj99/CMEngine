@@ -20,4 +20,10 @@ namespace CMEngineCore.Models
         public static string NYSE = "NYSE";
         public static string NASDAQ = "ISLAND";
     }
+
+    public class Constant
+    {
+        public static string Buy = "BUY";
+        public static string Sell = "SELL";
+    }
 }

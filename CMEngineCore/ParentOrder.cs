@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CMEngineCore.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace CMEngineCore
         public string Symbol { get; set; }
         public double OpenQty { get; set; }
         public double Qty { get; set; }
+
+        public List<TradeExecution> Executions = new List<TradeExecution>();
 
         public ParentOrder(string ID, string symbol, double openQty, TradeMap tradeMap)
         {
@@ -32,9 +35,22 @@ namespace CMEngineCore
 
         }
 
-        public void ProcessExecution()
+        public void ProcessExecution(ExecutionMessage msg)
         {
             //Add execution
+            TradeExecution tradeExec = new TradeExecution();
+            tradeExec.ParentOrderID = this.ID;
+            tradeExec.Execution = msg.Execution;
+            Executions.Add(tradeExec);
+            
+            if(msg.Execution.Side.ToUpper()==Constant.Buy)
+            {
+                Qty += msg.Execution.Shares;
+            }
+            else if (msg.Execution.Side.ToUpper() == Constant.Sell)
+            {
+                Qty -= msg.Execution.Shares;
+            }
 
             //Update TradeMap
         }
