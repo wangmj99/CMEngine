@@ -57,8 +57,10 @@
     <Compile Include="Models\Model.cs" />
     <Compile Include="Models\OrderMessage.cs" />
     <Compile Include="Models\OrderStatusMessage.cs" />
+    <Compile Include="ParentOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TradeManager.cs" />
+    <Compile Include="TradeMap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
