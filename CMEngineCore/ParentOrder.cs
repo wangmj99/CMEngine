@@ -42,7 +42,7 @@ namespace CMEngineCore
 
         }
 
-        public void ProcessExecution(ExecutionMessage msg)
+        public void HandleExecutionMsg(ExecutionMessage msg)
         {
             //Add execution
             TradeExecution tradeExec = new TradeExecution();
@@ -96,7 +96,7 @@ namespace CMEngineCore
             }
         }
 
-        public void UpdateChildOrder(OrderStatusMessage msg)
+        public void HandleOrderStatusMsg(OrderStatusMessage msg)
         {
             TradeOrder order = GetChildOrderByID(msg.OrderId);
 

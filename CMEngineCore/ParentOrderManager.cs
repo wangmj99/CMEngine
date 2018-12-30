@@ -41,7 +41,7 @@ namespace CMEngineCore
 
         public List<ParentOrder> GetAllParentOrders() { return parentOrderList; }
 
-        public ParentOrder GetParentOrderByID (int ID)
+        public ParentOrder GetParentOrderByParentID (int ID)
         {
             ParentOrder res = null;
 
@@ -56,6 +56,21 @@ namespace CMEngineCore
                     }
                 }
             }
+            return res;
+        }
+
+        public ParentOrder GetParentOrderByChildID(int childOrderID)
+        {
+            ParentOrder res = null;
+            lock (locker)
+            {
+                if (Child_Parent_Order_Map.ContainsKey(childOrderID))
+                {
+                    int pID = Child_Parent_Order_Map[childOrderID];
+                    res = GetParentOrderByParentID(pID);
+                }
+            }
+
             return res;
         }
 
@@ -103,7 +118,7 @@ namespace CMEngineCore
 
             lock (locker)
             {
-                ParentOrder pOrder = GetParentOrderByID(tradeOrder.ParentOrderID);
+                ParentOrder pOrder = GetParentOrderByParentID(tradeOrder.ParentOrderID);
                 pOrder.AddChildOrder(tradeOrder);
                 Parent_Child_Order_Map[tradeOrder.ParentOrderID].Add(tradeOrder.OrderID);
                 Child_Parent_Order_Map[tradeOrder.OrderID] = tradeOrder.ParentOrderID;

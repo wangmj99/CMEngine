@@ -91,19 +91,59 @@ namespace CMEngineCore
             }
         }
 
-        private void HandleOrderStatusMsg(OrderStatusMessage obj)
+        private void HandleOrderStatusMsg(OrderStatusMessage msg)
         {
-            throw new NotImplementedException();
+            Log.Info(string.Format("Receive Order Status Msg. OrderID: {0}, Status: {1}", msg.OrderId, msg.Status));
+
+            try
+            {
+                var parent = ParentOrderManager.Instance.GetParentOrderByChildID(msg.OrderId);
+                if (parent != null)
+                {
+                    parent.HandleOrderStatusMsg(msg);
+                }else
+                {
+                    Log.Error(string.Format("Cannot find associated Parent Order."));
+                }
+
+                //if(IsInitialized)
+                    //save state
+            }catch(Exception ex)
+            {
+                Log.Error("HandleOrderStatusMsg error: " + ex.Message);
+                Log.Error(ex.StackTrace);
+            }
         }
 
-        private void HandleExecutionMsg(ExecutionMessage obj)
+        private void HandleExecutionMsg(ExecutionMessage msg)
         {
-            throw new NotImplementedException();
+            Log.Info(string.Format("Receive Execution Msg. {0}", Util.PrintExecutionMsg(msg)));
+
+            try
+            {
+                var parent = ParentOrderManager.Instance.GetParentOrderByChildID(msg.Execution.OrderId);
+                if (parent != null)
+                {
+                    parent.HandleExecutionMsg(msg);
+                }
+                else
+                {
+                    Log.Error(string.Format("Cannot find associated Parent Order."));
+                }
+
+                //if(IsInitialized)
+                //save state
+            }
+            catch (Exception ex)
+            {
+                Log.Error("HandleExecutionMsg error: " + ex.Message);
+                Log.Error(ex.StackTrace);
+            }
         }
 
-        private void HandleOpenOrderMsg(OpenOrderMessage obj)
+        private void HandleOpenOrderMsg(OpenOrderMessage msg)
         {
-            throw new NotImplementedException();
+            Log.Info("Receive Open Order Msg. " + string.Format("Open OrderID {0}, ClientID {1} ", msg.Order.OrderId, msg.Order.ClientId));
         }
 
 

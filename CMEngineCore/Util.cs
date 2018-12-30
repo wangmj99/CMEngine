@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
+using CMEngineCore.Models;
+using IBApi;
 
 namespace CMEngineCore
 {
@@ -33,6 +35,13 @@ namespace CMEngineCore
                 JsonSerializer serializer = JsonSerializer.Create(settings);
                 return (T)serializer.Deserialize(file, typeof(T));
             }
+        }
+
+
+        public static string PrintExecutionMsg(ExecutionMessage msg)
+        {
+            Execution exe = msg.Execution;
+            return string.Format("executioID {0}, orderID {1}, side {2}, price {3}, qty {4}, reqeustID {5}", exe.ExecId, exe.OrderId, exe.Side, exe.Price, exe.Shares, msg.ReqId);
         }
     }
 }
