@@ -6,59 +6,105 @@ using System.Text;
 using System.Threading.Tasks;
 using IBApi;
 using Newtonsoft.Json;
+using CMEngineCore.Models;
+using System.Threading;
 
 namespace CMEngineCore
 {
     public class TradeManager
     {
-        public static string DataFile = "tradeManager.dat";
+        public static string DataFile = "TradeManager.dat";
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         [JsonIgnore]
         public IBClient IBClient { get; set; }
 
+        [JsonIgnore]
+        private EReaderMonitorSignal signal;
 
-        public List<ParentOrder> ParentOrders = new List<ParentOrder>();
+        [JsonIgnore]
+        private object trade_locker = new object();
 
-        public Dictionary<string, List<int>> Parent_Child_Order_Map = new Dictionary<string, List<int>>();
+        [JsonIgnore]
+        public bool IsInitialized { get; set; }
 
-        public ParentOrder CreateParentOrder(string symbol, double openQty, TradeMap tradeMap)
+        [JsonIgnore]
+        public static TradeManager Instance = new TradeManager();
+
+        private TradeManager() { }
+
+        public void Init()
         {
-            string id = Guid.NewGuid().ToString();
-            ParentOrder parentOrder = new ParentOrder(id, symbol, openQty, tradeMap);
-            ParentOrders.Add(parentOrder);
-            Parent_Child_Order_Map[id] = new List<int>();
+            if (IBClient != null)
+            {
+                Disconnect();
+            }
 
-            return parentOrder;
+            signal = new EReaderMonitorSignal();
+            IBClient = new IBClient(signal);
+
+            IBClient.OpenOrder += HandleOpenOrderMsg;
+            IBClient.ExecutionDetails += HandleExecutionMsg;
+            IBClient.OrderStatus += HandleOrderStatusMsg;
+
+            IsInitialized = true;
         }
 
-        public bool RemoveParentOrder(ParentOrder parentOrder)
-        {
-            if (Parent_Child_Order_Map.ContainsKey(parentOrder.ID))
-                Parent_Child_Order_Map.Remove(parentOrder.ID);
+        public bool IsConnected { get { return IBClient != null && IBClient.IsConnected; } }
 
-            int temp = -1;
-            for( int idx =0; idx< ParentOrders.Count; idx++)
+        public void Connect (string ip, int port, int clientID)
+        {
+            Log.Info("Connecting IB");
+            try
             {
-                var p = ParentOrders[idx];
-                if(p.ID == parentOrder.ID)
+                IBClient.ClientSocket.eConnect(ip, port, clientID);
+
+                var reader = new EReader(IBClient.ClientSocket, signal);
+                reader.Start();
+
+                new Thread(() => { while (IBClient.ClientSocket.IsConnected()) { signal.waitForSignal(); reader.processMsgs(); } }) { IsBackground = true }.Start();
+            }
+            catch(Exception ex)
+            {
+                Log.Error("Error on connect IB, message: " + ex.Message);
+                Log.Error("Error on connect IB, StackTrace: " + ex.StackTrace);
+            }
+        }
+
+        private void Disconnect()
+        {
+            if (IBClient.IsConnected)
+            {
+                try
                 {
-                    temp = idx;
-                    break;
+                    IBClient.ClientSocket.eDisconnect();
+                    Log.Info("Disconnecting IB");
+                }catch(Exception ex)
+                {
+                    Log.Error("Disconnect IB error. Message: " + ex.Message);
+                    Log.Error(ex.StackTrace);
                 }
             }
-
-            if(temp != -1)
+            else
             {
-                ParentOrders.RemoveAt(temp);
-                
-                return true;
-            }else
-            {
-                return false;
+                Log.Info("IB is already disconnected");
             }
         }
 
+        private void HandleOrderStatusMsg(OrderStatusMessage obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void HandleExecutionMsg(ExecutionMessage obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void HandleOpenOrderMsg(OpenOrderMessage obj)
+        {
+            throw new NotImplementedException();
+        }
 
 
     }

@@ -10,6 +10,6 @@ namespace CMEngineCore.Models
     public class TradeExecution
     {
         public Execution Execution { get; set; }
-        public string ParentOrderID { get; set; }
+        public int ParentOrderID { get; set; }
     }
 }
