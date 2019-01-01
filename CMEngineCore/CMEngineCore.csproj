@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="CSVManager.cs" />
     <Compile Include="IBClient.cs" />
+    <Compile Include="MarketDataManager.cs" />
     <Compile Include="Models\ExecutionMessage.cs" />
     <Compile Include="Models\Model.cs" />
     <Compile Include="Models\OrderMessage.cs" />
