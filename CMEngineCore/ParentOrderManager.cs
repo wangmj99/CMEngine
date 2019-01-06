@@ -27,7 +27,7 @@ namespace CMEngineCore
         public Dictionary<int, int> Child_Parent_Order_Map = new Dictionary<int, int>();
 
 
-        public ParentOrder CreateParentOrder(string symbol, double openQty, TradeMap tradeMap)
+        public ParentOrder CreateParentOrder(string symbol, double openQty, Algo tradeMap)
         {
             int id = -1;
             do

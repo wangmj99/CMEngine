@@ -171,5 +171,24 @@ namespace CMEngineCore
             return orderID;
         }
 
+        public void CancelOrders(List<TradeOrder> orders)
+        {
+            lock (trade_locker)
+            {
+                foreach(var order in orders)
+                {
+                    try
+                    {
+                        Log.Info(string.Format("Cancel orderID: {0}", order.OrderID));
+                        IBClient.ClientSocket.cancelOrder(order.OrderID);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("Failed to cancel order. Error: " + ex.Message);
+                    }
+                }
+            }
+        }
+
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CMEngineCore
@@ -18,23 +19,29 @@ namespace CMEngineCore
         public double? AvailableCash { get; set; }
         public double Qty { get; set; }
 
+        public bool IsActive { get; set; }
+
+        private List<TradeOrder> lastSendOrders = new List<TradeOrder>();
+
         private object locker = new object();
 
         public List<TradeExecution> Executions = new List<TradeExecution>();
 
         public List<TradeOrder> TradeOrders = new List<TradeOrder>();
 
-        public ParentOrder(int ID, string symbol, double openQty, TradeMap tradeMap, double? cash = null )
+        public ParentOrder(int ID, string symbol, double openQty, Algo tradeMap, double? cash = null )
         {
             this.ID = ID;
             this.Symbol = symbol;
             this.OpenQty = openQty;
-            this.TradeMap = tradeMap;
+            this.Algo = tradeMap;
             this.AvailableCash = cash;
             Qty = openQty;
+
+            this.IsActive = true;
         }
 
-        public TradeMap TradeMap { get; set; }
+        public Algo Algo { get; set; }
 
         public void Evaluate()
         {
@@ -119,6 +126,78 @@ namespace CMEngineCore
         public void UpdateAvailableCash()
         {
 
+        }
+
+
+        public List<TradeOrder> GetOpenOrders()
+        {
+            List<TradeOrder> res = new List<TradeOrder>();
+
+            lock (locker)
+            {
+                foreach(var order in TradeOrders)
+                {
+                    if(order.Status == TradeOrderStatus.Submitted || order.Status == TradeOrderStatus.PendingSubmit)
+                    {
+                        res.Add(order);
+                    }
+                }
+            }
+
+            return res;
+        }
+
+        public void Eval()
+        {
+            lock (locker)
+            {
+                /*
+                 1. On waking up, check if last open orders has been filled on canclled.
+                 2. if none of order filled or cancelled then sleep again
+                 3. else cancel all op
+                 
+                 * */
+
+                bool changed = false;
+                if (lastSendOrders.Count > 0)
+                {
+                    foreach (var order in lastSendOrders)
+                    {
+                        if (order.Status == TradeOrderStatus.Filled || order.Status == TradeOrderStatus.Cancelled)
+                        {
+                            changed = true;
+                            Log.Info("Order status changed, start cancel open orders!");
+                            break;
+                        }
+                    }
+                }
+
+                if (changed)
+                {
+                    try
+                    {
+                        //cancel all open orders, synchronized call, wait for cancel event back
+                        var openOrders = GetOpenOrders();
+                        if (openOrders.Count > 0)
+                        {
+                            TradeManager.Instance.CancelOrders(openOrders);
+                            //wait for cancle back
+                            Thread.Sleep(2000);
+                        }
+                        lastSendOrders.Clear();
+
+                        //place buy and sell order
+                        Algo.Eval(this);
+                    
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message);
+                        Log.Error(ex.StackTrace);
+                    }
+                }
+
+            }
         }
         
     }
