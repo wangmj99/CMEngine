@@ -9,43 +9,50 @@ namespace CMEngineCore
 {
     public interface ITradeRule
     {
-        List<int> CreateOrder(ParentOrder parentOrder);
+        List<TradeOrder> CreateOrder(ParentOrder parentOrder);
     }
 
     public class RollingAlgoBuyRule : ITradeRule
     {
-        public List<int> CreateOrder(ParentOrder parentOrder)
+        public List<TradeOrder> CreateOrder(ParentOrder parentOrder)
         {
-            List<int> res = new List<int>();
+            List<TradeOrder> res = new List<TradeOrder>();
             RollingAlgo algo = (RollingAlgo)parentOrder.Algo;
 
             TradeMapEntry entry = null;
+            int orderLevel = -99;
 
             if (algo.CurrentLevel == -1)
             {
-                entry = algo.TradeMap[0];
+                //entry = algo.TradeMap[0];
+                orderLevel = 0;
             }
             else
             {
                 TradeMapEntry currEntry = algo.TradeMap[algo.CurrentLevel];
                 if (currEntry.PartialFilled && !currEntry.WasFilledSellOnPartial)
                 {
-                    //On partial filled, if bugy, then fill current level
-                    entry = currEntry;
+                    //On partial filled, if buy, then buy current level
+                    //entry = currEntry;
+                    orderLevel = algo.CurrentLevel;
                 }
                 else if (algo.CurrentLevel < algo.ScaleLevel - 1)
                 {
                     //buy next level
-                    entry = algo.TradeMap[algo.CurrentLevel + 1];
+                    //entry = algo.TradeMap[algo.CurrentLevel + 1];
+                    orderLevel = algo.CurrentLevel + 1;
                 }
             }
+
+            entry = algo.TradeMap.ContainsKey(orderLevel) ? algo.TradeMap[orderLevel] : null;
 
             if(entry != null)
             {
                 double price = Util.AdjustOrderPrice(TradeType.Buy, parentOrder.Symbol, entry.TargetBuyPrice);
                 double qty = entry.TargetQty - entry.CurrentQty;
-                int orderID = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Buy, parentOrder.Symbol, price, qty);
-                res.Add(orderID);
+                var order = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Buy, parentOrder.Symbol, price, qty);
+                order.Notes = orderLevel.ToString();
+                res.Add(order);
             }
 
             return res;
@@ -54,9 +61,9 @@ namespace CMEngineCore
 
     public class RollingAlgoSellRule : ITradeRule
     {
-        public List<int> CreateOrder(ParentOrder parentOrder)
+        public List<TradeOrder> CreateOrder(ParentOrder parentOrder)
         {
-            List<int> res = new List<int>();
+            List<TradeOrder> res = new List<TradeOrder>();
 
             RollingAlgo algo = (RollingAlgo)parentOrder.Algo;
 
@@ -75,8 +82,9 @@ namespace CMEngineCore
             {
                 double price = Util.AdjustOrderPrice(TradeType.Sell, parentOrder.Symbol, entry.TargetSellPrice);
                 double qty = entry.CurrentQty;
-                int orderID = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Sell, parentOrder.Symbol, price, qty);
-                res.Add(orderID);
+                var order = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Sell, parentOrder.Symbol, price, qty);
+                order.Notes = algo.CurrentLevel.ToString();
+                res.Add(order);
             }
 
             return res;
@@ -85,9 +93,9 @@ namespace CMEngineCore
 
     public class RollingAlgoFirstLevelBuyRule : ITradeRule
     {
-        public List<int> CreateOrder(ParentOrder parentOrder)
+        public List<TradeOrder> CreateOrder(ParentOrder parentOrder)
         {
-            List<int> res = new List<int>();
+            List<TradeOrder> res = new List<TradeOrder>();
             RollingAlgo algo = (RollingAlgo)parentOrder.Algo;
             if (algo.BuyBackLvlZero)
             {
@@ -97,8 +105,9 @@ namespace CMEngineCore
                 {
                     double price = Util.AdjustOrderPrice(TradeType.Buy, parentOrder.Symbol, entry.TargetBuyPrice);
                     double qty = entry.TargetQty - entry.CurrentQty;
-                    int orderID = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Buy, parentOrder.Symbol, price, qty);
-                    res.Add(orderID);
+                    var order = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Buy, parentOrder.Symbol, price, qty);
+                    order.Notes = algo.CurrentLevel.ToString();
+                    res.Add(order);
                 }
             }
 
@@ -118,9 +127,9 @@ namespace CMEngineCore
             this.priceUpPct = priceUpPct;
         }
 
-        public List<int> CreateOrder(ParentOrder parentOrder)
+        public List<TradeOrder> CreateOrder(ParentOrder parentOrder)
         {
-            List<int> res = new List<int>();
+            List<TradeOrder> res = new List<TradeOrder>();
 
             RollingAlgo algo = (RollingAlgo)parentOrder.Algo;
 
@@ -134,8 +143,9 @@ namespace CMEngineCore
             {
                 double price = Util.AdjustOrderPrice(TradeType.Sell, parentOrder.Symbol, entry.LastBuyPrice);
                 double qty = entry.CurrentQty;
-                int orderID = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Sell, parentOrder.Symbol, price, qty);
-                res.Add(orderID);
+                var order = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Sell, parentOrder.Symbol, price, qty);
+                order.Notes = algo.CurrentLevel.ToString();
+                res.Add(order);
             } 
             else
             {
@@ -144,8 +154,9 @@ namespace CMEngineCore
                 {
                     double qty = SellPct * entry.TargetQty - (entry.TargetQty -entry.CurrentQty);
                     double price = Util.AdjustOrderPrice(TradeType.Sell, parentOrder.Symbol, entry.LastBuyPrice * (1 + priceUpPct));
-                    int orderID = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Sell, parentOrder.Symbol, price, qty);
-                    res.Add(orderID);
+                    var order = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Sell, parentOrder.Symbol, price, qty);
+                    order.Notes = algo.CurrentLevel.ToString();
+                    res.Add(order);
                 }
             }
 

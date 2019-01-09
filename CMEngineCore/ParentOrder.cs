@@ -15,7 +15,7 @@ namespace CMEngineCore
 
         public int ID { get; set; }
         public string Symbol { get; set; }
-        public double OpenQty { get; set; }
+        public double InitialQty { get; set; }
         public double? AvailableCash { get; set; }
         public double Qty { get; set; }
 
@@ -33,7 +33,7 @@ namespace CMEngineCore
         {
             this.ID = ID;
             this.Symbol = symbol;
-            this.OpenQty = openQty;
+            this.InitialQty = openQty;
             this.Algo = tradeMap;
             this.AvailableCash = cash;
             Qty = openQty;
@@ -46,6 +46,7 @@ namespace CMEngineCore
         public void Evaluate()
         {
             //on time elapse event, evalute and place order
+            Algo.Eval(this);
 
         }
 
@@ -58,10 +59,13 @@ namespace CMEngineCore
 
             lock (locker)
             {
+                Algo.HandleExecutionMsg(this, tradeExec);
+
                 Executions.Add(tradeExec);
 
                 if (msg.Execution.Side.ToUpper() == Constant.Buy)
                 {
+                    
                     Qty += msg.Execution.Shares;
 
                 }
@@ -74,6 +78,8 @@ namespace CMEngineCore
 
             //Update TradeMap
         }
+
+
 
         public TradeOrder GetChildOrderByID(int ID)
         {

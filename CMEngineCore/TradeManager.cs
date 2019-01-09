@@ -146,29 +146,29 @@ namespace CMEngineCore
             Log.Info("Receive Open Order Msg. " + string.Format("Open OrderID {0}, ClientID {1} ", msg.Order.OrderId, msg.Order.ClientId));
         }
 
-        public int PlaceOrder(int parentOrderID, TradeType tradeType, string symbol, double price, double qty, string exchange = null)
+        public TradeOrder PlaceOrder(int parentOrderID, TradeType tradeType, string symbol, double price, double qty, string exchange = null)
         {
             if (tradeType != TradeType.Buy || tradeType != TradeType.Sell) throw new Exception("Unsupported TradeType: " + tradeType);
 
-            int orderID = -1;
-            lock (trade_locker)
+            TradeOrder res = null;
+                lock (trade_locker)
             {
-                orderID = IBClient.PlaceOrder(symbol, price, qty, tradeType, exchange);
-                TradeOrder temp = new TradeOrder();
-                temp.ParentOrderID = parentOrderID;
-                temp.OrderID = orderID;
-                temp.Status = TradeOrderStatus.PendingSubmit;
+                int orderID = IBClient.PlaceOrder(symbol, price, qty, tradeType, exchange);
+                res = new TradeOrder();
+                res.ParentOrderID = parentOrderID;
+                res.OrderID = orderID;
+                res.Status = TradeOrderStatus.PendingSubmit;
 
-                ParentOrderManager.Instance.AddChildOrder(temp);
+                ParentOrderManager.Instance.AddChildOrder(res);
 
                 //if(IsInitialized)
                 //save state
             }
 
             Log.Info(string.Format("Place order ID {0}, TradeType {1}, symbol {2}, price {3}, qty {4}, exchange {5}, parentOrderID {6}", 
-                orderID, tradeType, symbol, price, qty, exchange, parentOrderID));
+                res.OrderID, tradeType, symbol, price, qty, exchange, parentOrderID));
 
-            return orderID;
+            return res;
         }
 
         public void CancelOrders(List<TradeOrder> orders)
