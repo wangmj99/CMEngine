@@ -108,12 +108,29 @@ namespace CMEngineCore
 
         private void GenerateTradeMapNextLevel(TradeExecution execution)
         {
-            throw new NotImplementedException();
+            if (CurrentLevel < this.ScaleLevel - 1)
+            {
+                TradeMapEntry entry = new TradeMapEntry();
+                entry.Level = CurrentLevel + 1;
+                double price = (IsPctScaleFactor) ? execution.Execution.Price * (1 - ScaleFactor) :
+                    execution.Execution.Price - ScaleFactor;
+                entry.TargetBuyPrice = price <= 0 ? 0 : Util.NormalizePrice(price);
+
+                if (this.IsShare)
+                    entry.TargetQty = this.ShareOrDollarAmt;
+                else
+                    entry.TargetQty = Math.Floor(this.ShareOrDollarAmt / entry.TargetBuyPrice);
+
+                TradeMap[entry.Level] = entry;
+                
+            }
         }
 
         private void UpdateTradeMapCurrentLevel(TradeExecution execution)
         {
-            throw new NotImplementedException();
+            TradeMapEntry entry = new TradeMapEntry();
+            entry.LastBuyPrice = execution.Execution.Price;
+            entry.TargetSellPrice = (CurrentLevel == 0) ? int.MaxValue : TradeMap[CurrentLevel - 1].LastBuyPrice;
         }
 
         private void HandleSellExecution(ParentOrder parentOrder, TradeExecution execution)
