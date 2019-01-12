@@ -47,6 +47,7 @@ namespace CMEngineCore
 
         private void OnTimeElapsed(object sender, ElapsedEventArgs e)
         {
+            Log.Info("Start ParentOrderManager OnTimeElapsed");
             if (timerInProcess) return;
 
             if (!TradeManager.Instance.IsConnected)
@@ -80,6 +81,8 @@ namespace CMEngineCore
                 }
                 timerInProcess = false;
             }
+
+            Log.Info("Stop ParentOrderManager OnTimeElapsed");
         }
 
         public ParentOrder CreateParentOrder(string symbol, double openQty, Algo algo)
