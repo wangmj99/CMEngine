@@ -1,5 +1,6 @@
 ﻿using CMEngineCore.Models;
 using log4net;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,27 +22,33 @@ namespace CMEngineCore
 
         public bool IsActive { get; set; }
 
+        public Algo Algo { get; set; }
+
         private List<TradeOrder> lastSendOrders = new List<TradeOrder>();
 
+        [JsonIgnore]
         private object locker = new object();
 
         public List<TradeExecution> Executions = new List<TradeExecution>();
 
-        public List<TradeOrder> TradeOrders = new List<TradeOrder>();
+        public List<TradeOrder> TradeOrders { get; set; }
 
-        public ParentOrder(int ID, string symbol, double openQty, Algo tradeMap, double? cash = null )
+        public ParentOrder() { }
+
+        public ParentOrder(int ID, string symbol, double openQty, Algo algo, double? cash = null )
         {
             this.ID = ID;
             this.Symbol = symbol;
             this.InitialQty = openQty;
-            this.Algo = tradeMap;
+            this.Algo = algo;
             this.AvailableCash = cash;
             Qty = openQty;
 
             this.IsActive = true;
+            TradeOrders = new List<TradeOrder>();
         }
 
-        public Algo Algo { get; set; }
+
 
         public void Evaluate()
         {

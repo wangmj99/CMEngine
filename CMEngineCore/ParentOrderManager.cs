@@ -1,10 +1,13 @@
 ﻿using CMEngineCore.Models;
+using log4net;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace CMEngineCore
 {
@@ -12,13 +15,21 @@ namespace CMEngineCore
     {
         public static string DataFile = "ParentOrderManager.dat";
 
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         [JsonIgnore]
         public static ParentOrderManager Instance = new ParentOrderManager();
 
         [JsonIgnore]
         private object locker = new object();
 
-        public List<ParentOrder> parentOrderList = new List<ParentOrder>();
+        [JsonIgnore]
+        private System.Timers.Timer m_timer;
+
+        [JsonIgnore]
+        private volatile bool timerInProcess = false;
+
+        public List<ParentOrder> ParentOrderList { get; set; }
 
         //parentOrderID => List of Child Order IDs
         public Dictionary<int, List<int>> Parent_Child_Order_Map = new Dictionary<int, List<int>>();
@@ -26,8 +37,52 @@ namespace CMEngineCore
         //Child Order ID => Parent Order ID
         public Dictionary<int, int> Child_Parent_Order_Map = new Dictionary<int, int>();
 
+        private ParentOrderManager()
+        {
+            ParentOrderList = new List<ParentOrder>();
+            m_timer = new System.Timers.Timer();
+            m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeElapsed);
+            m_timer.Interval = 30 * 1000;
+        }
 
-        public ParentOrder CreateParentOrder(string symbol, double openQty, Algo tradeMap)
+        private void OnTimeElapsed(object sender, ElapsedEventArgs e)
+        {
+            if (timerInProcess) return;
+
+            if (!TradeManager.Instance.IsConnected)
+            {
+                Log.Info("IB is disconnected, skip eval orders");
+                return;
+            }
+
+            lock (locker)
+            {
+                timerInProcess = true;
+                foreach (var p in ParentOrderList)
+                {
+                    if (p.IsActive)
+                    {
+                        try
+                        {
+                            Log.Info(string.Format("Start to evaluate parentOrder, ID: {0}, symbol {1}", p.ID, p.Symbol));
+                            p.Eval();
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex.Message);
+                            Log.Error(ex.StackTrace);
+                        }
+                    }
+                    else
+                    {
+                        Log.Info(string.Format("Skip evaluate inactive parentOrder , ID: {0}, symbol {1}", p.ID, p.Symbol));
+                    }
+                }
+                timerInProcess = false;
+            }
+        }
+
+        public ParentOrder CreateParentOrder(string symbol, double openQty, Algo algo)
         {
             int id = -1;
             do
@@ -35,11 +90,11 @@ namespace CMEngineCore
                 id = new Random().Next(1000 * 1000);
             } while (Parent_Child_Order_Map.ContainsKey(id));
 
-            ParentOrder parentOrder = new ParentOrder(id, symbol, openQty, tradeMap);
+            ParentOrder parentOrder = new ParentOrder(id, symbol, openQty, algo);
             return parentOrder;
         }
 
-        public List<ParentOrder> GetAllParentOrders() { return parentOrderList; }
+        public List<ParentOrder> GetAllParentOrders() { return ParentOrderList; }
 
         public ParentOrder GetParentOrderByParentID (int ID)
         {
@@ -47,7 +102,7 @@ namespace CMEngineCore
 
             lock (locker)
             {
-                foreach (ParentOrder p in parentOrderList)
+                foreach (ParentOrder p in ParentOrderList)
                 {
                     if (p.ID == ID)
                     {
@@ -78,10 +133,27 @@ namespace CMEngineCore
         {
             lock (locker)
             {
-                parentOrderList.Add(parentOrder);
+                ParentOrderList.Add(parentOrder);
 
                 if (!Parent_Child_Order_Map.ContainsKey(parentOrder.ID))
                     Parent_Child_Order_Map[parentOrder.ID] = new List<int>();
+            }
+        }
+
+        public void SetAllOrdertoCancelStatus()
+        {
+            lock (locker)
+            {
+                foreach(var p in ParentOrderList)
+                {
+                    foreach(var o in p.TradeOrders)
+                    {
+                        if(o.Status != TradeOrderStatus.Filled && o.Status != TradeOrderStatus.Cancelled)
+                        {
+                            o.Status = TradeOrderStatus.Cancelled;
+                        }
+                    }
+                }
             }
         }
 
@@ -95,15 +167,15 @@ namespace CMEngineCore
                     Parent_Child_Order_Map.Remove(ID);
 
                 
-                for (int i = 0; i < parentOrderList.Count; i++)
+                for (int i = 0; i < ParentOrderList.Count; i++)
                 {
-                    if (parentOrderList[i].ID == ID)
+                    if (ParentOrderList[i].ID == ID)
                     {
                         idx = i;
                         break;
                     }
                 }
-                if (idx != -1) parentOrderList.RemoveAt(idx);
+                if (idx != -1) ParentOrderList.RemoveAt(idx);
             }
 
             return idx != -1;
@@ -132,12 +204,39 @@ namespace CMEngineCore
 
         public void StartParentOrder(int parentOrderID)
         {
-
+            var p = GetParentOrderByParentID(parentOrderID);
+            p.IsActive = true;
         }
 
         public void StopParentOrder(int parentOrderID)
         {
+            var p = GetParentOrderByParentID(parentOrderID);
+            p.IsActive = false;
+        }
 
+        public static ParentOrderManager PopulateStates(string filename)
+        {
+            ParentOrderManager res = ParentOrderManager.Instance;
+            if (File.Exists(filename))
+                res = Util.DeSerializeObject<ParentOrderManager>(filename);
+            return res;
+        }
+
+        public void StartAllActiveParentOrder()
+        {
+            if (m_timer == null)
+            {
+                m_timer = new System.Timers.Timer();
+                m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeElapsed);
+                m_timer.Interval = 30 * 1000;
+            }
+            m_timer.Start();
+        }
+
+        public void StopAllActiveParentOrder()
+        {
+            if(m_timer!=null)
+                m_timer.Stop();
         }
 
     }

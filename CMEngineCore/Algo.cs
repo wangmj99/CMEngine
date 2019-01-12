@@ -14,6 +14,7 @@ namespace CMEngineCore
 
     public class RollingAlgo : Algo
     {
+        [JsonIgnore]
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public string Name = "RollingAlgo";
@@ -30,7 +31,6 @@ namespace CMEngineCore
         public bool BuyBackLvlZero { get; set; }
 
         public List<ITradeRule> TradeRules { get; set; }
-
 
         public RollingAlgo(double beginPrice, double scaleLevel, double scaleFactor, bool isPct, double shareAmt, bool isShare, bool buyBackLvlZero)
         {

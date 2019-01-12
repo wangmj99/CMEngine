@@ -59,7 +59,14 @@ namespace CMEngineCore
         public static void Resume()
         {
             string saveDir = ConfigurationManager.AppSettings["SaveFolder"];
-            var tradeMgr = TradeManager.
+            //var tradeMgr = TradeManager.PopulateStates(string.Format("{0}\\{1}", saveDir, TradeManager.DataFile));
+            var parentOrderMgr = ParentOrderManager.PopulateStates(string.Format("{0}\\{1}", saveDir, ParentOrderManager.DataFile));
+
+            ParentOrderManager.Instance.ParentOrderList = parentOrderMgr.ParentOrderList;
+            ParentOrderManager.Instance.Parent_Child_Order_Map = parentOrderMgr.Parent_Child_Order_Map;
+            ParentOrderManager.Instance.Child_Parent_Order_Map = parentOrderMgr.Child_Parent_Order_Map;
+
+            TradeManager.Instance.IsInitialized = true;
 
         }
 

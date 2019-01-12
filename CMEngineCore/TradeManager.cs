@@ -8,6 +8,7 @@ using IBApi;
 using Newtonsoft.Json;
 using CMEngineCore.Models;
 using System.Threading;
+using System.IO;
 
 namespace CMEngineCore
 {
@@ -71,7 +72,7 @@ namespace CMEngineCore
             }
         }
 
-        private void Disconnect()
+        public void Disconnect()
         {
             if (IBClient.IsConnected)
             {
@@ -196,6 +197,28 @@ namespace CMEngineCore
         }
 
 
+        public static TradeManager PopulateStates(string filename)
+        {
+            TradeManager res = TradeManager.Instance;
+            if (File.Exists(filename))
+                res = Util.DeSerializeObject<TradeManager>(filename);
+            return res;
+        }
 
+        public void RequestGlobalCancle()
+        {
+            lock (trade_locker)
+            {
+                try
+                {
+                    Log.Info("Request Global cancel!");
+                    IBClient.ClientSocket.reqGlobalCancel();
+                }catch(Exception ex)
+                {
+                    Log.Error("Failed to request global cancel. Error: " + ex.Message);
+                    Log.Error(ex.StackTrace);
+                }
+            }
+        }
     }
 }

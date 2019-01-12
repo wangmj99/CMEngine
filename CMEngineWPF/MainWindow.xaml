@@ -5,8 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CMEngineWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="CMEngine" Height="578.765" Width="1024.698">
     <Grid>
-        
+        <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="520" VerticalAlignment="Top" Width="1010">
+            <TabItem Header="RollingAlgo">
+                <Grid Background="#FFE5E5E5" Margin="0,0,-9,-9">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="136*"/>
+                        <ColumnDefinition Width="877*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="label" Content="Symbol" HorizontalAlignment="Left" Height="30" Margin="10,29,0,0" VerticalAlignment="Top" Width="102"/>
+                    <Label x:Name="label_Copy" Content="Price" HorizontalAlignment="Left" Height="30" Margin="10,64,0,0" VerticalAlignment="Top" Width="102"/>
+                    <Label x:Name="label_Copy1" Content="Scale Factor" HorizontalAlignment="Left" Height="30" Margin="10,99,0,0" VerticalAlignment="Top" Width="102"/>
+                    <Label x:Name="label_Copy2" Content="Is Percentage" HorizontalAlignment="Left" Height="30" Margin="139,99,0,0" VerticalAlignment="Top" Width="116" Grid.Column="1"/>
+                    <Label x:Name="label_Copy3" Content="Share/Amount" HorizontalAlignment="Left" Height="30" Margin="10,169,0,0" VerticalAlignment="Top" Width="102"/>
+                    <Label x:Name="label_Copy4" Content="Is Share" HorizontalAlignment="Left" Height="30" Margin="141,167,0,0" VerticalAlignment="Top" Width="102" Grid.Column="1"/>
+                    <Label x:Name="label_Copy5" Content="Pct gain sell level 0" HorizontalAlignment="Left" Height="30" Margin="10,212,0,0" VerticalAlignment="Top" Width="116"/>
+                    <Label x:Name="label_Copy6" Content="% level 0 qty to sell" HorizontalAlignment="Left" Height="30" Margin="10,247,0,0" VerticalAlignment="Top" Width="116"/>
+                    <Label x:Name="label_Copy7" Content="Buy back level 0" HorizontalAlignment="Left" Height="30" Margin="10,282,0,0" VerticalAlignment="Top" Width="102"/>
+                    <TextBox x:Name="txt_symbol" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,30,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="84"/>
+                    <TextBox x:Name="txt_price" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,64,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="84"/>
+                    <TextBox x:Name="txt_scaleFactor" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,102,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="84"/>
+                    <TextBox x:Name="txt_pricegain" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,214,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="84"/>
+                    <TextBox x:Name="txt_pctsell" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,250,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="84"/>
+                    <CheckBox x:Name="chk_scaleFactor" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="119,106,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="txt_shareAmt" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,172,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="84"/>
+                    <CheckBox x:Name="chk_isShare" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="119,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.493,2.05"/>
+                    <CheckBox x:Name="chk_buyback" Content="" Grid.Column="1" HorizontalAlignment="Right" Margin="0,288,857,0" VerticalAlignment="Top" RenderTransformOrigin="0.493,2.05"/>
+                    <Button x:Name="btn_conn" Content="Connect IB" Grid.Column="1" HorizontalAlignment="Left" Margin="632,68,0,0" VerticalAlignment="Top" Width="89" Height="26" Click="btn_conn_Click"/>
+                    <Button x:Name="btn_disconn" Content="DisConnect" Grid.Column="1" HorizontalAlignment="Left" Margin="745,68,0,0" VerticalAlignment="Top" Width="89" Height="26" Click="btn_disconn_Click"/>
+                    <Button x:Name="btn_new" Content="Submit" Grid.Column="1" HorizontalAlignment="Left" Margin="632,172,0,0" VerticalAlignment="Top" Width="89" Height="27" Click="btn_submit_Click"/>
+                    <Button x:Name="btn_resume" Content="Resume" Grid.Column="1" HorizontalAlignment="Left" Margin="745,172,0,0" VerticalAlignment="Top" Width="89" Height="27" Click="btn_resume_Click"/>
+                    <Label x:Name="label_Copy8" Content="Max Scale Level" HorizontalAlignment="Left" Height="30" Margin="10,134,0,0" VerticalAlignment="Top" Width="102"/>
+                    <TextBox x:Name="txt_scalelvl" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,138,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="84"/>
+                    <Border BorderBrush="LightGray" BorderThickness="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="35" Margin="10,94,0,0" VerticalAlignment="Top" Width="346"/>
+                    <Border BorderBrush="LightGray" BorderThickness="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="38" Margin="10,164,0,0" VerticalAlignment="Top" Width="346"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="OrderManagement">
+                <Grid Background="#FFE5E5E5" Margin="0,0,0,-356"/>
+            </TabItem>
+            <TabItem Header="WatchList">
+                <Grid Background="#FFE5E5E5" Margin="0,0,0,-356"/>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </Window>
