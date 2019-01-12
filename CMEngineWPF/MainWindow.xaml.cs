@@ -2,6 +2,7 @@
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -36,8 +37,10 @@ namespace CMEngineWPF
             {
                 try
                 {
+                    string ip = ConfigurationManager.AppSettings["IBIPAddress"];
+                    int port = int.Parse(ConfigurationManager.AppSettings["IBPort"]);
                     TradeManager.Instance.Init();
-                    TradeManager.Instance.Connect("127.0.0.1", 7497, 2);
+                    TradeManager.Instance.Connect(ip, port, 1);
                 }
                 catch(Exception ex)
                 {
