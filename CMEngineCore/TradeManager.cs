@@ -190,5 +190,12 @@ namespace CMEngineCore
             }
         }
 
+        public void Save(string filename)
+        {
+            Util.SerializeObject<TradeManager>(Instance, filename);
+        }
+
+
+
     }
 }

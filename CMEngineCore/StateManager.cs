@@ -29,5 +29,39 @@ namespace CMEngineCore
             }
         }
 
+        public static void Save()
+        {
+            string saveDir = ConfigurationManager.AppSettings["SaveFolder"];
+            DirectoryInfo dir = new DirectoryInfo(saveDir);
+
+            if (!dir.Exists) Directory.CreateDirectory(saveDir);
+
+            try
+            {
+
+                if (dir.Exists)
+                {
+                    foreach (FileInfo file in dir.GetFiles())
+                        file.Delete();
+                }
+
+                TradeManager.Instance.Save(string.Format("{0}\\{1}", saveDir, TradeManager.DataFile));
+                ParentOrderManager.Instance.Save(string.Format("{0}\\{1}", saveDir, ParentOrderManager.DataFile));
+                Log.Info("Status saved");
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Fialed to save the state. Error: " + ex.Message);
+                Log.Error(ex.StackTrace);
+            }
+        }
+
+        public static void Resume()
+        {
+            string saveDir = ConfigurationManager.AppSettings["SaveFolder"];
+            var tradeMgr = TradeManager.
+
+        }
+
     }
 }

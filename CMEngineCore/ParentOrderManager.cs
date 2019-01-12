@@ -125,9 +125,9 @@ namespace CMEngineCore
             }
         }
 
-        public void Save()
+        public void Save(string filename)
         {
-            Util.SerializeObject<ParentOrderManager>(Instance, DataFile);
+            Util.SerializeObject<ParentOrderManager>(Instance, filename);
         }
 
         public void StartParentOrder(int parentOrderID)
