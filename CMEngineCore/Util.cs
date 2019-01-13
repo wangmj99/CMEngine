@@ -63,7 +63,7 @@ namespace CMEngineCore
 
         public static double AdjustOrderPrice(TradeType tradeType, string symbol, double price)
         {
-            double res = -1;
+            double res = price;
 
             double lastPrice = MarketDataManager.Instance.GetLastPrice(symbol);
             if(lastPrice > 0)
