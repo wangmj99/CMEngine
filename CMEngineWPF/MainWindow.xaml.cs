@@ -86,7 +86,7 @@ namespace CMEngineWPF
             Thread.Sleep(3000);
             ParentOrderManager.Instance.SetAllOrdertoCancelStatus();
 
-            ParentOrderManager.Instance.StartAllActiveParentOrder();
+            ParentOrderManager.Instance.Start();
         }
 
         private void btn_submit_Click(object sender, RoutedEventArgs e)
@@ -113,17 +113,19 @@ namespace CMEngineWPF
                 bool isShare = chk_isShare.IsChecked.Value;
                 bool buyBackLvlZero = chk_buyback.IsChecked.Value;
 
-                algo = new RollingAlgo(beginPrice, scaleLevel, scaleFactor, isPctScaleFactor, shareOrDollarAmt, isShare, buyBackLvlZero);
 
-                if(algo.BeginPrice<=0 || algo.ScaleLevel<=0 || algo.ScaleFactor<=0 || (algo.IsPctScaleFactor && algo.ScaleFactor >= 1))
+                if(beginPrice<=0 || scaleLevel<=0 || scaleFactor<=0 || (isPctScaleFactor && scaleFactor >= 100))
                 {
                     MessageBox.Show("Invalid price, scale inputs. scale factor pct must be between 0% and 100%");
                     return;
                 }
 
+                algo = new RollingAlgo(beginPrice, scaleLevel, scaleFactor, isPctScaleFactor, shareOrDollarAmt, isShare, buyBackLvlZero);
+
+
                 //Establish rules
-                double pctGain = Convert.ToDouble(txt_pricegain.Text);
-                double pctSell = Convert.ToDouble(txt_pctsell.Text);
+                double pctGain = Convert.ToDouble(txt_pricegain.Text)/100;
+                double pctSell = Convert.ToDouble(txt_pctsell.Text)/100;
                 RollingAlgoFirstLevelSellRule sellRule = new RollingAlgoFirstLevelSellRule(pctSell,pctGain);
 
                 rules.Add(sellRule);
@@ -143,6 +145,11 @@ namespace CMEngineWPF
             ParentOrder order = ParentOrderManager.Instance.CreateParentOrder(symbol, 0, algo);
             order.IsActive = true;
             ParentOrderManager.Instance.AddParentOrder(order);
+
+            if (!ParentOrderManager.Instance.IsStarted)
+            {
+                ParentOrderManager.Instance.Start();
+            }
         }
     }
 }

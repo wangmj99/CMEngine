@@ -44,6 +44,8 @@ namespace CMEngineCore
             this.IsShare = isShare;
             this.BuyBackLvlZero = buyBackLvlZero;
 
+            this.CurrentLevel = -1;
+
             InitTradeMap();
 
         }
@@ -51,13 +53,13 @@ namespace CMEngineCore
         private void InitTradeMap()
         {
             TradeMap = new Dictionary<int, TradeMapEntry>();
-            CurrentLevel = 0;
+            //CurrentLevel = -1;
             TradeMapEntry entry = new TradeMapEntry();
             entry.Level = 0;
             entry.TargetBuyPrice = BeginPrice;
             entry.TargetQty = (IsShare) ? ShareOrDollarAmt : Math.Floor(ShareOrDollarAmt / entry.TargetBuyPrice);
             entry.TargetSellPrice = int.MaxValue;
-            TradeMap[CurrentLevel] = entry;
+            TradeMap[entry.Level] = entry;
         }
 
         public override void Eval(ParentOrder parentOrder)

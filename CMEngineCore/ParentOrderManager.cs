@@ -37,6 +37,8 @@ namespace CMEngineCore
         //Child Order ID => Parent Order ID
         public Dictionary<int, int> Child_Parent_Order_Map = new Dictionary<int, int>();
 
+        public bool IsStarted { get { return m_timer != null && m_timer.Enabled; } }
+
         private ParentOrderManager()
         {
             ParentOrderList = new List<ParentOrder>();
@@ -225,7 +227,7 @@ namespace CMEngineCore
             return res;
         }
 
-        public void StartAllActiveParentOrder()
+        public void Start()
         {
             if (m_timer == null)
             {
@@ -236,7 +238,7 @@ namespace CMEngineCore
             m_timer.Start();
         }
 
-        public void StopAllActiveParentOrder()
+        public void Stop()
         {
             if(m_timer!=null)
                 m_timer.Stop();
