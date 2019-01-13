@@ -107,8 +107,8 @@ namespace CMEngineCore
                     Log.Error(string.Format("Cannot find associated Parent Order."));
                 }
 
-                //if(IsInitialized)
-                    //save state
+                if (IsInitialized)
+                    StateManager.Save();
             }catch(Exception ex)
             {
                 Log.Error("HandleOrderStatusMsg error: " + ex.Message);
@@ -132,8 +132,8 @@ namespace CMEngineCore
                     Log.Error(string.Format("Cannot find associated Parent Order."));
                 }
 
-                //if(IsInitialized)
-                //save state
+                if (IsInitialized)
+                    StateManager.Save();
             }
             catch (Exception ex)
             {
@@ -149,7 +149,7 @@ namespace CMEngineCore
 
         public TradeOrder PlaceOrder(int parentOrderID, TradeType tradeType, string symbol, double price, double qty, string exchange = null)
         {
-            if (tradeType != TradeType.Buy || tradeType != TradeType.Sell) throw new Exception("Unsupported TradeType: " + tradeType);
+            if (tradeType != TradeType.Buy && tradeType != TradeType.Sell) throw new Exception("Unsupported TradeType: " + tradeType);
 
             TradeOrder res = null;
                 lock (trade_locker)
@@ -162,8 +162,8 @@ namespace CMEngineCore
 
                 ParentOrderManager.Instance.AddChildOrder(res);
 
-                //if(IsInitialized)
-                //save state
+                if (IsInitialized)
+                    StateManager.Save();
             }
 
             Log.Info(string.Format("Place order ID {0}, TradeType {1}, symbol {2}, price {3}, qty {4}, exchange {5}, parentOrderID {6}", 

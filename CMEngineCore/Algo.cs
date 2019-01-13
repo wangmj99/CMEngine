@@ -8,7 +8,7 @@ namespace CMEngineCore
 {
     public abstract class Algo
     {
-        public abstract void Eval(ParentOrder parentOrder);
+        public abstract List<TradeOrder> Eval(ParentOrder parentOrder);
         public abstract void HandleExecutionMsg(ParentOrder parentOrder, TradeExecution tradeExecution);
     }
 
@@ -62,12 +62,18 @@ namespace CMEngineCore
             TradeMap[entry.Level] = entry;
         }
 
-        public override void Eval(ParentOrder parentOrder)
+        public override List<TradeOrder> Eval(ParentOrder parentOrder)
         {
-            foreach(var rule in TradeRules)
+            List<TradeOrder> res = new List<TradeOrder>();
+            foreach (var rule in TradeRules)
             {
                 var list = rule.CreateOrder(parentOrder);
+
+                if (list != null && list.Count > 0)
+                    res.AddRange(list);
             }
+            
+            return res;
         }
 
         private void HandleBuyExecution(ParentOrder parentOrder, TradeExecution execution)

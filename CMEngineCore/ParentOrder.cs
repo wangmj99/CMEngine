@@ -171,6 +171,21 @@ namespace CMEngineCore
                  
                  * */
 
+                if(lastSendOrders.Count==0 && this.Qty == this.InitialQty)
+                {
+                    try
+                    {
+                        List<TradeOrder> orders = Algo.Eval(this);
+                        lastSendOrders.AddRange(orders);
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.Error(ex.Message);
+                        Log.Error(ex.StackTrace);
+                    }
+                }
+
+
                 bool changed = false;
                 if (lastSendOrders.Count > 0)
                 {
@@ -194,13 +209,14 @@ namespace CMEngineCore
                         if (openOrders.Count > 0)
                         {
                             TradeManager.Instance.CancelOrders(openOrders);
-                            //wait for cancle back
+                            //wait for cancel back
                             Thread.Sleep(2000);
                         }
                         lastSendOrders.Clear();
 
                         //place buy and sell order
-                        Algo.Eval(this);
+                        List<TradeOrder> orders = Algo.Eval(this);
+                        lastSendOrders.AddRange(orders);
                     
                     }
                     catch (Exception ex)
