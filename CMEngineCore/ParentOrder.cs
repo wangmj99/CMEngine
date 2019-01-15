@@ -116,24 +116,52 @@ namespace CMEngineCore
             }
         }
 
-        public void HandleOrderStatusMsg(OrderStatusMessage msg)
+        public bool HandleOrderStatusMsg(OrderStatusMessage msg)
         {
+            bool res = false;
             TradeOrder order = GetChildOrderByID(msg.OrderId);
 
             if (order != null)
             {
                 switch (msg.Status)
                 {
-                    case Constant.OrderCancelled: order.Status = TradeOrderStatus.Cancelled;break;
-                    case Constant.OrderApiCancelled: order.Status = TradeOrderStatus.Cancelled;break;
-                    case Constant.OrderSubmitted: order.Status = TradeOrderStatus.Submitted;break;
-                    case Constant.OrderFilled: order.Status = TradeOrderStatus.Filled;break;
+                    case Constant.OrderCancelled:
+                        if (order.Status != TradeOrderStatus.Cancelled)
+                        {
+                            order.Status = TradeOrderStatus.Cancelled;
+                            res = true;
+                        };
+                        break;
+                    case Constant.OrderApiCancelled:
+                        if (order.Status != TradeOrderStatus.Cancelled)
+                        {
+                            order.Status = TradeOrderStatus.Cancelled;
+                            res = true;
+                        };
+                        break; 
+                    case Constant.OrderSubmitted:
+                        if (order.Status != TradeOrderStatus.Submitted)
+                        {
+                            order.Status = TradeOrderStatus.Submitted;
+                            res = true;
+                        };
+                        break;
+
+                    case Constant.OrderFilled:
+                        if (order.Status != TradeOrderStatus.Filled)
+                        {
+                            order.Status = TradeOrderStatus.Filled;
+                            res = true;
+                        };
+                        break;
                 }
 
             }else
             {
                 Log.Error(string.Format("Error UpdateChildOrder. Cannot find order. ChildOrderID: {0}, ParentOrderID: {1}", msg.OrderId, this.ID));
             }
+
+            return res;
         }
 
         public void UpdateAvailableCash()

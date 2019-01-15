@@ -95,19 +95,19 @@ namespace CMEngineCore
         private void HandleOrderStatusMsg(OrderStatusMessage msg)
         {
             Log.Info(string.Format("Receive Order Status Msg. OrderID: {0}, Status: {1}", msg.OrderId, msg.Status));
-
+            bool updated = false;
             try
             {
                 var parent = ParentOrderManager.Instance.GetParentOrderByChildID(msg.OrderId);
                 if (parent != null)
                 {
-                    parent.HandleOrderStatusMsg(msg);
+                    updated = parent.HandleOrderStatusMsg(msg);
                 }else
                 {
                     Log.Error(string.Format("Cannot find associated Parent Order."));
                 }
 
-                if (IsInitialized)
+                if (IsInitialized && updated)
                     StateManager.Save();
             }catch(Exception ex)
             {

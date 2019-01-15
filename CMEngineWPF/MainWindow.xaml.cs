@@ -28,6 +28,7 @@ namespace CMEngineWPF
 
         public MainWindow()
         {
+            Log.Info("**********Algo trading engine start************");
             InitializeComponent();
         }
 
