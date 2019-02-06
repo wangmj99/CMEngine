@@ -51,7 +51,7 @@ namespace CMEngineCore
             }
             catch (Exception ex)
             {
-                Log.Error("Fialed to save the state. Error: " + ex.Message);
+                Log.Error("Failed to save the state. Error: " + ex.Message);
                 Log.Error(ex.StackTrace);
             }
         }

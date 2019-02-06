@@ -89,28 +89,35 @@ namespace CMEngineCore
 
 
             TradeOrder order = parentOrder.GetChildOrderByID(execution.Execution.OrderId);
-            if(order == null)
+            if (order == null)
             {
                 Log.Error(string.Format("Cannot find trade order, orderID: {0}", execution.Execution.OrderId));
 
-            }else
+            }
+            else
             {
                 int exeLevel = int.Parse(order.Notes);
                 TradeMap[exeLevel].CurrentQty += execution.Execution.Shares;
                 if (TradeMap[exeLevel].CurrentQty > TradeMap[exeLevel].TargetQty)
                 {
                     //should not hit here
-                    Log.Error(string.Format("Overbot Qty detected. level: {0}, qty: {1}, target qty: {2}", 
+                    Log.Error(string.Format("Overbot Qty detected. level: {0}, qty: {1}, target qty: {2}",
                         exeLevel, TradeMap[exeLevel].CurrentQty, TradeMap[exeLevel].TargetQty));
                 }
 
-                UpdateTradeMapCurrentLevel(execution);
+
+                TradeMap[exeLevel].LastBuyPrice = execution.Execution.Price;
+                TradeMap[exeLevel].TargetSellPrice = (exeLevel == 0) ? int.MaxValue : TradeMap[exeLevel - 1].LastBuyPrice;
+
+                CurrentLevel = Math.Max(CurrentLevel, exeLevel);
 
                 if (TradeMap[CurrentLevel].Filled)
                 {
                     TradeMap[CurrentLevel].WasFilledSellOnPartial = true;
                     GenerateTradeMapNextLevel(execution);
                 }
+
+                Log.Info("After buy execution." + Util.PrintTradeMapCurrLvl(this));
             }
         }
 
@@ -136,9 +143,9 @@ namespace CMEngineCore
 
         private void UpdateTradeMapCurrentLevel(TradeExecution execution)
         {
-            TradeMapEntry entry = new TradeMapEntry();
-            entry.LastBuyPrice = execution.Execution.Price;
-            entry.TargetSellPrice = (CurrentLevel == 0) ? int.MaxValue : TradeMap[CurrentLevel - 1].LastBuyPrice;
+            //TradeMapEntry entry = TradeMap[execution]
+            //entry.LastBuyPrice = execution.Execution.Price;
+            //entry.TargetSellPrice = (CurrentLevel == 0) ? int.MaxValue : TradeMap[CurrentLevel - 1].LastBuyPrice;
         }
 
         private void HandleSellExecution(ParentOrder parentOrder, TradeExecution execution)
@@ -180,11 +187,11 @@ namespace CMEngineCore
 
         public override void HandleExecutionMsg(ParentOrder parentOrder, TradeExecution tradeExecution)
         {
-            if(tradeExecution.Execution.Side.ToUpper() == Constant.Buy)
+            if(tradeExecution.Execution.Side.ToUpper() == Constant.ExecutionBuy)
             {
                 HandleBuyExecution(parentOrder, tradeExecution);
 
-            }else if (tradeExecution.Execution.Side.ToUpper() == Constant.Sell)
+            }else if (tradeExecution.Execution.Side.ToUpper() == Constant.ExecutionSell)
             {
                 HandleSellExecution(parentOrder, tradeExecution);
             }

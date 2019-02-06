@@ -96,6 +96,7 @@ namespace CMEngineCore
             } while (Parent_Child_Order_Map.ContainsKey(id));
 
             ParentOrder parentOrder = new ParentOrder(id, symbol, openQty, algo);
+            Log.Info(string.Format("ParentOrder {0} is created, symbol {1}", id, symbol));
             return parentOrder;
         }
 

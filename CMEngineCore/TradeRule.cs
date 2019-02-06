@@ -33,13 +33,11 @@ namespace CMEngineCore
                 if (currEntry.PartialFilled && !currEntry.WasFilledSellOnPartial)
                 {
                     //On partial filled, if buy, then buy current level
-                    //entry = currEntry;
                     orderLevel = algo.CurrentLevel;
                 }
-                else if (algo.CurrentLevel < algo.ScaleLevel - 1)
+                else if (currEntry.Filled && algo.CurrentLevel < algo.ScaleLevel - 1)
                 {
                     //buy next level
-                    //entry = algo.TradeMap[algo.CurrentLevel + 1];
                     orderLevel = algo.CurrentLevel + 1;
                 }
             }
@@ -78,7 +76,7 @@ namespace CMEngineCore
 
             //}
 
-            if (entry.Level > 0)
+            if (entry.Level > 0 && entry.WasFilledSellOnPartial)
             {
                 double price = Util.AdjustOrderPrice(TradeType.Sell, parentOrder.Symbol, entry.TargetSellPrice);
                 double qty = entry.CurrentQty;
@@ -139,15 +137,8 @@ namespace CMEngineCore
 
             double lastPrice = MarketDataManager.Instance.GetLastPrice(parentOrder.Symbol);
 
-            if (entry.WasFilledSellOnPartial && lastPrice <= entry.LastBuyPrice * 1.01)
-            {
-                double price = Util.AdjustOrderPrice(TradeType.Sell, parentOrder.Symbol, entry.LastBuyPrice);
-                double qty = entry.CurrentQty;
-                var order = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Sell, parentOrder.Symbol, price, qty);
-                order.Notes = algo.CurrentLevel.ToString();
-                res.Add(order);
-            } 
-            else
+
+            if (entry.WasFilledSellOnPartial )
             {
                 double soldPct = 1 - entry.CurrentQty / entry.TargetQty;
                 if(SellPct-soldPct>0.001)

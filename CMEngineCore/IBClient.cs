@@ -61,7 +61,7 @@ namespace CMEngineCore
 
         public void commissionReport(CommissionReport commissionReport)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void connectAck()

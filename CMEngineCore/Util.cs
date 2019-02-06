@@ -47,6 +47,13 @@ namespace CMEngineCore
             return string.Format("executioID {0}, orderID {1}, side {2}, price {3}, qty {4}, reqeustID {5}", exe.ExecId, exe.OrderId, exe.Side, exe.Price, exe.Shares, msg.ReqId);
         }
 
+        public static string PrintTradeMapCurrLvl(RollingAlgo algo)
+        {
+            var entry = algo.TradeMap[algo.CurrentLevel];
+            return string.Format("CurrentLvl: {0}, Qty: {1}, IsFilled: {2}, LastBuyPx: {3}, TargetSellPx: {4} ",
+                algo.CurrentLevel, entry.CurrentQty, entry.Filled, entry.LastBuyPrice, entry.TargetSellPrice);
+        }
+
         public static double NormalizePrice (double price)
         {
             return Math.Round(price, 2, MidpointRounding.AwayFromZero);

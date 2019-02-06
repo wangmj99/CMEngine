@@ -70,13 +70,13 @@ namespace CMEngineCore
 
                 Executions.Add(tradeExec);
 
-                if (msg.Execution.Side.ToUpper() == Constant.Buy)
+                if (msg.Execution.Side.ToUpper() == Constant.ExecutionBuy)
                 {
                     
                     Qty += msg.Execution.Shares;
 
                 }
-                else if (msg.Execution.Side.ToUpper() == Constant.Sell)
+                else if (msg.Execution.Side.ToUpper() == Constant.ExecutionSell)
                 {
                     Qty -= msg.Execution.Shares;
 

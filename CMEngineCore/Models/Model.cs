@@ -33,8 +33,8 @@ namespace CMEngineCore.Models
 
     public class Constant
     {
-        public const string Buy = "BUY";
-        public const string Sell = "SELL";
+        public const string ExecutionBuy = "BOT";
+        public const string ExecutionSell = "SLD";
 
         public const string OrderCancelled = "Cancelled";
         public const string OrderApiCancelled = "ApiCancelled";
