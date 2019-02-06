@@ -37,6 +37,7 @@ namespace CMEngineCore
         //Child Order ID => Parent Order ID
         public Dictionary<int, int> Child_Parent_Order_Map = new Dictionary<int, int>();
 
+        [JsonIgnore]
         public bool IsStarted { get { return m_timer != null && m_timer.Enabled; } }
 
         private ParentOrderManager()

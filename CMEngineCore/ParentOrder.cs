@@ -12,6 +12,7 @@ namespace CMEngineCore
 {
     public class ParentOrder
     {
+        [JsonIgnore]
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public int ID { get; set; }
@@ -63,6 +64,7 @@ namespace CMEngineCore
             TradeExecution tradeExec = new TradeExecution();
             tradeExec.ParentOrderID = this.ID;
             tradeExec.Execution = msg.Execution;
+            tradeExec.Execution.LastLiquidity = null;
 
             lock (locker)
             {

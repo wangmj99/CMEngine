@@ -94,7 +94,9 @@ namespace CMEngineCore
 
         private void HandleOrderStatusMsg(OrderStatusMessage msg)
         {
-            Log.Info(string.Format("Receive Order Status Msg. OrderID: {0}, Status: {1}", msg.OrderId, msg.Status));
+            if(msg.Status!= Constant.OrderSubmitted)
+                Log.Info(string.Format("Receive Order Status Msg. OrderID: {0}, Status: {1}", msg.OrderId, msg.Status));
+
             bool updated = false;
             try
             {
@@ -144,7 +146,7 @@ namespace CMEngineCore
 
         private void HandleOpenOrderMsg(OpenOrderMessage msg)
         {
-            Log.Info("Receive Open Order Msg. " + string.Format("Open OrderID {0}, ClientID {1} ", msg.Order.OrderId, msg.Order.ClientId));
+            //Log.Info("Receive Open Order Msg. " + string.Format("Open OrderID {0}, ClientID {1} ", msg.Order.OrderId, msg.Order.ClientId));
         }
 
         public TradeOrder PlaceOrder(int parentOrderID, TradeType tradeType, string symbol, double price, double qty, string exchange = null)
