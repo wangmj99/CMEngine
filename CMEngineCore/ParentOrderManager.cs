@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -168,12 +169,35 @@ namespace CMEngineCore
         {
             int idx = -1;
 
+            ParentOrder parentOrder = GetParentOrderByParentID(ID);
+            if (parentOrder == null) return false;
+
             lock (locker)
             {
+                //Cancel open orders for this parentOrder
+                var openOrders = parentOrder.GetOpenOrders();
+                TradeManager.Instance.CancelOrders(openOrders);
+            }
+
+            Thread.Sleep(2000);
+
+            lock (locker)
+            {
+
                 if (Parent_Child_Order_Map.ContainsKey(ID))
                     Parent_Child_Order_Map.Remove(ID);
 
-                
+                List<int> remove = new List<int>();
+                foreach(int childID in Child_Parent_Order_Map.Keys)
+                {
+                    if (Child_Parent_Order_Map[childID] == parentOrder.ID)
+                        remove.Add(childID);
+                }
+
+                foreach (int item in remove)
+                    Child_Parent_Order_Map.Remove(item);
+
+
                 for (int i = 0; i < ParentOrderList.Count; i++)
                 {
                     if (ParentOrderList[i].ID == ID)

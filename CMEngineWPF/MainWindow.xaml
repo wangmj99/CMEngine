@@ -30,7 +30,7 @@
                     <TextBox x:Name="txt_pctsell" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,250,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="84"/>
                     <CheckBox x:Name="chk_scaleFactor" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="119,106,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="txt_shareAmt" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,172,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="84"/>
-                    <CheckBox x:Name="chk_isShare" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="119,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.493,2.05"/>
+                    <CheckBox x:Name="chk_isShare" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="119,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.493,2.05" IsChecked="True"/>
                     <CheckBox x:Name="chk_buyback" Content="" Grid.Column="1" HorizontalAlignment="Right" Margin="0,288,857,0" VerticalAlignment="Top" RenderTransformOrigin="0.493,2.05"/>
                     <Button x:Name="btn_conn" Content="Connect IB" Grid.Column="1" HorizontalAlignment="Left" Margin="632,68,0,0" VerticalAlignment="Top" Width="89" Height="26" Click="btn_conn_Click"/>
                     <Button x:Name="btn_disconn" Content="DisConnect" Grid.Column="1" HorizontalAlignment="Left" Margin="745,68,0,0" VerticalAlignment="Top" Width="89" Height="26" Click="btn_disconn_Click"/>
@@ -39,7 +39,7 @@
                     <Label x:Name="label_Copy8" Content="Max Scale Level" HorizontalAlignment="Left" Height="30" Margin="10,134,0,0" VerticalAlignment="Top" Width="102"/>
                     <TextBox x:Name="txt_scalelvl" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,138,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="84"/>
                     <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="35" Margin="10,98,0,0" VerticalAlignment="Top" Width="346" Grid.ColumnSpan="2"/>
-                    <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="38" Margin="10,161,0,0" VerticalAlignment="Top" Width="346" Grid.ColumnSpan="2"/>
+                    <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="38" Margin="10,164,0,0" VerticalAlignment="Top" Width="346" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
             <TabItem Header="OrderManagement">

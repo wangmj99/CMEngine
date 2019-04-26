@@ -42,15 +42,18 @@ namespace CMEngineWPF
                     int port = int.Parse(ConfigurationManager.AppSettings["IBPort"]);
                     TradeManager.Instance.Init();
                     TradeManager.Instance.Connect(ip, port, 1);
+                    MessageBox.Show("IB is connected");
                 }
                 catch(Exception ex)
                 {
                     Log.Error("Failed to Connect to IB. Message: "+ ex.Message);
                     Log.Error(ex.StackTrace);
+                    MessageBox.Show("Failed to Connect to IB.Message: "+ ex.Message);
                 }
             }else
             {
                 Log.Info("IB is already connected");
+                MessageBox.Show("IB is already connected");
             }
         }
 
@@ -62,11 +65,14 @@ namespace CMEngineWPF
                 {
                     TradeManager.Instance.Disconnect();
                     Log.Info("IB is disconnected");
+                    MessageBox.Show("IB is disconnected");
 
-                }catch(Exception ex)
+                }
+                catch(Exception ex)
                 {
                     Log.Error("Disconnect IB error. Message: " + ex.Message);
                     Log.Error(ex.StackTrace);
+                    MessageBox.Show("Disconnect IB error. Message: " + ex.Message);
                 }
             }
         }
@@ -76,6 +82,7 @@ namespace CMEngineWPF
             if (!TradeManager.Instance.IsConnected)
             {
                 Log.Error("IB is not connected, please reconnect it first");
+                MessageBox.Show("IB is not connected, please reconnect it first");
                 return;
             }
 
@@ -88,6 +95,7 @@ namespace CMEngineWPF
             ParentOrderManager.Instance.SetAllOrdertoCancelStatus();
 
             ParentOrderManager.Instance.Start();
+            MessageBox.Show("System is resumed.");
         }
 
         private void btn_submit_Click(object sender, RoutedEventArgs e)
@@ -102,11 +110,12 @@ namespace CMEngineWPF
             List<ITradeRule> rules = new List<ITradeRule>() { new RollingAlgoBuyRule(), new RollingAlgoSellRule() };
             RollingAlgo algo = null;
             string symbol;
+            double beginPrice;
 
             try
             {
                 symbol = txt_symbol.Text.Trim().ToUpper();
-                double beginPrice = Convert.ToDouble(txt_price.Text);
+                beginPrice = Convert.ToDouble(txt_price.Text);
                 double scaleFactor = Convert.ToDouble(txt_scaleFactor.Text);
                 int scaleLevel = Convert.ToInt32(txt_scalelvl.Text);
                 double shareOrDollarAmt = Convert.ToDouble(txt_shareAmt.Text);
@@ -151,6 +160,7 @@ namespace CMEngineWPF
             {
                 ParentOrderManager.Instance.Start();
             }
+            MessageBox.Show(string.Format("Parent order created. Symbol {0}, Begine price {1}", symbol, beginPrice));
         }
     }
 }
