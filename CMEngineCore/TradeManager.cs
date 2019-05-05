@@ -69,6 +69,7 @@ namespace CMEngineCore
             {
                 Log.Error("Error on connect IB, message: " + ex.Message);
                 Log.Error("Error on connect IB, StackTrace: " + ex.StackTrace);
+                throw ex;
             }
         }
 
@@ -84,6 +85,7 @@ namespace CMEngineCore
                 {
                     Log.Error("Disconnect IB error. Message: " + ex.Message);
                     Log.Error(ex.StackTrace);
+                    throw ex;
                 }
             }
             else
@@ -223,19 +225,6 @@ namespace CMEngineCore
             }
         }
 
-        private static TimeSpan startTimeSpan = new TimeSpan(9, 30, 00);
-        private static TimeSpan endTimeSpan = new TimeSpan(16, 00, 00);
-        private static TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-        public bool IsTradingHour()
-        {
-            DateTime utcNow = DateTime.UtcNow;
-            DateTime estTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, estZone);
-            TimeSpan easternSpan = TimeZoneInfo.ConvertTimeFromUtc(utcNow, estZone).TimeOfDay;
-
-            bool res = estTime.DayOfWeek != DayOfWeek.Sunday && estTime.DayOfWeek != DayOfWeek.Saturday &&
-                easternSpan >= startTimeSpan && easternSpan <= endTimeSpan;
-
-            return res;
-        }
+        
     }
 }

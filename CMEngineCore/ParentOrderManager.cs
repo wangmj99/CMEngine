@@ -60,11 +60,12 @@ namespace CMEngineCore
                 return;
             }
 
-            if (!TradeManager.Instance.IsTradingHour())
+            if (!Util.IsTradingHour())
             {
                 Log.Info("Not trading hour");
-                return;
+                //return;
             }
+
 
             lock (locker)
             {

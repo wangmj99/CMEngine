@@ -107,9 +107,24 @@ namespace CMEngineCore
             throw new NotImplementedException();
         }
 
+        private static List<string> disconnStrs = new List<string>() { "UNABLE", "READ", "END", "STREAM" };
         public void error(string str)
         {
             Log.Error(str);
+            HashSet<string> strs = new HashSet<string>(str.ToUpper().Split(' ', '.'));
+
+            bool res = true;
+            foreach (string s in disconnStrs)
+            {
+                if(!strs.Contains(s))
+                {
+                    res = false;
+                    continue;
+                }
+            }
+
+            if (res)
+                IsConnected = false;
         }
 
         public void error(Exception e)
@@ -120,6 +135,7 @@ namespace CMEngineCore
             {
                 Log.Error("Disconnect IB on IO Exception/SocketException");
                 IsConnected = false;
+                throw e;
             }
         }
 

@@ -201,7 +201,8 @@ namespace CMEngineCore
                  
                  * */
 
-                if(lastSendOrders.Count==0 && this.Qty == this.InitialQty)
+                //if(lastSendOrders.Count==0 && this.Qty == this.InitialQty)
+                if (lastSendOrders.Count == 0 && GetOpenOrders().Count == 0)
                 {
                     try
                     {

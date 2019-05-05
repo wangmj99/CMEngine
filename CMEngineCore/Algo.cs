@@ -117,7 +117,7 @@ namespace CMEngineCore
                     GenerateTradeMapNextLevel(execution);
                 }
 
-                Log.Info("After buy execution." + Util.PrintTradeMapCurrLvl(this));
+                Log.Info("After bot execution." + Util.PrintTradeMapCurrLvl(this));
             }
         }
 
@@ -183,6 +183,7 @@ namespace CMEngineCore
                     }
                 }
             }
+            Log.Info("After sld execution." + Util.PrintTradeMapCurrLvl(this));
         }
 
         public override void HandleExecutionMsg(ParentOrder parentOrder, TradeExecution tradeExecution)
