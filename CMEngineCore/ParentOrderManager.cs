@@ -129,7 +129,7 @@ namespace CMEngineCore
             return res;
         }
 
-        public ParentOrder GetParentOrderByChildID(int childOrderID)
+        public ParentOrder FindAssociatedParentOrderByChildID(int childOrderID)
         {
             ParentOrder res = null;
             lock (locker)
@@ -216,6 +216,7 @@ namespace CMEngineCore
                 if (idx != -1) ParentOrderList.RemoveAt(idx);
             }
 
+            StateManager.Save();
             return idx != -1;
         }
 
@@ -244,12 +245,26 @@ namespace CMEngineCore
         {
             var p = GetParentOrderByParentID(parentOrderID);
             p.IsActive = true;
+
+            StateManager.Save();
         }
 
         public void StopParentOrder(int parentOrderID)
         {
-            var p = GetParentOrderByParentID(parentOrderID);
-            p.IsActive = false;
+            var parentOrder = GetParentOrderByParentID(parentOrderID);
+            parentOrder.IsActive = false;
+            StateManager.Save();
+
+            if (parentOrder == null) return ;
+
+            lock (locker)
+            {
+                //Cancel open orders for this parentOrder
+                var openOrders = parentOrder.GetOpenOrders();
+                TradeManager.Instance.CancelOrders(openOrders);
+            }
+
+
         }
 
         public static ParentOrderManager PopulateStates(string filename)
@@ -275,6 +290,7 @@ namespace CMEngineCore
         {
             if(m_timer!=null)
                 m_timer.Stop();
+
         }
 
     }

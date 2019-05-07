@@ -102,7 +102,7 @@ namespace CMEngineCore
             bool updated = false;
             try
             {
-                var parent = ParentOrderManager.Instance.GetParentOrderByChildID(msg.OrderId);
+                var parent = ParentOrderManager.Instance.FindAssociatedParentOrderByChildID(msg.OrderId);
                 if (parent != null)
                 {
                     updated = parent.HandleOrderStatusMsg(msg);
@@ -126,7 +126,7 @@ namespace CMEngineCore
 
             try
             {
-                var parent = ParentOrderManager.Instance.GetParentOrderByChildID(msg.Execution.OrderId);
+                var parent = ParentOrderManager.Instance.FindAssociatedParentOrderByChildID(msg.Execution.OrderId);
                 if (parent != null)
                 {
                     parent.HandleExecutionMsg(msg);

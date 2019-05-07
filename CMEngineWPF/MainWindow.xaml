@@ -43,7 +43,27 @@
                 </Grid>
             </TabItem>
             <TabItem Header="OrderManagement">
-                <Grid Background="#FFE5E5E5" Margin="0,0,0,-356"/>
+                <Grid Background="#FFE5E5E5" Margin="0,-6,0,-350">
+                    <Button x:Name="btn_getParent" Content="Get Parent Orders" HorizontalAlignment="Left" VerticalAlignment="Top" Width="111" Margin="731,10,0,0" Height="42" Click="btn_getparent_Click"/>
+                    <DataGrid x:Name="dg_ParentOrders" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top" Height="129" Width="699" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header ="ID" Binding="{Binding ID}" />
+                            <DataGridTextColumn Header ="Symbol" Binding="{Binding Symbol}" />
+                            <DataGridTextColumn Header ="Qty" Binding="{Binding Qty}" />
+                            <DataGridTextColumn Header ="IsActive" Binding="{Binding IsActive}" />
+                            <DataGridTextColumn Header ="CurrentLvl" Binding="{Binding Algo.CurrentLevel}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button x:Name="btn_getChildOrder" Content="Show Child Orders" HorizontalAlignment="Left" VerticalAlignment="Top" Width="111" Margin="731,70,0,0" Height="42" Click="btn_getchild_Click"/>
+                    <Button x:Name="btn_getExecution" Content="Show Executions" HorizontalAlignment="Left" VerticalAlignment="Top" Width="111" Margin="731,130,0,0" Height="42" Click="btn_getExecution_Click"/>
+                    <Button x:Name="btn_getAlgo" Content="Show Algo Details" HorizontalAlignment="Left" VerticalAlignment="Top" Width="111" Margin="731,189,0,0" Height="42" Click="btn_getAlgo_Click"/>
+                    <Button x:Name="btn_StartParent" Content="Start Parent" HorizontalAlignment="Left" Margin="871,10,0,0" VerticalAlignment="Top" Width="114" Height="42" Click="btn_StartParent_Click"/>
+                    <Button x:Name="btn_StopParent" Content="Stop Parent" HorizontalAlignment="Left" Margin="871,69,0,0" VerticalAlignment="Top" Width="114" Height="42" Click="btn_StopParent_Click"/>
+                    <Button x:Name="btn_RemoveParent" Content="Remove Parent" HorizontalAlignment="Left" Margin="871,131,0,0" VerticalAlignment="Top" Width="114" Height="42" Click="btn_RemoveParent_Click"/>
+                    <DataGrid x:Name="dg_Details" HorizontalAlignment="Left" Margin="0,146,0,0" VerticalAlignment="Top" Height="164" Width="699" IsReadOnly="True"/>
+                    <DataGrid x:Name="dg_Trademap" HorizontalAlignment="Left" Margin="0,327,0,0" VerticalAlignment="Top" Height="164" Width="699" IsReadOnly="True"/>
+                    <Button x:Name="btn_getTrademap" Content="Show Trade Map" HorizontalAlignment="Left" VerticalAlignment="Top" Width="111" Margin="731,248,0,0" Height="42" Click="btn_getTrademap_Click"/>
+                </Grid>
             </TabItem>
             <TabItem Header="WatchList">
                 <Grid Background="#FFE5E5E5" Margin="0,0,0,-356"/>

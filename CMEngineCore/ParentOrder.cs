@@ -50,15 +50,7 @@ namespace CMEngineCore
         }
 
 
-
-        public void Evaluate()
-        {
-            //on time elapse event, evalute and place order
-            Algo.Eval(this);
-
-        }
-
-        public void HandleExecutionMsg(ExecutionMessage msg)
+        internal void HandleExecutionMsg(ExecutionMessage msg)
         {
             //Add execution
             TradeExecution tradeExec = new TradeExecution();
@@ -89,8 +81,7 @@ namespace CMEngineCore
         }
 
 
-
-        public TradeOrder GetChildOrderByID(int ID)
+        internal TradeOrder GetChildOrderByID(int ID)
         {
             TradeOrder res = null;
 
@@ -108,7 +99,7 @@ namespace CMEngineCore
             return res;
         }
 
-        public void AddChildOrder(TradeOrder order)
+        internal void AddChildOrder(TradeOrder order)
         {
             if (order.ParentOrderID != this.ID) return;
 
@@ -118,7 +109,7 @@ namespace CMEngineCore
             }
         }
 
-        public bool HandleOrderStatusMsg(OrderStatusMessage msg)
+        internal bool HandleOrderStatusMsg(OrderStatusMessage msg)
         {
             bool res = false;
             TradeOrder order = GetChildOrderByID(msg.OrderId);
@@ -166,13 +157,13 @@ namespace CMEngineCore
             return res;
         }
 
-        public void UpdateAvailableCash()
+        internal void UpdateAvailableCash()
         {
 
         }
 
 
-        public List<TradeOrder> GetOpenOrders()
+        internal List<TradeOrder> GetOpenOrders()
         {
             List<TradeOrder> res = new List<TradeOrder>();
 
@@ -190,7 +181,7 @@ namespace CMEngineCore
             return res;
         }
 
-        public void Eval()
+        internal void Eval()
         {
             lock (locker)
             {

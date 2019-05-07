@@ -79,12 +79,12 @@ namespace CMEngineWPF
 
         private void btn_resume_Click(object sender, RoutedEventArgs e)
         {
-            if (!TradeManager.Instance.IsConnected)
-            {
-                Log.Error("IB is not connected, please reconnect it first");
-                MessageBox.Show("IB is not connected, please reconnect it first");
-                return;
-            }
+            //if (!TradeManager.Instance.IsConnected)
+            //{
+            //    Log.Error("IB is not connected, please reconnect it first");
+            //    MessageBox.Show("IB is not connected, please reconnect it first");
+            //    return;
+            //}
 
             StateManager.Resume();
 
@@ -161,6 +161,213 @@ namespace CMEngineWPF
                 ParentOrderManager.Instance.Start();
             }
             MessageBox.Show(string.Format("Parent order created. Symbol {0}, Begine price {1}", symbol, beginPrice));
+        }
+
+
+        private void btn_getparent_Click(object sender, RoutedEventArgs e)
+        {
+            //if (!TradeManager.Instance.IsConnected)
+            //{
+            //    MessageBox.Show("IB is not connected, please reconnect first!");
+            //    Log.Error("IB is not connected, please reconnect first");
+            //    return;
+            //}
+
+            try
+            {
+                List<ParentOrder> parents = ParentOrderManager.Instance.GetAllParentOrders();
+                dg_ParentOrders.ItemsSource = null;
+                dg_ParentOrders.ItemsSource = parents;
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                Log.Error(ex.StackTrace);
+                MessageBox.Show("Fail to retrieve parent order, error: " + ex.Message);
+            }
+        }
+
+        private void btn_getchild_Click(object sender, RoutedEventArgs e)
+        {
+            //if (!TradeManager.Instance.IsConnected)
+            //{
+            //    MessageBox.Show("IB is not connected, please reconnect first!");
+            //    Log.Error("IB is not connected, please reconnect first");
+            //    return;
+            //}
+
+            try
+            {
+                ParentOrder parent = (ParentOrder)dg_ParentOrders.SelectedItem;
+                //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
+
+                if (parent == null)
+                    MessageBox.Show("Please select parent order");
+                else
+                    dg_Details.ItemsSource = parent.TradeOrders;
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                Log.Error(ex.StackTrace);
+                MessageBox.Show("Fail to retrieve parent order, error: " + ex.Message);
+            }
+        }
+
+        private void btn_getExecution_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ParentOrder parent = (ParentOrder)dg_ParentOrders.SelectedItem;
+                //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
+
+                if (parent == null)
+                    MessageBox.Show("Please select parent order");
+                else
+                    dg_Details.ItemsSource = parent.Executions;
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                Log.Error(ex.StackTrace);
+                MessageBox.Show("Fail to retrieve parent order, error: " + ex.Message);
+            }
+        }
+
+        private void btn_getAlgo_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ParentOrder parent = (ParentOrder)dg_ParentOrders.SelectedItem;
+                //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
+
+                if (parent == null)
+                    MessageBox.Show("Please select parent order");
+                else
+                    dg_Details.ItemsSource = new List<RollingAlgo> (){ (RollingAlgo)parent.Algo};
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                Log.Error(ex.StackTrace);
+                MessageBox.Show("Fail to retrieve parent order, error: " + ex.Message);
+            }
+        }
+
+        private void btn_StartParent_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ParentOrder parent = (ParentOrder)dg_ParentOrders.SelectedItem;
+                //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
+
+                if (parent == null)
+                    MessageBox.Show("Please select parent order");
+                else
+                {
+                    ParentOrderManager.Instance.StartParentOrder(parent.ID);
+                    dg_ParentOrders.Items.Refresh();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                Log.Error(ex.StackTrace);
+                MessageBox.Show("Fail to retrieve parent order, error: " + ex.Message);
+            }
+        }
+
+        private void btn_StopParent_Click(object sender, RoutedEventArgs e)
+        {
+            //if (!TradeManager.Instance.IsConnected)
+            //{
+            //    MessageBox.Show("IB is not connected, please reconnect first!");
+            //    Log.Error("IB is not connected, please reconnect first");
+            //    return;
+            //}
+
+            try
+            {
+                ParentOrder parent = (ParentOrder)dg_ParentOrders.SelectedItem;
+                //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
+
+                if (parent == null)
+                    MessageBox.Show("Please select parent order");
+                else
+                {
+                    ParentOrderManager.Instance.StopParentOrder(parent.ID);
+                    dg_ParentOrders.Items.Refresh();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                Log.Error(ex.StackTrace);
+                MessageBox.Show("Fail to retrieve parent order, error: " + ex.Message);
+            }
+        }
+
+        private void btn_RemoveParent_Click(object sender, RoutedEventArgs e)
+        {
+            //if (!TradeManager.Instance.IsConnected)
+            //{
+            //    MessageBox.Show("IB is not connected, please reconnect first!");
+            //    Log.Error("IB is not connected, please reconnect first");
+            //    return;
+            //}
+
+            try
+            {
+                ParentOrder parent = (ParentOrder)dg_ParentOrders.SelectedItem;
+                //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
+
+                if (parent == null)
+                    MessageBox.Show("Please select parent order");
+                else
+                {
+                    ParentOrderManager.Instance.RemoveParentOrderByID(parent.ID);
+                    dg_ParentOrders.Items.Refresh();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                Log.Error(ex.StackTrace);
+                MessageBox.Show("Fail to retrieve parent order, error: " + ex.Message);
+            }
+        }
+
+        private void btn_getTrademap_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                RollingAlgo algo = (RollingAlgo)dg_Details.SelectedItem;
+                //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
+
+                if (algo == null)
+                    MessageBox.Show("Please select algo");
+                else
+                {
+                    dg_Trademap.ItemsSource = null;
+                    var list = algo.TradeMap.Values.OrderBy(o => o.Level).ToList();
+                    dg_Trademap.ItemsSource = list;
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                Log.Error(ex.StackTrace);
+                MessageBox.Show("Fail to retrieve parent order, error: " + ex.Message);
+            }
         }
     }
 }
