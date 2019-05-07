@@ -356,9 +356,12 @@ namespace CMEngineWPF
                 else
                 {
                     dg_Trademap.ItemsSource = null;
-                    var list = algo.TradeMap.Values.OrderBy(o => o.Level).ToList();
-                    dg_Trademap.ItemsSource = list;
-
+                    if (algo.TradeMap != null && algo.TradeMap.Count > 0)
+                    {
+                        var list = algo.TradeMap.Values.OrderBy(o => o.Level).ToList();
+                        dg_Trademap.ItemsSource = list;
+                    }
+                
                 }
 
             }
