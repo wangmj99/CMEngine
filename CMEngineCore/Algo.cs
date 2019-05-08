@@ -114,21 +114,24 @@ namespace CMEngineCore
                 if (TradeMap[CurrentLevel].Filled)
                 {
                     TradeMap[CurrentLevel].WasFilledSellOnPartial = true;
-                    GenerateTradeMapNextLevel(execution);
+                    GenerateTradeMapNextLevel(TradeMap[CurrentLevel].LastBuyPrice);
                 }
 
                 Log.Info("After bot execution." + Util.PrintTradeMapCurrLvl(this));
             }
         }
 
-        private void GenerateTradeMapNextLevel(TradeExecution execution)
+        private void GenerateTradeMapNextLevel(double currBuyPrice)
         {
             if (CurrentLevel < this.ScaleLevel - 1)
             {
                 TradeMapEntry entry = new TradeMapEntry();
                 entry.Level = CurrentLevel + 1;
-                double price = (IsPctScaleFactor) ? execution.Execution.Price * (1 - ScaleFactor) :
-                    execution.Execution.Price - ScaleFactor;
+
+                double price = (IsPctScaleFactor) ? currBuyPrice * (1 - ScaleFactor) :
+                    currBuyPrice - ScaleFactor;
+
+
                 entry.TargetBuyPrice = price <= 0 ? 0 : Util.NormalizePrice(price);
 
                 if (this.IsShare)
@@ -179,7 +182,7 @@ namespace CMEngineCore
 
                     if (CurrentLevel >= 0)
                     {
-                        GenerateTradeMapNextLevel(execution);
+                        GenerateTradeMapNextLevel(TradeMap[CurrentLevel].LastBuyPrice);
                     }
                 }
             }

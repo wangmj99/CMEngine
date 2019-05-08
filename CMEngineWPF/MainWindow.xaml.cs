@@ -361,9 +361,7 @@ namespace CMEngineWPF
                         var list = algo.TradeMap.Values.OrderBy(o => o.Level).ToList();
                         dg_Trademap.ItemsSource = list;
                     }
-                
                 }
-
             }
             catch (Exception ex)
             {
