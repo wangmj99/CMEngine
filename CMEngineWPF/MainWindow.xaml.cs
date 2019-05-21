@@ -348,11 +348,12 @@ namespace CMEngineWPF
         {
             try
             {
-                RollingAlgo algo = (RollingAlgo)dg_Details.SelectedItem;
+                ParentOrder po = (ParentOrder)dg_ParentOrders.SelectedItem;
+                RollingAlgo algo = (RollingAlgo)po.Algo;
                 //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
 
                 if (algo == null)
-                    MessageBox.Show("Please select algo");
+                    MessageBox.Show("Please select parent order");
                 else
                 {
                     dg_Trademap.ItemsSource = null;

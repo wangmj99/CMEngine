@@ -21,6 +21,15 @@ namespace CMEngineCore
         public double? AvailableCash { get; set; }
         public double Qty { get; set; }
 
+        [JsonIgnore]
+        public int NoOfTransactions
+        {
+            get
+            {
+                return this.Executions.Select(e => e.TradeType == Constant.ExecutionSell).Count();
+            }
+        }
+
         public bool IsActive { get; set; }
 
         public Algo Algo { get; set; }
@@ -57,6 +66,7 @@ namespace CMEngineCore
             tradeExec.ParentOrderID = this.ID;
             tradeExec.Execution = msg.Execution;
             tradeExec.Execution.LastLiquidity = null;
+            tradeExec.Symbol = this.Symbol;
 
             lock (locker)
             {
@@ -249,6 +259,28 @@ namespace CMEngineCore
                 }
 
             }
+        }
+
+        public double GetRealizedGain()
+        {
+            double res = 0;
+            var buyList = Executions.Where(e => e.TradeType == Constant.ExecutionBuy).ToList();
+            buyList.Sort();
+
+            var sellList = Executions.Where(e => e.TradeType == Constant.ExecutionBuy).ToList();
+            sellList.Sort();
+
+            double totalAmt = 0;
+            double totalQty = 0;
+            for(int i = sellList.Count-1; i >= 0; i--)
+            {
+                totalAmt += sellList[i].Execution.Shares * sellList[i].Execution.Price;
+                totalQty += sellList[i].Execution.Shares;
+            }
+
+
+
+            return res;
         }
         
     }

@@ -163,6 +163,8 @@ namespace CMEngineCore
                 res.ParentOrderID = parentOrderID;
                 res.OrderID = orderID;
                 res.Status = TradeOrderStatus.PendingSubmit;
+                res.Side = tradeType.ToString();
+                res.Price = price;
 
                 ParentOrderManager.Instance.AddChildOrder(res);
 

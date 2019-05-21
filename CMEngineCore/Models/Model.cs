@@ -50,5 +50,8 @@ namespace CMEngineCore.Models
         public Order Order { get; set; }
         public TradeOrderStatus Status { get; set; }
         public string Notes { get; set; }
+        public string Side { get; set; }
+        public double Price { get; set; }
+        
     }
 }
