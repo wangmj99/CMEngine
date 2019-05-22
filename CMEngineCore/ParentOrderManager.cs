@@ -220,6 +220,18 @@ namespace CMEngineCore
             return idx != -1;
         }
 
+        public void CloseParentOrderByID(int ID)
+        {
+            ParentOrder parent = GetParentOrderByParentID(ID);
+            ParentOrderManager.Instance.StopParentOrder(ID);
+            Thread.Sleep(2000);
+            //Please mkt order
+            Log.Info(string.Format("Close parent order {0},  qty: {1}, market order ", parent.ID, parent.Qty));
+            TradeManager.Instance.PlaceOrder(ID, TradeType.Sell, parent.Symbol, 0, parent.Qty, null, OrderType.MKT);
+            Thread.Sleep(500);
+            ParentOrderManager.Instance.RemoveParentOrderByID(parent.ID);
+        }
+
         public void AddChildOrder(TradeOrder tradeOrder)
         {
             if (!Parent_Child_Order_Map.ContainsKey(tradeOrder.ParentOrderID))

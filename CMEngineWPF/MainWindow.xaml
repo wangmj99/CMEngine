@@ -43,7 +43,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="OrderManagement">
-                <Grid Background="#FFE5E5E5" Margin="0,-6,0,-350">
+                <Grid Background="#FFE5E5E5" Margin="0,-4,0,-352">
                     <Button x:Name="btn_getParent" Content="Get Parent Orders" HorizontalAlignment="Left" VerticalAlignment="Top" Width="111" Margin="731,10,0,0" Height="42" Click="btn_getparent_Click"/>
                     <DataGrid x:Name="dg_ParentOrders" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top" Height="129" Width="699" IsReadOnly="True">
                         <DataGrid.Columns>
@@ -52,6 +52,9 @@
                             <DataGridTextColumn Header ="Qty" Binding="{Binding Qty}" />
                             <DataGridTextColumn Header ="IsActive" Binding="{Binding IsActive}" />
                             <DataGridTextColumn Header ="CurrentLvl" Binding="{Binding Algo.CurrentLevel}" />
+                            <DataGridTextColumn Header ="RealizedGain" Binding="{Binding RealizedGain}" />
+                            <DataGridTextColumn Header ="UnRealizedGain" Binding="{Binding UnRealizedGain}" />
+                            <DataGridTextColumn Header ="TotalGain" Binding="{Binding TotalGain}" />
                         </DataGrid.Columns>
                     </DataGrid>
                     <Button x:Name="btn_getChildOrder" Content="Show Child Orders" HorizontalAlignment="Left" VerticalAlignment="Top" Width="111" Margin="731,70,0,0" Height="42" Click="btn_getchild_Click"/>
@@ -63,6 +66,7 @@
                     <DataGrid x:Name="dg_Details" HorizontalAlignment="Left" Margin="0,146,0,0" VerticalAlignment="Top" Height="164" Width="699" IsReadOnly="True"/>
                     <DataGrid x:Name="dg_Trademap" HorizontalAlignment="Left" Margin="0,327,0,0" VerticalAlignment="Top" Height="164" Width="699" IsReadOnly="True"/>
                     <Button x:Name="btn_getTrademap" Content="Show Trade Map" HorizontalAlignment="Left" VerticalAlignment="Top" Width="111" Margin="731,248,0,0" Height="42" Click="btn_getTrademap_Click"/>
+                    <Button x:Name="btn_closeParent" Content="Close Parent Position" HorizontalAlignment="Left" Margin="871,188,0,0" VerticalAlignment="Top" Width="114" Height="42" Click="btn_CloseParent_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="WatchList">

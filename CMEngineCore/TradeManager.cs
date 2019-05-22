@@ -151,14 +151,14 @@ namespace CMEngineCore
             //Log.Info("Receive Open Order Msg. " + string.Format("Open OrderID {0}, ClientID {1} ", msg.Order.OrderId, msg.Order.ClientId));
         }
 
-        public TradeOrder PlaceOrder(int parentOrderID, TradeType tradeType, string symbol, double price, double qty, string exchange = null)
+        public TradeOrder PlaceOrder(int parentOrderID, TradeType tradeType, string symbol, double price, double qty, string exchange = null, OrderType orderType = OrderType.LMT)
         {
             if (tradeType != TradeType.Buy && tradeType != TradeType.Sell) throw new Exception("Unsupported TradeType: " + tradeType);
 
             TradeOrder res = null;
                 lock (trade_locker)
             {
-                int orderID = IBClient.PlaceOrder(symbol, price, qty, tradeType, exchange);
+                int orderID = IBClient.PlaceOrder(symbol, price, qty, tradeType, exchange, orderType);
                 res = new TradeOrder();
                 res.ParentOrderID = parentOrderID;
                 res.OrderID = orderID;

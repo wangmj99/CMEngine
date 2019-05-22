@@ -36,6 +36,12 @@ namespace CMEngineCore
 
         private List<TradeOrder> lastSendOrders = new List<TradeOrder>();
 
+        public double RealizedGain { get { return GetRealizedGain(); } }
+
+        public double UnRealizedGain { get { return GetUnRealizedGain(); } }
+
+        public double TotalGain { get { return this.RealizedGain + this.UnRealizedGain;  } }
+
         [JsonIgnore]
         private object locker = new object();
 
@@ -57,7 +63,6 @@ namespace CMEngineCore
             this.IsActive = true;
             TradeOrders = new List<TradeOrder>();
         }
-
 
         internal void HandleExecutionMsg(ExecutionMessage msg)
         {
@@ -270,17 +275,46 @@ namespace CMEngineCore
             var sellList = Executions.Where(e => e.TradeType == Constant.ExecutionBuy).ToList();
             sellList.Sort();
 
-            double totalAmt = 0;
+
             double totalQty = 0;
+            
             for(int i = sellList.Count-1; i >= 0; i--)
             {
-                totalAmt += sellList[i].Execution.Shares * sellList[i].Execution.Price;
+                res += sellList[i].Execution.Shares * sellList[i].Execution.Price;
                 totalQty += sellList[i].Execution.Shares;
             }
 
-
+            //LIFO
+            for(int i = buyList.Count-1; i >= 0 && totalQty > 0; i--)
+            {
+                var exe = buyList[i];
+                double tempQty = Math.Min(totalQty, exe.Shares);
+                res -= (exe.Execution.Price * tempQty);
+                totalQty -= tempQty;               
+            }
 
             return res;
+        }
+
+        public double GetUnRealizedGain()
+        {
+
+            double mktValue = this.Qty * MarketDataManager.Instance.GetLastPrice(this.Symbol);
+
+            var buyList = Executions.Where(e => e.TradeType == Constant.ExecutionBuy).ToList();
+            buyList.Sort();
+
+            double qty = this.Qty;
+            double costBasis = 0;
+
+            for (int i = 0; i < buyList.Count && qty > 0; i++)
+            {
+                var exe = buyList[i];
+                costBasis += exe.Execution.Price * Math.Min(qty, exe.Execution.Shares);
+                qty -= Math.Min(qty, exe.Execution.Shares);
+            }
+
+            return mktValue - costBasis;
         }
         
     }

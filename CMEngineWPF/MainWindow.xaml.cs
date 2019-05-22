@@ -1,4 +1,5 @@
 ﻿using CMEngineCore;
+using CMEngineCore.Models;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -315,13 +316,6 @@ namespace CMEngineWPF
 
         private void btn_RemoveParent_Click(object sender, RoutedEventArgs e)
         {
-            //if (!TradeManager.Instance.IsConnected)
-            //{
-            //    MessageBox.Show("IB is not connected, please reconnect first!");
-            //    Log.Error("IB is not connected, please reconnect first");
-            //    return;
-            //}
-
             try
             {
                 ParentOrder parent = (ParentOrder)dg_ParentOrders.SelectedItem;
@@ -363,6 +357,29 @@ namespace CMEngineWPF
                         dg_Trademap.ItemsSource = list;
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                Log.Error(ex.StackTrace);
+                MessageBox.Show("Fail to retrieve parent order, error: " + ex.Message);
+            }
+        }
+
+        private void btn_CloseParent_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ParentOrder parent = (ParentOrder)dg_ParentOrders.SelectedItem;
+
+                if (parent == null)
+                    MessageBox.Show("Please select parent order");
+                else
+                {
+                    ParentOrderManager.Instance.CloseParentOrderByID(parent.ID);
+                    dg_ParentOrders.Items.Refresh();
+                }
+
             }
             catch (Exception ex)
             {

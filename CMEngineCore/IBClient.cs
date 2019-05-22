@@ -484,7 +484,7 @@ namespace CMEngineCore
             throw new NotImplementedException();
         }
 
-        public int PlaceOrder(string symbol, double price, double qty, TradeType tradeType, string exchange = null)
+        public int PlaceOrder(string symbol, double price, double qty, TradeType tradeType, string exchange = null, OrderType orderType = OrderType.LMT)
         {
             if (tradeType != TradeType.Buy && tradeType != TradeType.Sell)
                 throw new Exception(string.Format("Not support TradeType: {0}", tradeType));
@@ -492,8 +492,9 @@ namespace CMEngineCore
             Contract contract = CreateContract(symbol, exchange);
 
             Order order = CreateOrder(qty, tradeType);
-            order.OrderType = "LMT";
-            order.LmtPrice = price;
+            order.OrderType = orderType.ToString();
+            if (orderType == OrderType.LMT)
+                order.LmtPrice = price;
 
             this.ClientSocket.placeOrder(NextOrderId, contract, order);
             int res = NextOrderId;
@@ -502,6 +503,7 @@ namespace CMEngineCore
             return res;
 
         }
+
 
         private Order CreateOrder(double qty, TradeType tradeType)
         {

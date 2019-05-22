@@ -161,32 +161,40 @@ namespace CMEngineCore
             }
             else
             {
-                int exeLevel = int.Parse(order.Notes);
-                TradeMap[exeLevel].CurrentQty -= execution.Execution.Shares;
-
-                if(TradeMap[exeLevel].CurrentQty < 0)
+                if (string.IsNullOrWhiteSpace(order.Notes))
                 {
-                    //should not hit here
-                    Log.Error(string.Format("Negative CurrentQty detected. level: {0}, qty: {1}", exeLevel, TradeMap[exeLevel].CurrentQty));
+                    Log.Warn("HandleSellExecution error. Cannot resolve execution level due to emtpy order notes");
                 }
-
-                if (TradeMap[exeLevel].CurrentQty <= 0)
+                else
                 {
-                    TradeMap.Remove(CurrentLevel);
-                    CurrentLevel--;
 
-                    for(int i = CurrentLevel+1; i <= ScaleLevel; i++)
+                    int exeLevel = int.Parse(order.Notes);
+                    TradeMap[exeLevel].CurrentQty -= execution.Execution.Shares;
+
+                    if (TradeMap[exeLevel].CurrentQty < 0)
                     {
-                        if (TradeMap.ContainsKey(i)) TradeMap.Remove(i);
+                        //should not hit here
+                        Log.Error(string.Format("Negative CurrentQty detected. level: {0}, qty: {1}", exeLevel, TradeMap[exeLevel].CurrentQty));
                     }
 
-                    if (CurrentLevel >= 0)
+                    if (TradeMap[exeLevel].CurrentQty <= 0)
                     {
-                        GenerateTradeMapNextLevel(TradeMap[CurrentLevel].LastBuyPrice);
+                        TradeMap.Remove(CurrentLevel);
+                        CurrentLevel--;
+
+                        for (int i = CurrentLevel + 1; i <= ScaleLevel; i++)
+                        {
+                            if (TradeMap.ContainsKey(i)) TradeMap.Remove(i);
+                        }
+
+                        if (CurrentLevel >= 0)
+                        {
+                            GenerateTradeMapNextLevel(TradeMap[CurrentLevel].LastBuyPrice);
+                        }
                     }
                 }
+                Log.Info("After sld execution." + Util.PrintTradeMapCurrLvl(this));
             }
-            Log.Info("After sld execution." + Util.PrintTradeMapCurrLvl(this));
         }
 
         public override void HandleExecutionMsg(ParentOrder parentOrder, TradeExecution tradeExecution)

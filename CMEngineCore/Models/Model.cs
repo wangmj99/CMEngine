@@ -16,6 +16,12 @@ namespace CMEngineCore.Models
         Hold
     }
 
+    public enum OrderType
+    {
+        MKT,
+        LMT
+    }
+
     public enum TradeOrderStatus
     {
         Submitted,
