@@ -269,7 +269,7 @@ namespace CMEngineCore
         public double GetRealizedGain()
         {
             double res = 0;
-            var buyList = Executions.Where(e => e.TradeType == Constant.ExecutionBuy).ToList();
+            List<TradeExecution> buyList = Executions.Where(e => e.TradeType == Constant.ExecutionBuy).ToList();
             buyList.Sort();
 
             var sellList = Executions.Where(e => e.TradeType == Constant.ExecutionBuy).ToList();

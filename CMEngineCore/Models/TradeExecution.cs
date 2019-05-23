@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CMEngineCore.Models
 {
-    public class TradeExecution
+    public class TradeExecution: IComparable<TradeExecution>
     {
         public Execution Execution { get; set; }
         public int ParentOrderID { get; set; }
@@ -22,6 +22,7 @@ namespace CMEngineCore.Models
                 return DateTime.ParseExact(Execution.Time, "yyyyMMdd  HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
             }
         }
+
 
         public int CompareTo(TradeExecution other)
         {
