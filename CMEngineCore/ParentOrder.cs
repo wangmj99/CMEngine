@@ -21,6 +21,8 @@ namespace CMEngineCore
         public double? AvailableCash { get; set; }
         public double Qty { get; set; }
 
+
+
         [JsonIgnore]
         public int NoOfTransactions
         {
