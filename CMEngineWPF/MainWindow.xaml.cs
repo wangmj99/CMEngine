@@ -41,7 +41,7 @@ namespace CMEngineWPF
                 {
                     string ip = ConfigurationManager.AppSettings["IBIPAddress"];
                     int port = int.Parse(ConfigurationManager.AppSettings["IBPort"]);
-                    TradeManager.Instance.Init();
+                    TradeManager.Instance.Init(Broker.IB);
                     TradeManager.Instance.Connect(ip, port, 1);
                     MessageBox.Show("IB is connected");
                 }
@@ -91,7 +91,7 @@ namespace CMEngineWPF
 
             Log.Info(string.Format("Request Global cancel for all orders on resume"));
 
-            TradeManager.Instance.RequestGlobalCancle();
+            TradeManager.Instance.RequestGlobalCancel();
             Thread.Sleep(3000);
             ParentOrderManager.Instance.SetAllOrdertoCancelStatus();
 

@@ -60,4 +60,10 @@ namespace CMEngineCore.Models
         public double Price { get; set; }
         
     }
+
+    public enum Broker
+    {
+        IB,
+        TD
+    }
 }

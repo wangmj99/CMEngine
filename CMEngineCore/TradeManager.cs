@@ -21,6 +21,9 @@ namespace CMEngineCore
         public IBClient IBClient { get; set; }
 
         [JsonIgnore]
+        public TDClient TDClient { get; set; }
+
+        [JsonIgnore]
         private EReaderMonitorSignal signal;
 
         [JsonIgnore]
@@ -32,28 +35,40 @@ namespace CMEngineCore
         [JsonIgnore]
         public static TradeManager Instance = new TradeManager();
 
+        [JsonIgnore]
+        public static Broker Broker { get; set; }
+
         private TradeManager() { }
 
-        public void Init()
+        public void Init(Broker broker)
         {
-            if (IBClient != null)
+            Broker = broker;
+            if (broker == Broker.IB)
             {
-                Disconnect();
+                if (IBClient != null)
+                {
+                    Disconnect();
+                }
+
+                signal = new EReaderMonitorSignal();
+                IBClient = new IBClient(signal);
+
+                IBClient.OpenOrder += HandleOpenOrderMsg;
+                IBClient.ExecutionDetails += HandleExecutionMsg;
+                IBClient.OrderStatus += HandleOrderStatusMsg;
+            }else if (broker == Broker.TD)
+            {
+                TDClient = TDClient.Instance;
+                TDClient.ExecutionDetails += HandleExecutionMsg;
+                TDClient.OrderStatus += HandleOrderStatusMsg;
             }
-
-            signal = new EReaderMonitorSignal();
-            IBClient = new IBClient(signal);
-
-            IBClient.OpenOrder += HandleOpenOrderMsg;
-            IBClient.ExecutionDetails += HandleExecutionMsg;
-            IBClient.OrderStatus += HandleOrderStatusMsg;
 
             IsInitialized = true;
         }
 
         public bool IsConnected { get { return IBClient != null && IBClient.IsConnected; } }
 
-        public void Connect (string ip, int port, int clientID)
+        public bool Connect (string ip, int port, int clientID)
         {
             Log.Info("Connecting IB");
             try
@@ -71,6 +86,8 @@ namespace CMEngineCore
                 Log.Error("Error on connect IB, StackTrace: " + ex.StackTrace);
                 throw ex;
             }
+
+            return true;
         }
 
         public void Disconnect()
@@ -158,7 +175,14 @@ namespace CMEngineCore
             TradeOrder res = null;
                 lock (trade_locker)
             {
-                int orderID = IBClient.PlaceOrder(symbol, price, qty, tradeType, exchange, orderType);
+                int orderID = -1;
+                if (Broker == Broker.IB)
+                {
+                    orderID = IBClient.PlaceOrder(symbol, price, qty, tradeType, exchange, orderType);
+                }else
+                {
+                    orderID = TDClient.PlaceOrder(symbol, price, qty, tradeType, exchange, orderType);
+                }
                 res = new TradeOrder();
                 res.ParentOrderID = parentOrderID;
                 res.OrderID = orderID;
@@ -187,7 +211,13 @@ namespace CMEngineCore
                     try
                     {
                         Log.Info(string.Format("Cancel orderID: {0}", order.OrderID));
-                        IBClient.ClientSocket.cancelOrder(order.OrderID);
+                        if (Broker == Broker.IB)
+                        {
+                            IBClient.ClientSocket.cancelOrder(order.OrderID);
+                        }else if(Broker == Broker.TD)
+                        {
+                            TDClient.CancelOrder(order.OrderID);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -211,14 +241,20 @@ namespace CMEngineCore
             return res;
         }
 
-        public void RequestGlobalCancle()
+        public void RequestGlobalCancel()
         {
             lock (trade_locker)
             {
                 try
                 {
                     Log.Info("Request Global cancel!");
-                    IBClient.ClientSocket.reqGlobalCancel();
+                    if (Broker == Broker.IB)
+                    {
+                        IBClient.ClientSocket.reqGlobalCancel();
+                    }else if(Broker == Broker.TD)
+                    {
+                        TDClient.RequestGlobalCancel();
+                    }
                 }catch(Exception ex)
                 {
                     Log.Error("Failed to request global cancel. Error: " + ex.Message);
