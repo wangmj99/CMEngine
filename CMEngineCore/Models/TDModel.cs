@@ -49,17 +49,23 @@ namespace CMEngineCore.Models
 
     public class TDConstantVal
     {
-        public static string OrderTypeMKT = "MARKET";
-        public static string OrderTypeLMT = "LIMIT";
-        public static string OrderSessionNormal = "NORMAL";
-        public static string OrderTIFDay = "DAY";
-        public static string OrderTIFGTC = "GOOD_TILL_CANCEL";
-        public static string OrderStrategyTypeSingle = "SINGLE";
-        public static string AssetTypeEQUITY = "EQUITY";
-        public static string OrderTradeTypeBuy = "BUY";
-        public static string OrderTradeTypeSell = "SELL";
+        public static string OrderType_MKT = "MARKET";
+        public static string OrderType_LMT = "LIMIT";
 
-        
+        public static string OrderSession_Normal = "NORMAL";
+
+        public static string OrderTIF_Day = "DAY";
+        public static string OrderTIF_GTC = "GOOD_TILL_CANCEL";
+
+        public static string OrderStrategyType_Single = "SINGLE";
+
+        public static string AssetType_EQUITY = "EQUITY";
+
+        public static string OrderTradeType_Buy = "BUY";
+        public static string OrderTradeType_Sell = "SELL";
+        public static string OrderTradeType_BuyToOpen = "BUY_TO_OPEN";
+
+
 
     }
     public class Instrument
@@ -80,6 +86,7 @@ namespace CMEngineCore.Models
         public string orderType { get; set; }
         public double price { get; set; }
         public string session { get; set; }
+        //Time In Force, TIF
         public string duration { get; set; }
         public string orderStrategyType { get; set; }
         public List<OrderLegCollection> orderLegCollection { get; set; }
