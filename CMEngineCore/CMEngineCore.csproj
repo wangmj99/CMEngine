@@ -59,6 +59,7 @@
     <Compile Include="Models\Model.cs" />
     <Compile Include="Models\OrderMessage.cs" />
     <Compile Include="Models\OrderStatusMessage.cs" />
+    <Compile Include="Models\TDModel.cs" />
     <Compile Include="Models\TradeExecution.cs" />
     <Compile Include="ParentOrder.cs" />
     <Compile Include="ParentOrderManager.cs" />
