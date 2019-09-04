@@ -40,6 +40,7 @@
                     <TextBox x:Name="txt_scalelvl" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,138,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="84"/>
                     <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="35" Margin="10,98,0,0" VerticalAlignment="Top" Width="346" Grid.ColumnSpan="2"/>
                     <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="38" Margin="10,164,0,0" VerticalAlignment="Top" Width="346" Grid.ColumnSpan="2"/>
+                    <Button x:Name="button" Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="635,248,0,0" VerticalAlignment="Top" Width="86" Height="29" Click="button_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="OrderManagement">

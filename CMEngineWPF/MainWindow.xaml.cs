@@ -388,5 +388,15 @@ namespace CMEngineWPF
                 MessageBox.Show("Fail to retrieve parent order, error: " + ex.Message);
             }
         }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            TDClient tdclient = TDClient.Instance;
+            //tdclient.GetAccessToken();
+            int id = tdclient.PlaceOrder("GDX", 28.89, 150, TradeType.Buy,null, OrderType.LMT);
+
+            //int id = 675583175;
+            tdclient.CancelOrder(id);
+        }
     }
 }

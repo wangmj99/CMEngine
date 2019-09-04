@@ -68,17 +68,21 @@ namespace CMEngineCore.Models
 
 
     }
-    public class Instrument
+    public class TDInstrument
     {
         public string symbol { get; set; }
+        public string cusip { get; set; }
         public string assetType { get; set; }
     }
 
     public class OrderLegCollection
     {
+        public string orderLegType { get; set; }
+        public int legId { get; set; }
+        public TDInstrument instrument { get; set; }
         public string instruction { get; set; }
+        public string positionEffect { get; set; }
         public int quantity { get; set; }
-        public Instrument instrument { get; set; }
     }
 
     public class TDContract
@@ -90,5 +94,37 @@ namespace CMEngineCore.Models
         public string duration { get; set; }
         public string orderStrategyType { get; set; }
         public List<OrderLegCollection> orderLegCollection { get; set; }
+    }
+
+    public class TDOrder
+    {
+        public string session { get; set; }
+        public string duration { get; set; }
+        public string orderType { get; set; }
+        public string complexOrderStrategyType { get; set; }
+        public int quantity { get; set; }
+        public int filledQuantity { get; set; }
+        public int remainingQuantity { get; set; }
+        public string requestedDestination { get; set; }
+        public string destinationLinkName { get; set; }
+        public double price { get; set; }
+        public List<OrderLegCollection> orderLegCollection { get; set; }
+        public string orderStrategyType { get; set; }
+        public int orderId { get; set; }
+        public bool cancelable { get; set; }
+        public bool editable { get; set; }
+        public string status { get; set; }
+        public DateTime enteredTime { get; set; }
+        public string tag { get; set; }
+        public int accountId { get; set; }
+    }
+
+    public class TDToken
+    {
+        public string access_token { get; set; }
+        public string refresh_token { get; set; }
+        public int expires_in { get; set; }
+        public int refresh_token_expires_in { get; set; }
+        public string token_type { get; set; }
     }
 }
