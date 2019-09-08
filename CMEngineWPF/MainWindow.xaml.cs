@@ -393,10 +393,26 @@ namespace CMEngineWPF
         {
             TDClient tdclient = TDClient.Instance;
             //tdclient.GetAccessToken();
-            int id = tdclient.PlaceOrder("GDX", 28.89, 150, TradeType.Buy,null, OrderType.LMT);
 
+            //var orders = tdclient.GetOpenOrders();
+
+            List<int> ids = new List<int>();
+            int count = 3;
+            for (int i = 0; i < count; i++)
+            {
+                //double price = Math.Round(26.89 + i / (double)100,2);
+                double price = 26.01;
+                int qty = 150;
+                int id = tdclient.PlaceOrder("GDX", price, qty, TradeType.Buy, null, OrderType.LMT);
+                Thread.Sleep(200);
+                ids.Add(id);
+            }
+
+
+            tdclient.RequestGlobalCancel();
             //int id = 675583175;
-            tdclient.CancelOrder(id);
+            //foreach(int id in ids)
+            //    tdclient.CancelOrder(id);
         }
     }
 }
