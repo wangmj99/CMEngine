@@ -105,6 +105,27 @@ namespace CMEngineCore.Models
         public List<OrderLegCollection> orderLegCollection { get; set; }
     }
 
+    public class TDExecutionLeg
+    {
+        public int legId { get; set; }
+        public int quantity { get; set; }
+        public int mismarkedQuantity { get; set; }
+        public double price { get; set; }
+        public DateTime time { get; set; }
+        //following field need to be populated
+        public int orderId { get; set; }
+        public string side { get; set; }
+    }
+
+    public class TDOrderActivityCollection
+    {
+        public string activityType { get; set; }
+        public string executionType { get; set; }
+        public int quantity { get; set; }
+        public int orderRemainingQuantity { get; set; }
+        public List<TDExecutionLeg> executionLegs { get; set; }
+    }
+
     public class TDOrder
     {
         public string session { get; set; }
@@ -124,8 +145,10 @@ namespace CMEngineCore.Models
         public bool editable { get; set; }
         public string status { get; set; }
         public DateTime enteredTime { get; set; }
+        public DateTime closeTime { get; set; }
         public string tag { get; set; }
         public int accountId { get; set; }
+        public List<TDOrderActivityCollection> orderActivityCollection { get; set; }
     }
 
     public class TDToken

@@ -36,6 +36,7 @@ namespace CMEngineCore
 
         public Algo Algo { get; set; }
 
+        [JsonIgnore]
         private List<TradeOrder> lastSendOrders = new List<TradeOrder>();
 
         public double RealizedGain { get { return GetRealizedGain(); } }
@@ -69,11 +70,11 @@ namespace CMEngineCore
         internal void HandleExecutionMsg(ExecutionMessage msg)
         {
             //Add execution
-            TradeExecution tradeExec = new TradeExecution();
-            tradeExec.ParentOrderID = this.ID;
-            tradeExec.Execution = msg.Execution;
-            tradeExec.Execution.LastLiquidity = null;
-            tradeExec.Symbol = this.Symbol;
+            TradeExecution tradeExec = new TradeExecution(msg.Execution);
+            //tradeExec.ParentOrderID = this.ID;
+            //tradeExec.Execution = msg.Execution;
+            //tradeExec.Execution.LastLiquidity = null;
+            //tradeExec.Symbol = this.Symbol;
 
             lock (locker)
             {
@@ -276,6 +277,68 @@ namespace CMEngineCore
             }
         }
 
+        internal void TDEval()
+        {
+            lock (locker)
+            {
+                /*
+                 1. On wake up, check the status of last send order.
+                 2. Update last send order status and executions.
+                 3. Update trademap/handle execution
+                 4. Check If last send orders has been filled or canclled.
+                 5. if none of order filled or cancelled then sleep again
+                 6. else cancel all open orders and eval algo
+                 
+                 * */
+                bool changed = false;
+                if(lastSendOrders.Count > 0)
+                {
+                    foreach(var o in lastSendOrders)
+                    {
+                        TDOrder order = TradeManager.Instance.GetTDOrderById(o.OrderID);
+                        if (order != null)
+                        {
+                            if (order.status == TDConstantVal.OrderStatus_Filled || order.status == TDConstantVal.OrderStatus_Canceled)
+                                changed = true;
+
+                            //TODO: update tradeOrder status  -- refer handle order status msg
+
+                            //TODO: if there is new execution
+                                //TODO: update executions   -- refer handle execution msg
+
+                                //TODO: update trademap
+                        }
+                    }
+                }
+
+                if (lastSendOrders.Count == 0 || changed)
+                {
+                    try
+                    {
+                        //cancel all open orders, synchronized call, wait for cancel event back
+                        var openOrders = GetOpenOrders();
+                        if (openOrders.Count > 0)
+                        {
+                            TradeManager.Instance.CancelOrders(openOrders);
+                            //wait for cancel back
+                            Thread.Sleep(500);
+                        }
+                        lastSendOrders.Clear();
+
+                        //place buy and sell order
+                        List<TradeOrder> orders = Algo.Eval(this);
+                        lastSendOrders.AddRange(orders);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message);
+                        Log.Error(ex.StackTrace);
+                    }
+                }
+            }
+        }
+
         public double GetRealizedGain()
         {
             double res = 0;
@@ -290,8 +353,8 @@ namespace CMEngineCore
             
             for(int i = sellList.Count-1; i >= 0; i--)
             {
-                res += sellList[i].Execution.Shares * sellList[i].Execution.Price;
-                totalQty += sellList[i].Execution.Shares;
+                res += sellList[i].Shares * sellList[i].Price;
+                totalQty += sellList[i].Shares;
             }
 
             //LIFO
@@ -299,7 +362,7 @@ namespace CMEngineCore
             {
                 var exe = buyList[i];
                 double tempQty = Math.Min(totalQty, exe.Shares);
-                res -= (exe.Execution.Price * tempQty);
+                res -= (exe.Price * tempQty);
                 totalQty -= tempQty;               
             }
 
@@ -320,8 +383,8 @@ namespace CMEngineCore
             for (int i = 0; i < buyList.Count && qty > 0; i++)
             {
                 var exe = buyList[i];
-                costBasis += exe.Execution.Price * Math.Min(qty, exe.Execution.Shares);
-                qty -= Math.Min(qty, exe.Execution.Shares);
+                costBasis += exe.Price * Math.Min(qty, exe.Shares);
+                qty -= Math.Min(qty, exe.Shares);
             }
 
             return mktValue - costBasis;

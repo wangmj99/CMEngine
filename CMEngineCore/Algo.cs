@@ -88,16 +88,16 @@ namespace CMEngineCore
              * */
 
 
-            TradeOrder order = parentOrder.GetChildOrderByID(execution.Execution.OrderId);
+            TradeOrder order = parentOrder.GetChildOrderByID(execution.OrderID);
             if (order == null)
             {
-                Log.Error(string.Format("Cannot find trade order, orderID: {0}", execution.Execution.OrderId));
+                Log.Error(string.Format("Cannot find trade order, orderID: {0}", execution.OrderID));
 
             }
             else
             {
                 int exeLevel = int.Parse(order.Notes);
-                TradeMap[exeLevel].CurrentQty += execution.Execution.Shares;
+                TradeMap[exeLevel].CurrentQty += execution.Shares;
                 if (TradeMap[exeLevel].CurrentQty > TradeMap[exeLevel].TargetQty)
                 {
                     //should not hit here
@@ -106,7 +106,7 @@ namespace CMEngineCore
                 }
 
 
-                TradeMap[exeLevel].LastBuyPrice = execution.Execution.Price;
+                TradeMap[exeLevel].LastBuyPrice = execution.Price;
                 TradeMap[exeLevel].TargetSellPrice = (exeLevel == 0) ? int.MaxValue : TradeMap[exeLevel - 1].LastBuyPrice;
 
                 CurrentLevel = Math.Max(CurrentLevel, exeLevel);
@@ -153,10 +153,10 @@ namespace CMEngineCore
 
         private void HandleSellExecution(ParentOrder parentOrder, TradeExecution execution)
         {
-            TradeOrder order = parentOrder.GetChildOrderByID(execution.Execution.OrderId);
+            TradeOrder order = parentOrder.GetChildOrderByID(execution.OrderID);
             if (order == null)
             {
-                Log.Error(string.Format("Cannot find trade order, orderID: {0}", execution.Execution.OrderId));
+                Log.Error(string.Format("Cannot find trade order, orderID: {0}", execution.OrderID));
 
             }
             else
@@ -169,7 +169,7 @@ namespace CMEngineCore
                 {
 
                     int exeLevel = int.Parse(order.Notes);
-                    TradeMap[exeLevel].CurrentQty -= execution.Execution.Shares;
+                    TradeMap[exeLevel].CurrentQty -= execution.Shares;
 
                     if (TradeMap[exeLevel].CurrentQty < 0)
                     {
@@ -199,17 +199,17 @@ namespace CMEngineCore
 
         public override void HandleExecutionMsg(ParentOrder parentOrder, TradeExecution tradeExecution)
         {
-            if(tradeExecution.Execution.Side.ToUpper() == Constant.ExecutionBuy)
+            if(tradeExecution.Side.ToUpper() == Constant.ExecutionBuy)
             {
                 HandleBuyExecution(parentOrder, tradeExecution);
 
-            }else if (tradeExecution.Execution.Side.ToUpper() == Constant.ExecutionSell)
+            }else if (tradeExecution.Side.ToUpper() == Constant.ExecutionSell)
             {
                 HandleSellExecution(parentOrder, tradeExecution);
             }
             else
             {
-                Log.Error(string.Format("Unsupported execution. Side {0}", tradeExecution.Execution.Side.ToUpper()));
+                Log.Error(string.Format("Unsupported execution. Side {0}", tradeExecution.Side));
             }
         }
     }

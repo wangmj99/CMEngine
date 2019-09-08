@@ -263,6 +263,12 @@ namespace CMEngineCore
             }
         }
 
+        public TDOrder GetTDOrderById(int orderId)
+        {
+            return TDClient.GetOrderByID(orderId);
+
+        }
+
         
     }
 }

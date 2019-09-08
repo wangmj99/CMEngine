@@ -53,7 +53,7 @@ namespace CMEngineCore.Models
     {
         public int OrderID { get; set; }
         public int ParentOrderID { get; set; }
-        public Order Order { get; set; }
+        //public Order Order { get; set; }
         public TradeOrderStatus Status { get; set; }
         public string Notes { get; set; }
         public string Side { get; set; }

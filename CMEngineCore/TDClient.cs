@@ -124,6 +124,28 @@ namespace CMEngineCore
             }
         }
 
+        public TDOrder GetOrderByID(int orderId)
+        {
+            TDOrder res = null;
+            try
+            {
+                string accessToken = GetAccessToken();
+                string url = string.Format("{0}/{1}", OrderURL, orderId);
+                webClient = new WebClient();
+                webClient.Headers[HttpRequestHeader.Authorization] = string.Format("Bearer {0}", accessToken);
+                webClient.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36";
+                string orderStr = webClient.DownloadString(url);
+                res=(JsonConvert.DeserializeObject<TDOrder>(orderStr));
+                webClient.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(string.Format("Error getting open orders. orderid: {0}, error: {1}", orderId, ex.ToString()));
+            }
+
+            return res;
+        }
+
         public List<TDOrder> GetOpenOrders()
         {
             List<string> stats = new List<string>() {

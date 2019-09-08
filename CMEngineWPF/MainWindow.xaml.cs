@@ -392,12 +392,14 @@ namespace CMEngineWPF
         private void button_Click(object sender, RoutedEventArgs e)
         {
             TDClient tdclient = TDClient.Instance;
+
+            var o = tdclient.GetOrderByID(677527189);
             //tdclient.GetAccessToken();
 
             //var orders = tdclient.GetOpenOrders();
 
             List<int> ids = new List<int>();
-            int count = 3;
+            int count = 1;
             for (int i = 0; i < count; i++)
             {
                 //double price = Math.Round(26.89 + i / (double)100,2);
