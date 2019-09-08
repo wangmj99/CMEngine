@@ -150,19 +150,27 @@ namespace CMEngineCore
                         };
                         break; 
                     case Constant.OrderSubmitted:
-                        if (order.Status != TradeOrderStatus.Submitted)
+                        if (order.Status == TradeOrderStatus.PendingSubmit)
                         {
                             order.Status = TradeOrderStatus.Submitted;
                             res = true;
+                        }
+                        else
+                        {
+                            Log.Error("Received order submitted msg, however current order status is  " + msg.Status);
                         };
                         break;
 
                     case Constant.OrderFilled:
-                        if (order.Status != TradeOrderStatus.Filled)
+                        if (order.Status != TradeOrderStatus.Cancelled && order.Status!=TradeOrderStatus.PendingCxl)
                         {
                             order.Status = TradeOrderStatus.Filled;
                             res = true;
-                        };
+                        }
+                        else
+                        {
+                            Log.Error("Received order OrderFilled msg, however current order status is  " + msg.Status);
+                        }; 
                         break;
                 }
 

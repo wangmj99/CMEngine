@@ -4,6 +4,7 @@ using log4net;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Net;
@@ -21,7 +22,7 @@ namespace CMEngineCore
 
         string refreshToken = string.Empty;
 
-        private static string PlaceOrderURL = @"https://api.tdameritrade.com/v1/accounts/{0}/orders";
+        private static string OrderURL = @"https://api.tdameritrade.com/v1/accounts/{0}/orders";
         private static string CancelOrderURL = @"https://api.tdameritrade.com/v1/accounts/{0}/orders/{1}";
 
         public string accountId = string.Empty;
@@ -32,8 +33,8 @@ namespace CMEngineCore
         {
             accountId = ConfigurationManager.AppSettings["TDAccountID"];
             refreshToken = ConfigurationManager.AppSettings["TDToken"];
-            PlaceOrderURL = string.Format(PlaceOrderURL, accountId);
-            CancelOrderURL = string.Format(PlaceOrderURL, accountId);
+            OrderURL = string.Format(OrderURL, accountId);
+            CancelOrderURL = string.Format(OrderURL, accountId);
             webClient = new WebClient();
         }
 
@@ -96,9 +97,9 @@ namespace CMEngineCore
 
                 string msg = JsonConvert.SerializeObject(contract);
 
-                var header  = SendMessage(PlaceOrderURL, "POST", msg);
+                var res  = SendMessage(OrderURL, "POST", msg);
 
-                orderID = ParseOrderID(header);
+                orderID = ParseOrderID(res.Item1);
 
             }catch(Exception ex)
             {
@@ -123,12 +124,58 @@ namespace CMEngineCore
             }
         }
 
-        public void RequestGlobalCancel()
+        public List<TDOrder> GetOpenOrders()
         {
+            List<string> stats = new List<string>() {
+                TDConstantVal.OrderStatus_Queued,
+                TDConstantVal.OrderStatus_Working,
+                TDConstantVal.OrderStatus_Accepted,
+                TDConstantVal.OrderStatus_AwaitReview,
+                TDConstantVal.OrderStatus_PendingAct
+            };
+            List<TDOrder> res = new List<TDOrder>();
+            string accessToken = GetAccessToken();
+            
+            foreach (string s in stats)
+            {
+                try
+                {
+                    webClient = new WebClient();
+                    webClient.Headers[HttpRequestHeader.Authorization] = string.Format("Bearer {0}", accessToken);
+                    webClient.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36";
+                    webClient.QueryString.Add("status", s);
+                    string orderStr = webClient.DownloadString(OrderURL);
+                    res.AddRange(JsonConvert.DeserializeObject<List<TDOrder>>(orderStr));
+                    webClient.Dispose();
+                }catch(Exception ex)
+                {
+                    Log.Error(string.Format("Error getting open orders. status: {0}, error: {1}", s, ex.ToString()));
+                }
+            }
 
+            return res;
         }
 
-        private WebHeaderCollection SendMessage(string url, string method, string msg)
+        public void RequestGlobalCancel()
+        {
+            List<TDOrder> orders = GetOpenOrders();
+            if (orders.Count > 0)
+            {
+                foreach(var order in orders)
+                {
+                    try
+                    {
+                        CancelOrder(order.orderId);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(string.Format("Error cancel open order {0}, error: {0}", order.orderId, ex.ToString()));
+                    }
+                }
+            }
+        }
+
+        private Tuple<WebHeaderCollection, string> SendMessage(string url, string method, string msg)
         {
             string res = string.Empty;
             WebHeaderCollection header = null;
@@ -148,7 +195,7 @@ namespace CMEngineCore
                 throw ex;
             }
 
-            return header;
+            return new Tuple<WebHeaderCollection, string>(header, res);
         }
 
         private static Regex placeOrderPattern = new Regex("orders/\\d+");
@@ -178,11 +225,7 @@ namespace CMEngineCore
         {
             string res = string.Empty;
 
-            webClient = new WebClient();
-            webClient.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36";
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-
-            var reqparm = new System.Collections.Specialized.NameValueCollection();
+            var reqparm = new NameValueCollection();
 
             reqparm["grant_type"] = "refresh_token";
             reqparm["refresh_token"] = refreshToken;
@@ -191,12 +234,22 @@ namespace CMEngineCore
             reqparm["client_id"] = ConfigurationManager.AppSettings["TDAppID"];
             reqparm["redirect_uri"] = string.Empty;
 
-            var responsebytes = webClient.UploadValues(AccessTokenUrl, "POST",reqparm);
-            var str = Encoding.UTF8.GetString(responsebytes);
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36";
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+
+            var str = SetMessageWithParam(webClient, AccessTokenUrl, "POST", reqparm);
 
              res = JsonConvert.DeserializeObject<TDToken>(str).access_token;
 
             return res;
+        }
+
+        private string SetMessageWithParam(WebClient webClient, string url, string method, NameValueCollection reqparm)
+        {
+            var responsebytes = webClient.UploadValues(url, method, reqparm);
+            var str = Encoding.UTF8.GetString(responsebytes);
+            return str;
         }
     }
 }

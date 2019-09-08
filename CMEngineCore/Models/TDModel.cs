@@ -60,11 +60,20 @@ namespace CMEngineCore.Models
         public static string OrderStrategyType_Single = "SINGLE";
 
         public static string AssetType_EQUITY = "EQUITY";
+        public static string AssetType_CASHEQL = "CASH_EQUIVALENT";
+        
 
         public static string OrderTradeType_Buy = "BUY";
         public static string OrderTradeType_Sell = "SELL";
         public static string OrderTradeType_BuyToOpen = "BUY_TO_OPEN";
 
+        public static string OrderStatus_Working = "WORKING";
+        public static string OrderStatus_Accepted = "ACCEPTED";
+        public static string OrderStatus_Queued = "QUEUED";
+        public static string OrderStatus_Canceled = "CANCELED";
+        public static string OrderStatus_Filled = "FILLED";
+        public static string OrderStatus_AwaitReview = "AWAITING_MANUAL_REVIEW";
+        public static string OrderStatus_PendingAct = "PENDING_ACTIVATION";
 
 
     }
@@ -82,7 +91,7 @@ namespace CMEngineCore.Models
         public TDInstrument instrument { get; set; }
         public string instruction { get; set; }
         public string positionEffect { get; set; }
-        public int quantity { get; set; }
+        public double quantity { get; set; }
     }
 
     public class TDContract
@@ -102,9 +111,9 @@ namespace CMEngineCore.Models
         public string duration { get; set; }
         public string orderType { get; set; }
         public string complexOrderStrategyType { get; set; }
-        public int quantity { get; set; }
-        public int filledQuantity { get; set; }
-        public int remainingQuantity { get; set; }
+        public double quantity { get; set; }
+        public double filledQuantity { get; set; }
+        public double remainingQuantity { get; set; }
         public string requestedDestination { get; set; }
         public string destinationLinkName { get; set; }
         public double price { get; set; }
