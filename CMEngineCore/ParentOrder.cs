@@ -213,6 +213,7 @@ namespace CMEngineCore
                 switch (tdOrder.status)
                 {
                     case TDConstantVal.OrderStatus_Canceled:
+                    case TDConstantVal.OrderStatus_Rejected:
                         if (order.Status != TradeOrderStatus.Cancelled)
                         {
                             order.Status = TradeOrderStatus.Cancelled;
@@ -281,19 +282,7 @@ namespace CMEngineCore
             return res;
         }
 
-        public static List<TradeExecution> GetTradeExecution(TDOrder order)
-        {
-            List<TradeExecution> res = new List<TradeExecution>();
 
-            foreach(var item in order.orderActivityCollection)
-                foreach(var leg in item.executionLegs)
-                {
-                    TradeExecution exe = new TradeExecution(leg, order);
-                    res.Add(exe);
-                }
-
-            return res;
-        }
 
         internal void Eval()
         {
@@ -336,7 +325,7 @@ namespace CMEngineCore
                                 UpdateTDOrderStatus(tdOrder);
 
                                 //TODO: check if there is new execution
-                                List<TradeExecution> executions = GetTradeExecution(tdOrder);
+                                List<TradeExecution> executions = TradeManager.Instance.GetTDTradeExecution(tdOrder);
                                 List<TradeExecution> newExecutions = FindNewExecutions(executions, order);
 
                                 if (newExecutions.Count > 0)

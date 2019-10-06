@@ -269,6 +269,20 @@ namespace CMEngineCore
 
         }
 
-        
+        public List<TradeExecution> GetTDTradeExecution(TDOrder order)
+        {
+            List<TradeExecution> res = new List<TradeExecution>();
+
+            foreach (var item in order.orderActivityCollection)
+                foreach (var leg in item.executionLegs)
+                {
+                    TradeExecution exe = new TradeExecution(leg, order);
+                    res.Add(exe);
+                }
+
+            return res;
+        }
+
+
     }
 }
