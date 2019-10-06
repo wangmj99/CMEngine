@@ -273,13 +273,20 @@ namespace CMEngineCore
         {
             List<TradeExecution> res = new List<TradeExecution>();
 
-            foreach (var item in order.orderActivityCollection)
-                foreach (var leg in item.executionLegs)
+            if (order.orderActivityCollection != null)
+            {
+                foreach (var item in order.orderActivityCollection)
                 {
-                    TradeExecution exe = new TradeExecution(leg, order);
-                    res.Add(exe);
+                    if (item.executionLegs != null)
+                    {
+                        foreach (var leg in item.executionLegs)
+                        {
+                            TradeExecution exe = new TradeExecution(leg, order);
+                            res.Add(exe);
+                        }
+                    }
                 }
-
+            }
             return res;
         }
 
