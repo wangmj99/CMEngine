@@ -49,31 +49,31 @@ namespace CMEngineCore.Models
 
     public class TDConstantVal
     {
-        public static string OrderType_MKT = "MARKET";
-        public static string OrderType_LMT = "LIMIT";
+        public const string OrderType_MKT = "MARKET";
+        public const string OrderType_LMT = "LIMIT";
 
-        public static string OrderSession_Normal = "NORMAL";
+        public const string OrderSession_Normal = "NORMAL";
 
-        public static string OrderTIF_Day = "DAY";
-        public static string OrderTIF_GTC = "GOOD_TILL_CANCEL";
+        public const string OrderTIF_Day = "DAY";
+        public const string OrderTIF_GTC = "GOOD_TILL_CANCEL";
 
-        public static string OrderStrategyType_Single = "SINGLE";
+        public const string OrderStrategyType_Single = "SINGLE";
 
-        public static string AssetType_EQUITY = "EQUITY";
-        public static string AssetType_CASHEQL = "CASH_EQUIVALENT";
-        
+        public const string AssetType_EQUITY = "EQUITY";
+        public const string AssetType_CASHEQL = "CASH_EQUIVALENT";
 
-        public static string OrderTradeType_Buy = "BUY";
-        public static string OrderTradeType_Sell = "SELL";
-        public static string OrderTradeType_BuyToOpen = "BUY_TO_OPEN";
 
-        public static string OrderStatus_Working = "WORKING";
-        public static string OrderStatus_Accepted = "ACCEPTED";
-        public static string OrderStatus_Queued = "QUEUED";
-        public static string OrderStatus_Canceled = "CANCELED";
-        public static string OrderStatus_Filled = "FILLED";
-        public static string OrderStatus_AwaitReview = "AWAITING_MANUAL_REVIEW";
-        public static string OrderStatus_PendingAct = "PENDING_ACTIVATION";
+        public const string OrderTradeType_Buy = "BUY";
+        public const string OrderTradeType_Sell = "SELL";
+        public const string OrderTradeType_BuyToOpen = "BUY_TO_OPEN";
+
+        public const string OrderStatus_Working = "WORKING";
+        public const string OrderStatus_Accepted = "ACCEPTED";
+        public const string OrderStatus_Queued = "QUEUED";
+        public const string OrderStatus_Canceled = "CANCELED";
+        public const string OrderStatus_Filled = "FILLED";
+        public const string OrderStatus_AwaitReview = "AWAITING_MANUAL_REVIEW";
+        public const string OrderStatus_PendingAct = "PENDING_ACTIVATION";
 
 
     }
@@ -108,21 +108,23 @@ namespace CMEngineCore.Models
     public class TDExecutionLeg
     {
         public int legId { get; set; }
-        public int quantity { get; set; }
-        public int mismarkedQuantity { get; set; }
+        public double quantity { get; set; }
+        public double mismarkedQuantity { get; set; }
         public double price { get; set; }
         public DateTime time { get; set; }
         //following field need to be populated
-        public int orderId { get; set; }
-        public string side { get; set; }
+        //public int orderId { get; set; }
+        //public string side { get; set; }
+
     }
+
 
     public class TDOrderActivityCollection
     {
         public string activityType { get; set; }
         public string executionType { get; set; }
-        public int quantity { get; set; }
-        public int orderRemainingQuantity { get; set; }
+        public double quantity { get; set; }
+        public double orderRemainingQuantity { get; set; }
         public List<TDExecutionLeg> executionLegs { get; set; }
     }
 
@@ -159,4 +161,77 @@ namespace CMEngineCore.Models
         public int refresh_token_expires_in { get; set; }
         public string token_type { get; set; }
     }
+
+    /** 
+     * TDOrder
+         {
+          "session": "NORMAL",
+          "duration": "DAY",
+          "orderType": "LIMIT",
+          "complexOrderStrategyType": "NONE",
+          "quantity": 300,
+          "filledQuantity": 300,
+          "remainingQuantity": 0,
+          "requestedDestination": "AUTO",
+          "destinationLinkName": "NITE",
+          "price": 29.45,
+          "orderLegCollection": [
+            {
+              "orderLegType": "EQUITY",
+              "legId": 1,
+              "instrument": {
+                "assetType": "EQUITY",
+                "cusip": "92189F106",
+                "symbol": "GDX"
+              },
+              "instruction": "SELL",
+              "positionEffect": "CLOSING",
+              "quantity": 300
+            }
+          ],
+          "orderStrategyType": "SINGLE",
+          "orderId": 657267395,
+          "cancelable": false,
+          "editable": false,
+          "status": "FILLED",
+          "enteredTime": "2019-08-09T18:39:51+0000",
+          "closeTime": "2019-08-09T18:42:17+0000",
+          "tag": "WEB_GRID",
+          "accountId": 488490405,
+          "orderActivityCollection": [
+            {
+              "activityType": "EXECUTION",
+              "executionType": "FILL",
+              "quantity": 200,
+              "orderRemainingQuantity": 100,
+              "executionLegs": [
+                {
+                  "legId": 1,
+                  "quantity": 200,
+                  "mismarkedQuantity": 0,
+                  "price": 29.45,
+                  "time": "2019-08-09T18:39:59+0000"
+                }
+              ]
+            },
+            {
+              "activityType": "EXECUTION",
+              "executionType": "FILL",
+              "quantity": 100,
+              "orderRemainingQuantity": 0,
+              "executionLegs": [
+                {
+                  "legId": 1,
+                  "quantity": 100,
+                  "mismarkedQuantity": 0,
+                  "price": 29.45,
+                  "time": "2019-08-09T18:42:17+0000"
+                }
+              ]
+            }
+          ]
+        }
+     */
 }
+    
+

@@ -31,20 +31,30 @@ namespace CMEngineCore.Models
             Side = ibExecution.Side.ToUpper();
         }
 
-        public TradeExecution(TDExecutionLeg TDExecutionLeg)
+        public TradeExecution(TDExecutionLeg exe, TDOrder order)
         {
-            TradeType = TDExecutionLeg.side;
-            Shares = TDExecutionLeg.quantity;
-            Price = TDExecutionLeg.price;
-            OrderID = TDExecutionLeg.orderId;
-            Time = TDExecutionLeg.time;
-            Side = TDExecutionLeg.side.ToUpper();
+            TradeType = GetExecutionSide(order);
+            Shares = exe.quantity;
+            Price = exe.price;
+            OrderID = order.orderId;
+            Time = exe.time;
+            Side = GetExecutionSide(order);
         }
 
         public int CompareTo(TradeExecution other)
         {
             if (other == null) return 1;
             return this.Time.CompareTo(other.Time);
+        }
+
+        private string GetExecutionSide(TDOrder order)
+        {
+            string side = order.orderLegCollection[0].instruction;
+            if (side == TDConstantVal.OrderTradeType_Buy)
+                return Constant.ExecutionBuy;
+            else if (side == TDConstantVal.OrderTradeType_Sell)
+                return Constant.ExecutionSell;
+            else return "UNKNOWN";
         }
     }
 }

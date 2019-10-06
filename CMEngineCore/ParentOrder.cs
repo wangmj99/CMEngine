@@ -43,7 +43,7 @@ namespace CMEngineCore
 
         public double UnRealizedGain { get { return GetUnRealizedGain(); } }
 
-        public double TotalGain { get { return this.RealizedGain + this.UnRealizedGain;  } }
+        public double TotalGain { get { return this.RealizedGain + this.UnRealizedGain; } }
 
         [JsonIgnore]
         private object locker = new object();
@@ -54,7 +54,7 @@ namespace CMEngineCore
 
         public ParentOrder() { }
 
-        public ParentOrder(int ID, string symbol, double openQty, Algo algo, double? cash = null )
+        public ParentOrder(int ID, string symbol, double openQty, Algo algo, double? cash = null)
         {
             this.ID = ID;
             this.Symbol = symbol;
@@ -67,6 +67,24 @@ namespace CMEngineCore
             TradeOrders = new List<TradeOrder>();
         }
 
+        public Dictionary<int, List<TradeExecution>> GetOrderExecutionDict()
+        {
+            Dictionary<int, List<TradeExecution>> res = new Dictionary<int, List<TradeExecution>>();
+
+            lock (locker) { }
+            foreach (var item in Executions)
+            {
+                int id = item.OrderID;
+                if (!res.ContainsKey(id))
+                {
+                    res[id] = new List<TradeExecution>();                    
+                }
+                res[id].Add(item);
+            }
+        
+            return res;
+        }
+
         internal void HandleExecutionMsg(ExecutionMessage msg)
         {
             //Add execution
@@ -76,28 +94,30 @@ namespace CMEngineCore
             //tradeExec.Execution.LastLiquidity = null;
             //tradeExec.Symbol = this.Symbol;
 
+            HandleTradeExecution(tradeExec);
+        }
+
+        private void HandleTradeExecution( TradeExecution tradeExec)
+        {
             lock (locker)
             {
                 Algo.HandleExecutionMsg(this, tradeExec);
 
                 Executions.Add(tradeExec);
 
-                if (msg.Execution.Side.ToUpper() == Constant.ExecutionBuy)
+                if (tradeExec.Side == Constant.ExecutionBuy)
                 {
-                    
-                    Qty += msg.Execution.Shares;
+
+                    Qty += tradeExec.Shares;
 
                 }
-                else if (msg.Execution.Side.ToUpper() == Constant.ExecutionSell)
+                else if (tradeExec.Side == Constant.ExecutionSell)
                 {
-                    Qty -= msg.Execution.Shares;
+                    Qty -= tradeExec.Shares;
 
-                }               
+                }
             }
-
-            //Update TradeMap
         }
-
 
         internal TradeOrder GetChildOrderByID(int ID)
         {
@@ -183,6 +203,60 @@ namespace CMEngineCore
             return res;
         }
 
+        internal bool UpdateTDOrderStatus(TDOrder tdOrder)
+        {
+            bool res = false;
+            TradeOrder order = GetChildOrderByID(tdOrder.orderId);
+
+            if (order != null)
+            {
+                switch (tdOrder.status)
+                {
+                    case TDConstantVal.OrderStatus_Canceled:
+                        if (order.Status != TradeOrderStatus.Cancelled)
+                        {
+                            order.Status = TradeOrderStatus.Cancelled;
+                            res = true;
+                        };
+                        break;
+                    case TDConstantVal.OrderStatus_Filled:
+                        if (order.Status != TradeOrderStatus.Cancelled && order.Status != TradeOrderStatus.PendingCxl)
+                        {
+                            order.Status = TradeOrderStatus.Filled;
+                            res = true;
+                        }
+                        else
+                        {
+                            Log.Error("Received order OrderFilled msg, however current order status is  " + tdOrder.status);
+                        };
+                        break;
+                    case TDConstantVal.OrderStatus_Accepted:
+                    case TDConstantVal.OrderStatus_AwaitReview:
+                    case TDConstantVal.OrderStatus_Queued:
+                    case TDConstantVal.OrderStatus_Working:
+                        if (order.Status == TradeOrderStatus.PendingSubmit || order.Status == TradeOrderStatus.Submitted)
+                        {
+                            order.Status = TradeOrderStatus.Submitted;
+                            res = true;
+                        }
+                        else
+                        {
+                            Log.Error("Received order submitted msg, however current order status is  " + tdOrder.status);
+                        };
+                        break;
+
+
+                }
+
+            }
+            else
+            {
+                Log.Error(string.Format("Error UpdateChildOrder. Cannot find order. ChildOrderID: {0}, ParentOrderID: {1}", tdOrder.orderId, this.ID));
+            }
+
+            return res;
+        }
+
         internal void UpdateAvailableCash()
         {
 
@@ -203,6 +277,20 @@ namespace CMEngineCore
                     }
                 }
             }
+
+            return res;
+        }
+
+        public static List<TradeExecution> GetTradeExecution(TDOrder order)
+        {
+            List<TradeExecution> res = new List<TradeExecution>();
+
+            foreach(var item in order.orderActivityCollection)
+                foreach(var leg in item.executionLegs)
+                {
+                    TradeExecution exe = new TradeExecution(leg, order);
+                    res.Add(exe);
+                }
 
             return res;
         }
@@ -239,6 +327,28 @@ namespace CMEngineCore
                 {
                     foreach (var order in lastSendOrders)
                     {
+                        if(TradeManager.Broker == Broker.TD)
+                        {
+                            TDOrder tdOrder = TradeManager.Instance.GetTDOrderById(order.OrderID);
+                            if (tdOrder != null)
+                            {
+                                //TODO: update tradeOrder status  -- refer handle order status msg
+                                UpdateTDOrderStatus(tdOrder);
+
+                                //TODO: check if there is new execution
+                                List<TradeExecution> executions = GetTradeExecution(tdOrder);
+                                List<TradeExecution> newExecutions = FindNewExecutions(executions, order);
+
+                                if (newExecutions.Count > 0)
+                                {
+                                    foreach(var exec in newExecutions)
+                                    {
+                                        HandleTradeExecution(exec);
+                                    }
+                                }
+                            }
+                        }
+
                         if (order.Status == TradeOrderStatus.Filled || order.Status == TradeOrderStatus.Cancelled)
                         {
                             changed = true;
@@ -277,66 +387,30 @@ namespace CMEngineCore
             }
         }
 
-        internal void TDEval()
+        private List<TradeExecution> FindNewExecutions(List<TradeExecution> executions, TradeOrder order)
         {
-            lock (locker)
+            List<TradeExecution> res = new List<TradeExecution>();
+
+            if (executions.Count > 0)
             {
-                /*
-                 1. On wake up, check the status of last send order.
-                 2. Update last send order status and executions.
-                 3. Update trademap/handle execution
-                 4. Check If last send orders has been filled or canclled.
-                 5. if none of order filled or cancelled then sleep again
-                 6. else cancel all open orders and eval algo
-                 
-                 * */
-                bool changed = false;
-                if(lastSendOrders.Count > 0)
+                var dict = GetOrderExecutionDict();
+                if (!dict.ContainsKey(order.OrderID) || dict[order.OrderID].Count == 0)
                 {
-                    foreach(var o in lastSendOrders)
-                    {
-                        TDOrder order = TradeManager.Instance.GetTDOrderById(o.OrderID);
-                        if (order != null)
-                        {
-                            if (order.status == TDConstantVal.OrderStatus_Filled || order.status == TDConstantVal.OrderStatus_Canceled)
-                                changed = true;
-
-                            //TODO: update tradeOrder status  -- refer handle order status msg
-
-                            //TODO: if there is new execution
-                                //TODO: update executions   -- refer handle execution msg
-
-                                //TODO: update trademap
-                        }
-                    }
+                    res.AddRange(executions);
                 }
-
-                if (lastSendOrders.Count == 0 || changed)
+                else if (dict[order.OrderID].Count < res.Count)
                 {
-                    try
-                    {
-                        //cancel all open orders, synchronized call, wait for cancel event back
-                        var openOrders = GetOpenOrders();
-                        if (openOrders.Count > 0)
-                        {
-                            TradeManager.Instance.CancelOrders(openOrders);
-                            //wait for cancel back
-                            Thread.Sleep(500);
-                        }
-                        lastSendOrders.Clear();
+                    int idx = dict[order.OrderID].Count;
+                    
+                    executions.Sort();
 
-                        //place buy and sell order
-                        List<TradeOrder> orders = Algo.Eval(this);
-                        lastSendOrders.AddRange(orders);
-
-                    }
-                    catch (Exception ex)
+                    for (int i = idx; i < executions.Count; i++)
                     {
-                        Log.Error(ex.Message);
-                        Log.Error(ex.StackTrace);
+                        res.Add(executions[i]);
                     }
                 }
             }
+            return res;
         }
 
         public double GetRealizedGain()
