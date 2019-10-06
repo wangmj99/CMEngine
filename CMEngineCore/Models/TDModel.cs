@@ -111,10 +111,6 @@ namespace CMEngineCore.Models
         public double mismarkedQuantity { get; set; }
         public double price { get; set; }
         public DateTime time { get; set; }
-        //following field need to be populated
-        //public int orderId { get; set; }
-        //public string side { get; set; }
-
     }
 
 

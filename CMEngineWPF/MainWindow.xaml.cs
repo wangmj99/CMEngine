@@ -393,7 +393,10 @@ namespace CMEngineWPF
         {
             TDClient tdclient = TDClient.Instance;
 
-            var o = tdclient.GetOrderByID(677527189);
+            var o = tdclient.GetOrderByID(657267395);
+            var exe = TradeManager.Instance.GetTDTradeExecution(o);
+            exe.Sort();
+            
             //tdclient.GetAccessToken();
 
             //var orders = tdclient.GetOpenOrders();
