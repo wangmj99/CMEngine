@@ -116,6 +116,8 @@ namespace CMEngineCore
             {
                 string url = string.Format("{0}/{1}", CancelOrderURL,  orderId);
                 SendMessage(url, "DELETE", string.Empty);
+                Log.Info(string.Format("Successfully cancel orderID: {0} ", orderId));
+
             }
             catch (Exception ex)
             {

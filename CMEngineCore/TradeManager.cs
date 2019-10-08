@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using CMEngineCore.Models;
 using System.Threading;
 using System.IO;
+using System.Configuration;
 
 namespace CMEngineCore
 {
@@ -36,14 +37,15 @@ namespace CMEngineCore
         public static TradeManager Instance = new TradeManager();
 
         [JsonIgnore]
-        public static Broker Broker { get; set; }
+        public Broker Broker { get; set; }
 
         private TradeManager() { }
 
-        public void Init(Broker broker)
+        public void Init()
         {
-            Broker = broker;
-            if (broker == Broker.IB)
+            string strbroker = ConfigurationManager.AppSettings["Broker"];
+            Broker = (strbroker == "TD" )? Broker.TD : Broker.IB;
+            if (Broker == Broker.IB)
             {
                 if (IBClient != null)
                 {
@@ -56,35 +58,52 @@ namespace CMEngineCore
                 IBClient.OpenOrder += HandleOpenOrderMsg;
                 IBClient.ExecutionDetails += HandleExecutionMsg;
                 IBClient.OrderStatus += HandleOrderStatusMsg;
-            }else if (broker == Broker.TD)
+            }else if (Broker == Broker.TD)
             {
                 TDClient = TDClient.Instance;
-                TDClient.ExecutionDetails += HandleExecutionMsg;
-                TDClient.OrderStatus += HandleOrderStatusMsg;
+                //TDClient.ExecutionDetails += HandleExecutionMsg;
+                //TDClient.OrderStatus += HandleOrderStatusMsg;
             }
 
             IsInitialized = true;
         }
 
-        public bool IsConnected { get { return IBClient != null && IBClient.IsConnected; } }
+        public bool IsConnected
+        {
+            get
+            {
+                if (Broker == Broker.IB)
+                {
+                    return IBClient != null && IBClient.IsConnected;
+                }
+                else 
+                    return true;
+            }
+        }
 
         public bool Connect (string ip, int port, int clientID)
         {
-            Log.Info("Connecting IB");
-            try
-            {
-                IBClient.ClientSocket.eConnect(ip, port, clientID);
 
-                var reader = new EReader(IBClient.ClientSocket, signal);
-                reader.Start();
-
-                new Thread(() => { while (IBClient.ClientSocket.IsConnected()) { signal.waitForSignal(); reader.processMsgs(); } }) { IsBackground = true }.Start();
-            }
-            catch(Exception ex)
+            if (Broker == Broker.IB)
             {
-                Log.Error("Error on connect IB, message: " + ex.Message);
-                Log.Error("Error on connect IB, StackTrace: " + ex.StackTrace);
-                throw ex;
+
+                Log.Info("Connecting IB");
+                try
+                {
+
+                    IBClient.ClientSocket.eConnect(ip, port, clientID);
+
+                    var reader = new EReader(IBClient.ClientSocket, signal);
+                    reader.Start();
+
+                    new Thread(() => { while (IBClient.ClientSocket.IsConnected()) { signal.waitForSignal(); reader.processMsgs(); } }) { IsBackground = true }.Start();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Error on connect IB, message: " + ex.Message);
+                    Log.Error("Error on connect IB, StackTrace: " + ex.StackTrace);
+                    throw ex;
+                }
             }
 
             return true;
@@ -222,6 +241,15 @@ namespace CMEngineCore
                     catch (Exception ex)
                     {
                         Log.Error("Failed to cancel order. Error: " + ex.Message);
+
+                    }
+                    finally
+                    {
+                        if(Broker == Broker.TD)
+                        {
+                            Log.Error("Force set order status to cancel. orderId: " + order.OrderID);
+                            order.Status = TradeOrderStatus.Cancelled;
+                        }
                     }
                 }
             }
@@ -273,12 +301,16 @@ namespace CMEngineCore
         {
             List<TradeExecution> res = new List<TradeExecution>();
 
-            foreach (var item in order.orderActivityCollection)
-                foreach (var leg in item.executionLegs)
-                {
-                    TradeExecution exe = new TradeExecution(leg, order);
-                    res.Add(exe);
-                }
+            //if (order.orderActivityCollection != null && order.orderActivityCollection.Count > 0)
+            {
+
+                foreach (var item in order.orderActivityCollection)
+                    foreach (var leg in item.executionLegs)
+                    {
+                        TradeExecution exe = new TradeExecution(leg, order);
+                        res.Add(exe);
+                    }
+            }
 
             return res;
         }
