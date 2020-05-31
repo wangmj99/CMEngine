@@ -272,11 +272,19 @@ namespace CMEngineCore
 
             if (parentOrder == null) return ;
 
-            lock (locker)
+            if (TradeManager.Instance.IsConnected)
             {
-                //Cancel open orders for this parentOrder
-                var openOrders = parentOrder.GetOpenOrders();
-                TradeManager.Instance.CancelOrders(openOrders);
+                lock (locker)
+                {
+                    //Cancel open orders for this parentOrder
+                    var openOrders = parentOrder.GetOpenOrders();
+                    TradeManager.Instance.CancelOrders(openOrders);
+                }
+                Log.Info("IB is connected, cancelled child orders on parent order stop");
+            }
+            else
+            {
+                Log.Info("IB is disconnected, not cancelling child orders on parent order stop");
             }
 
 
