@@ -3,6 +3,7 @@ using CMEngineCore.Models;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Text;
@@ -93,7 +94,7 @@ namespace CMEngineWPF
             {
                 m_timer = new System.Timers.Timer();
                 m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeElapsed);
-                m_timer.Interval = 8 * 1000;
+                m_timer.Interval = 5 * 1000;
             }
 
         }
@@ -276,7 +277,12 @@ namespace CMEngineWPF
             {
                 ParentOrderManager.Instance.Start();
             }
-            MessageBox.Show(string.Format("Parent order created. Symbol {0}, Begine price {1}", symbol, beginPrice));
+
+            if(dg_ParentOrders.ItemsSource!=null ) dg_ParentOrders.Items.Refresh();
+            if (dg_Details.ItemsSource != null)  dg_Details.Items.Refresh();
+            if (dg_Trademap.ItemsSource != null)  dg_Trademap.Items.Refresh();
+            Dispatcher.InvokeAsync(() => 
+            MessageBox.Show(string.Format("Parent order created. Symbol {0}, Begine price {1}", symbol, beginPrice)));
         }
 
 
@@ -292,6 +298,7 @@ namespace CMEngineWPF
             try
             {
                 List<ParentOrder> parents = ParentOrderManager.Instance.GetAllParentOrders();
+                //ParentOrderList = ParentOrderManager.Instance.GetAllParentOrders();
                 dg_ParentOrders.ItemsSource = null;
                 dg_ParentOrders.ItemsSource = parents;
 
@@ -319,7 +326,9 @@ namespace CMEngineWPF
                 //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
 
                 if (parent == null)
-                    MessageBox.Show("Please select parent order");
+                {
+                    Dispatcher.InvokeAsync(() => MessageBox.Show("Please select parent order"));
+                }
                 else
                     dg_Details.ItemsSource = parent.TradeOrders;
 
@@ -340,7 +349,8 @@ namespace CMEngineWPF
                 //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
 
                 if (parent == null)
-                    MessageBox.Show("Please select parent order");
+                    Dispatcher.InvokeAsync(() => MessageBox.Show("Please select parent order"));
+
                 else
                     dg_Details.ItemsSource = parent.Executions;
 
@@ -361,7 +371,7 @@ namespace CMEngineWPF
                 //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
 
                 if (parent == null)
-                    MessageBox.Show("Please select parent order");
+                    Dispatcher.InvokeAsync(() => MessageBox.Show("Please select parent order"));
                 else
                     dg_Details.ItemsSource = new List<RollingAlgo> (){ (RollingAlgo)parent.Algo};
 
@@ -382,7 +392,7 @@ namespace CMEngineWPF
                 //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
 
                 if (parent == null)
-                    MessageBox.Show("Please select parent order");
+                    Dispatcher.InvokeAsync(() => MessageBox.Show("Please select parent order"));
                 else
                 {
                     ParentOrderManager.Instance.StartParentOrder(parent.ID);
@@ -462,7 +472,7 @@ namespace CMEngineWPF
                 //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
 
                 if (algo == null)
-                    MessageBox.Show("Please select parent order");
+                    Dispatcher.InvokeAsync(() => MessageBox.Show("Please select parent order"));
                 else
                 {
                     dg_Trademap.ItemsSource = null;
@@ -535,5 +545,6 @@ namespace CMEngineWPF
             //foreach(int id in ids)
             //    tdclient.CancelOrder(id);
         }
+
     }
 }

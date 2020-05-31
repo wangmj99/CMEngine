@@ -49,7 +49,7 @@ namespace CMEngineCore
             ParentOrderList = new List<ParentOrder>();
             m_timer = new System.Timers.Timer();
             m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeElapsed);
-            m_timer.Interval = 30 * 1000;
+            m_timer.Interval = 15 * 1000;
         }
 
         private void OnTimeElapsed(object sender, ElapsedEventArgs e)
