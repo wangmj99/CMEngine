@@ -102,6 +102,11 @@ namespace CMEngineCore.Models
         public string duration { get; set; }
         public string orderStrategyType { get; set; }
         public List<OrderLegCollection> orderLegCollection { get; set; }
+
+        public TDContract()
+        {
+            orderLegCollection = new List<OrderLegCollection>();
+        }
     }
 
     public class TDExecutionLeg
@@ -121,6 +126,11 @@ namespace CMEngineCore.Models
         public double quantity { get; set; }
         public double orderRemainingQuantity { get; set; }
         public List<TDExecutionLeg> executionLegs { get; set; }
+
+        public TDOrderActivityCollection()
+        {
+            executionLegs = new List<TDExecutionLeg>();
+        }
     }
 
     public class TDOrder
@@ -146,6 +156,12 @@ namespace CMEngineCore.Models
         public string tag { get; set; }
         public int accountId { get; set; }
         public List<TDOrderActivityCollection> orderActivityCollection { get; set; }
+
+        public TDOrder()
+        {
+            orderLegCollection = new List<OrderLegCollection>();
+            orderActivityCollection = new List<TDOrderActivityCollection>();
+        }
     }
 
     public class TDToken

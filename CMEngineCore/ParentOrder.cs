@@ -303,11 +303,12 @@ namespace CMEngineCore
                         List<TradeOrder> orders = Algo.Eval(this);
                         lastSendOrders.AddRange(orders);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Log.Error(ex.Message);
                         Log.Error(ex.StackTrace);
                     }
+                    return;
                 }
 
 
@@ -316,7 +317,7 @@ namespace CMEngineCore
                 {
                     foreach (var order in lastSendOrders)
                     {
-                        if(TradeManager.Broker == Broker.TD)
+                        if(TradeManager.Instance.Broker == Broker.TD)
                         {
                             TDOrder tdOrder = TradeManager.Instance.GetTDOrderById(order.OrderID);
                             if (tdOrder != null)
@@ -357,7 +358,20 @@ namespace CMEngineCore
                         {
                             TradeManager.Instance.CancelOrders(openOrders);
                             //wait for cancel back
-                            Thread.Sleep(2000);
+                            Thread.Sleep(1000);
+
+                            if(TradeManager.Instance.Broker == Broker.TD)
+                            {
+                                //update cancel order status here.
+                                foreach(var order in openOrders)
+                                {
+                                    TDOrder tdOrder = TradeManager.Instance.GetTDOrderById(order.OrderID);
+                                    if (tdOrder != null)
+                                    {
+                                        UpdateTDOrderStatus(tdOrder);
+                                    }
+                                }
+                            }
                         }
                         lastSendOrders.Clear();
 
@@ -376,7 +390,7 @@ namespace CMEngineCore
             }
         }
 
-        private List<TradeExecution> FindNewExecutions(List<TradeExecution> executions, TradeOrder order)
+        public List<TradeExecution> FindNewExecutions(List<TradeExecution> executions, TradeOrder order)
         {
             List<TradeExecution> res = new List<TradeExecution>();
 
