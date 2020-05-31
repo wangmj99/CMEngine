@@ -14,7 +14,7 @@
                         <ColumnDefinition Width="136*"/>
                         <ColumnDefinition Width="877*"/>
                     </Grid.ColumnDefinitions>
-                    <Label x:Name="label" Content="Symbol" HorizontalAlignment="Left" Height="30" Margin="10,29,0,0" VerticalAlignment="Top" Width="102"/>
+                    <Label x:Name="label" Content="Ticker" HorizontalAlignment="Left" Height="30" Margin="10,29,0,0" VerticalAlignment="Top" Width="102"/>
                     <Label x:Name="label_Copy" Content="Price" HorizontalAlignment="Left" Height="30" Margin="10,64,0,0" VerticalAlignment="Top" Width="102"/>
                     <Label x:Name="label_Copy1" Content="Scale Factor" HorizontalAlignment="Left" Height="30" Margin="10,99,0,0" VerticalAlignment="Top" Width="102"/>
                     <Label x:Name="label_Copy2" Content="Is Percentage" HorizontalAlignment="Left" Height="30" Margin="139,99,0,0" VerticalAlignment="Top" Width="116" Grid.Column="1"/>
