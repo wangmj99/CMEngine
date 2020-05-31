@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -26,11 +27,125 @@ namespace CMEngineWPF
     public partial class MainWindow : Window
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private System.Timers.Timer m_timer;
 
         public MainWindow()
         {
             Log.Info("**********Algo trading engine start************");
             InitializeComponent();
+
+            Init();
+            m_timer.Start();
+        }
+
+        private void Init()
+        {
+            StateManager.Resume();
+            Log.Info("IB is Resumed");
+
+            if (!TradeManager.Instance.IsConnected)
+            {
+                try
+                {
+                    string ip = ConfigurationManager.AppSettings["IBIPAddress"];
+                    int port = int.Parse(ConfigurationManager.AppSettings["IBPort"]);
+                    TradeManager.Instance.Init(Broker.IB);
+                    TradeManager.Instance.Connect(ip, port, 1);
+                    //MessageBox.Show("IB is connected");
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Failed to Connect to IB. Message: " + ex.Message);
+                    Log.Error(ex.StackTrace);
+                    MessageBox.Show("Failed to Connect to IB.Message: " + ex.Message);
+                }
+            }
+            else
+            {
+                Log.Info("IB is already connected");
+                //MessageBox.Show("IB is already connected");
+            }
+
+            Thread.Sleep(1500);
+            if (TradeManager.Instance.IsConnected)
+            {
+                lab_con_stats.Background = Brushes.LightGreen;
+                lab_con_stats.Content = "Connected";
+
+
+                ParentOrderManager.Instance.Init();
+                MessageBox.Show("System is resumed. All Parent Orders are stopped!");
+
+            }
+            else
+            {
+                lab_con_stats.Background = Brushes.LightCoral;
+                lab_con_stats.Content = "Disconnected";
+                Log.Info("IB is not connected, failed to Resume system");
+            }
+
+            StartTimer();
+        }
+
+        public void StartTimer()
+        {
+            if (m_timer == null)
+            {
+                m_timer = new System.Timers.Timer();
+                m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeElapsed);
+                m_timer.Interval = 8 * 1000;
+            }
+
+        }
+
+        private void OnTimeElapsed(object sender, ElapsedEventArgs e)
+        {
+            if (!TradeManager.Instance.IsConnected)
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    if (lab_con_stats != null)
+                    {
+                        lab_con_stats.Content = "Disconnected";
+                        lab_con_stats.Background = Brushes.LightCoral;
+                    }
+                });
+
+                try
+                {
+                    string ip = ConfigurationManager.AppSettings["IBIPAddress"];
+                    int port = int.Parse(ConfigurationManager.AppSettings["IBPort"]);
+                    TradeManager.Instance.Init(Broker.IB);
+                    TradeManager.Instance.Connect(ip, port, 1);
+
+
+
+                    Thread.Sleep(500);
+
+                    if (!ParentOrderManager.Instance.IsInit)
+                    {
+                        Log.Info("IB is connected, start to init parent order manager");
+                        ParentOrderManager.Instance.Init();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Failed to Connect to IB. Message: " + ex.Message);
+                    Log.Error(ex.StackTrace);
+
+                }
+            }else
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    if (lab_con_stats != null)
+                    {
+                        lab_con_stats.Content = "Connected";
+                        lab_con_stats.Background = Brushes.LightGreen;
+                    }
+                });
+            }
         }
 
         private void btn_conn_Click(object sender, RoutedEventArgs e)
@@ -101,7 +216,7 @@ namespace CMEngineWPF
 
         private void btn_submit_Click(object sender, RoutedEventArgs e)
         {
-            if (!TradeManager.Instance.IsConnected)
+            if (!TradeManager.Instance.IsConnected || !ParentOrderManager.Instance.IsInit)
             {
                 MessageBox.Show("IB is not connected, please reconnect first!");
                 Log.Error("IB is not connected, please reconnect first");

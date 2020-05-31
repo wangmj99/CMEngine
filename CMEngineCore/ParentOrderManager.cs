@@ -30,6 +30,9 @@ namespace CMEngineCore
         [JsonIgnore]
         private volatile bool timerInProcess = false;
 
+        [JsonIgnore]
+        public  bool IsInit = false;
+
         public List<ParentOrder> ParentOrderList { get; set; }
 
         //parentOrderID => List of Child Order IDs
@@ -279,6 +282,16 @@ namespace CMEngineCore
 
         }
 
+        public void StopAllParentOrders()
+        {
+            foreach(var p in ParentOrderList)
+            {
+                StopParentOrder(p.ID);
+            }
+
+            SetAllOrdertoCancelStatus();
+        }
+
         public static ParentOrderManager PopulateStates(string filename)
         {
             ParentOrderManager res = ParentOrderManager.Instance;
@@ -303,6 +316,13 @@ namespace CMEngineCore
             if(m_timer!=null)
                 m_timer.Stop();
 
+        }
+
+        public void Init()
+        {
+            StopAllParentOrders();
+            Start();
+            IsInit = true;
         }
 
     }

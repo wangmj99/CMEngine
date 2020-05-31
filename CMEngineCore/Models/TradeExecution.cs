@@ -11,14 +11,16 @@ namespace CMEngineCore.Models
     {
         //public Execution Execution { get; set; }
         //public int ParentOrderID { get; set; }
-        public string TradeType { get; private set; }
-        public double Shares { get; private set; }
-        public double Price { get; private set; }
+        public string TradeType { get; set; }
+        public double Shares { get; set; }
+        public double Price { get; set; }
         //public string Symbol { get; set; }
         //public string ExecID { get { return Execution.ExecId; } }
-        public int OrderID { get; private set; }
-        public DateTime Time { get; private set; }
-        public string Side { get; private set; }
+        public int OrderID { get; set; }
+        public DateTime Time { get; set; }
+        public string Side { get; set; }
+
+        public TradeExecution() { }
 
 
         public TradeExecution(Execution ibExecution)

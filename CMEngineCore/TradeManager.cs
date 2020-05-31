@@ -36,7 +36,7 @@ namespace CMEngineCore
         public static TradeManager Instance = new TradeManager();
 
         [JsonIgnore]
-        public static Broker Broker { get; set; }
+        public  Broker Broker { get; set; }
 
         private TradeManager() { }
 
@@ -48,6 +48,7 @@ namespace CMEngineCore
                 if (IBClient != null)
                 {
                     Disconnect();
+                    Thread.Sleep(500);
                 }
 
                 signal = new EReaderMonitorSignal();
