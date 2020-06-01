@@ -29,6 +29,7 @@ namespace CMEngineWPF
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private System.Timers.Timer m_timer;
+        private volatile bool m_inProcess = false;
 
         public MainWindow()
         {
@@ -94,13 +95,16 @@ namespace CMEngineWPF
             {
                 m_timer = new System.Timers.Timer();
                 m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeElapsed);
-                m_timer.Interval = 5 * 1000;
+                m_timer.Interval = 10 * 1000;
             }
 
         }
 
         private void OnTimeElapsed(object sender, ElapsedEventArgs e)
         {
+            if (m_inProcess) return;
+
+            m_inProcess = true;
             if (!TradeManager.Instance.IsConnected)
             {
                 this.Dispatcher.Invoke(() =>
@@ -147,6 +151,7 @@ namespace CMEngineWPF
                     }
                 });
             }
+            m_inProcess = false;
         }
 
         private void btn_conn_Click(object sender, RoutedEventArgs e)
