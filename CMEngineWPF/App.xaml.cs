@@ -27,7 +27,7 @@ namespace CMEngineWPF
             Log.Error("Unhandled exception occurred: \n" + e.Exception.Message);
             Log.Error("Sender: " + sender.ToString());
             Log.Error("Unhandled exception occurred: \n" + e.Exception.StackTrace);
-            MessageBox.Show("Unhandled exception occurred: \n" + e.Exception.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //MessageBox.Show("Unhandled exception occurred: \n" + e.Exception.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         protected override void OnStartup(StartupEventArgs e)

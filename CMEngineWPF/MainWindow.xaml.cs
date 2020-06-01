@@ -286,6 +286,7 @@ namespace CMEngineWPF
             if(dg_ParentOrders.ItemsSource!=null ) dg_ParentOrders.Items.Refresh();
             if (dg_Details.ItemsSource != null)  dg_Details.Items.Refresh();
             if (dg_Trademap.ItemsSource != null)  dg_Trademap.Items.Refresh();
+
             Dispatcher.InvokeAsync(() => 
             MessageBox.Show(string.Format("Parent order created. Symbol {0}, Begine price {1}", symbol, beginPrice)));
         }
@@ -306,6 +307,10 @@ namespace CMEngineWPF
                 //ParentOrderList = ParentOrderManager.Instance.GetAllParentOrders();
                 dg_ParentOrders.ItemsSource = null;
                 dg_ParentOrders.ItemsSource = parents;
+
+                //if (dg_ParentOrders.ItemsSource != null) dg_ParentOrders.Items.Refresh();
+                if (dg_Details.ItemsSource != null) dg_Details.Items.Refresh();
+                if (dg_Trademap.ItemsSource != null) dg_Trademap.Items.Refresh();
 
             }
             catch (Exception ex)
@@ -335,7 +340,13 @@ namespace CMEngineWPF
                     Dispatcher.InvokeAsync(() => MessageBox.Show("Please select parent order"));
                 }
                 else
+                {
                     dg_Details.ItemsSource = parent.TradeOrders;
+
+                    if (dg_ParentOrders.ItemsSource != null) dg_ParentOrders.Items.Refresh();
+                    //if (dg_Details.ItemsSource != null) dg_Details.Items.Refresh();
+                    if (dg_Trademap.ItemsSource != null) dg_Trademap.Items.Refresh();
+                }
 
             }
             catch (Exception ex)
@@ -357,7 +368,12 @@ namespace CMEngineWPF
                     Dispatcher.InvokeAsync(() => MessageBox.Show("Please select parent order"));
 
                 else
+                {
                     dg_Details.ItemsSource = parent.Executions;
+                    if (dg_ParentOrders.ItemsSource != null) dg_ParentOrders.Items.Refresh();
+                    //if (dg_Details.ItemsSource != null) dg_Details.Items.Refresh();
+                    if (dg_Trademap.ItemsSource != null) dg_Trademap.Items.Refresh();
+                }
 
             }
             catch (Exception ex)
@@ -378,7 +394,13 @@ namespace CMEngineWPF
                 if (parent == null)
                     Dispatcher.InvokeAsync(() => MessageBox.Show("Please select parent order"));
                 else
-                    dg_Details.ItemsSource = new List<RollingAlgo> (){ (RollingAlgo)parent.Algo};
+                {
+                    dg_Details.ItemsSource = new List<RollingAlgo>() { (RollingAlgo)parent.Algo };
+
+                    if (dg_ParentOrders.ItemsSource != null) dg_ParentOrders.Items.Refresh();
+                    //if (dg_Details.ItemsSource != null) dg_Details.Items.Refresh();
+                    if (dg_Trademap.ItemsSource != null) dg_Trademap.Items.Refresh();
+                }
 
             }
             catch (Exception ex)
@@ -485,6 +507,10 @@ namespace CMEngineWPF
                     {
                         var list = algo.TradeMap.Values.OrderBy(o => o.Level).ToList();
                         dg_Trademap.ItemsSource = list;
+
+                        if (dg_ParentOrders.ItemsSource != null) dg_ParentOrders.Items.Refresh();
+                        if (dg_Details.ItemsSource != null) dg_Details.Items.Refresh();
+                       // if (dg_Trademap.ItemsSource != null) dg_Trademap.Items.Refresh();
                     }
                 }
             }
