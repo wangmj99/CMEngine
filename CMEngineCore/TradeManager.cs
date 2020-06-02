@@ -203,6 +203,40 @@ namespace CMEngineCore
             return res;
         }
 
+        public TradeOrder PlaceTrailStopOrder(int parentOrderID, TradeType tradeType, string symbol, double qty, double trailStopPrice, double trailPct, string exchange = null)
+        {
+            TradeOrder res = null;
+            int orderID = -1;
+            lock (trade_locker)
+            {
+
+                if (Broker == Broker.IB)
+                {
+                    orderID = IBClient.PlaceTrailStopOrder(symbol, qty, trailStopPrice, trailPct, tradeType, exchange);
+                }
+                else
+                {
+                    //orderID = TDClient.PlaceOrder(symbol, price, qty, tradeType, exchange, orderType);
+                }
+
+                res = new TradeOrder();
+                res.ParentOrderID = parentOrderID;
+                res.OrderID = orderID;
+                res.Status = TradeOrderStatus.PendingSubmit;
+                res.Side = tradeType.ToString();
+                res.TrailStopPrice = trailStopPrice;
+                res.TrailingPct = trailPct;
+
+                if (IsInitialized)
+                    StateManager.Save();
+            }
+
+            Log.Info(string.Format("Place trailingstop order ID {0}, TradeType {1}, symbol {2}, qty {3}, trailStoppPrice {4}, trailingPct {5}%, exchange {6}",
+                orderID, tradeType, symbol, qty, trailStopPrice, trailPct*100, exchange));
+
+            return res;
+        }
+
         public void CancelOrders(List<TradeOrder> orders)
         {
             lock (trade_locker)

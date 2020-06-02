@@ -245,14 +245,17 @@ namespace CMEngineWPF
                 bool isShare = chk_isShare.IsChecked.Value;
                 bool buyBackLvlZero = chk_buyback.IsChecked.Value;
 
+                double adjQty = Convert.ToDouble(txt_adj.Text);
+                bool isAdjPct = comb_adj.SelectedIndex == 0;
 
-                if(beginPrice<=0 || scaleLevel<=0 || scaleFactor<=0 || (isPctScaleFactor && scaleFactor >= 100))
+
+                if (beginPrice<=0 || scaleLevel<=0 || scaleFactor<=0 || (isPctScaleFactor && scaleFactor >= 100) ||(isAdjPct && Math.Abs(adjQty)>=100))
                 {
-                    MessageBox.Show("Invalid price, scale inputs. scale factor pct must be between 0% and 100%");
+                    MessageBox.Show("Invalid price, scale inputs. scale factor pct must be between 0% and 100%. adj Pct must between 0% and 100%");
                     return;
                 }
 
-                algo = new RollingAlgo(beginPrice, scaleLevel, scaleFactor, isPctScaleFactor, shareOrDollarAmt, isShare, buyBackLvlZero);
+                algo = new RollingAlgo(beginPrice, scaleLevel, scaleFactor, isPctScaleFactor, shareOrDollarAmt, isShare, buyBackLvlZero, adjQty, isAdjPct);
 
 
                 //Establish rules
@@ -543,6 +546,13 @@ namespace CMEngineWPF
                 Log.Error(ex.StackTrace);
                 MessageBox.Show("Fail to retrieve parent order, error: " + ex.Message);
             }
+        }
+
+        private void btn_CloseParentTrailing_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO open dialog and place trailing order
+
+
         }
 
         private void button_Click(object sender, RoutedEventArgs e)

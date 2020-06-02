@@ -1,9 +1,10 @@
-﻿<Window x:Class="CMEngineWPF.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CMEngineWPF"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="CMEngineWPF.MainWindow"
         mc:Ignorable="d"
         Title="CMEngine" Height="578.765" Width="1024.698">
     <Grid>
@@ -22,25 +23,31 @@
                     <Label x:Name="label_Copy2" Content="Is Percentage" HorizontalAlignment="Left" Height="30" Margin="139,99,0,0" VerticalAlignment="Top" Width="116" Grid.Column="1"/>
                     <Label x:Name="label_Copy3" Content="Share/Amount" HorizontalAlignment="Left" Height="30" Margin="10,169,0,0" VerticalAlignment="Top" Width="102"/>
                     <Label x:Name="label_Copy4" Content="Is Share" HorizontalAlignment="Left" Height="30" Margin="141,167,0,0" VerticalAlignment="Top" Width="102" Grid.Column="1"/>
-                    <Label x:Name="label_Copy5" Content="Pct gain sell level 0" HorizontalAlignment="Left" Height="30" Margin="10,212,0,0" VerticalAlignment="Top" Width="116"/>
-                    <Label x:Name="label_Copy6" Content="Level 0 sell %" HorizontalAlignment="Left" Height="30" Margin="10,247,0,0" VerticalAlignment="Top" Width="116"/>
-                    <Label x:Name="label_Copy7" Content="Level 0 buy?" HorizontalAlignment="Left" Height="30" Margin="10,282,0,0" VerticalAlignment="Top" Width="102"/>
+                    <Label x:Name="label_Copy5" Content="Pct gain sell level 0" HorizontalAlignment="Left" Height="30" Margin="10,254,0,0" VerticalAlignment="Top" Width="116"/>
+                    <Label x:Name="label_Copy6" Content="Level 0 sell %" HorizontalAlignment="Left" Height="30" Margin="10,286,0,0" VerticalAlignment="Top" Width="116"/>
+                    <Label x:Name="label_Copy7" Content="Level 0 buy?" HorizontalAlignment="Left" Height="30" Margin="10,324,0,0" VerticalAlignment="Top" Width="102"/>
                     <TextBox x:Name="txt_symbol" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,30,0,0" TextWrapping="Wrap" Text="SOXL" VerticalAlignment="Top" Width="84"/>
                     <TextBox x:Name="txt_price" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,64,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="84"/>
                     <TextBox x:Name="txt_scaleFactor" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,102,0,0" TextWrapping="Wrap" Text="0.5" VerticalAlignment="Top" Width="84"/>
-                    <TextBox x:Name="txt_pricegain" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,214,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="84"/>
-                    <TextBox x:Name="txt_pctsell" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,250,0,0" TextWrapping="Wrap" Text="50" VerticalAlignment="Top" Width="84"/>
+                    <TextBox x:Name="txt_pricegain" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,256,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="84"/>
+                    <TextBox x:Name="txt_pctsell" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,292,0,0" TextWrapping="Wrap" Text="50" VerticalAlignment="Top" Width="84"/>
                     <CheckBox x:Name="chk_scaleFactor" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="119,106,0,0" VerticalAlignment="Top" Height="15" Width="20"/>
                     <TextBox x:Name="txt_shareAmt" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,172,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="84"/>
                     <CheckBox x:Name="chk_isShare" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="119,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.493,2.05" IsChecked="True" Height="15" Width="20"/>
-                    <CheckBox x:Name="chk_buyback" Content="" HorizontalAlignment="Right" Margin="0,288,6,0" VerticalAlignment="Top" RenderTransformOrigin="0.493,2.05" Height="15" Width="20"/>
-                    <Button x:Name="btn_new" Content="Submit&#xD;&#xA;Order" Grid.Column="3" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="89" Height="66" Click="btn_submit_Click"/>
+                    <CheckBox x:Name="chk_buyback" Content="" HorizontalAlignment="Right" Margin="0,330,6,0" VerticalAlignment="Top" RenderTransformOrigin="0.493,2.05" Height="15" Width="20"/>
+                    <Button x:Name="btn_new" Content="Submit&#xA;Order" Grid.Column="3" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="89" Height="66" Click="btn_submit_Click"/>
                     <Label x:Name="label_Copy8" Content="Max Scale" HorizontalAlignment="Left" Height="30" Margin="10,134,0,0" VerticalAlignment="Top" Width="102"/>
                     <TextBox x:Name="txt_scalelvl" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,138,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="84"/>
                     <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="35" Margin="10,98,0,0" VerticalAlignment="Top" Width="346" Grid.ColumnSpan="2"/>
                     <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="38" Margin="10,164,0,0" VerticalAlignment="Top" Width="346" Grid.ColumnSpan="2"/>
                     <Button x:Name="button" Content="Test" Grid.Column="3" HorizontalAlignment="Left" Margin="0,444,0,0" VerticalAlignment="Top" Width="86" Height="29" Click="button_Click"/>
                     <Label x:Name="lab_con_stats" Content="Connected" HorizontalAlignment="Left" Height="28" Margin="10,463,0,0" VerticalAlignment="Top" Width="92" Background="#FF76FB07"/>
+                    <Label x:Name="label_adj" Content="+/- each level" HorizontalAlignment="Left" Height="30" Margin="10,216,0,0" VerticalAlignment="Top" Width="116"/>
+                    <TextBox x:Name="txt_adj" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="0,217,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="84"/>
+                    <ComboBox x:Name="comb_adj" Grid.Column="1" HorizontalAlignment="Left" Margin="119,216,0,0" VerticalAlignment="Top" Width="101" SelectedIndex="0">
+                        <System:String>Pct</System:String>
+                        <System:String>Qty</System:String>
+                    </ComboBox>
                 </Grid>
             </TabItem>
             <TabItem Header="OrderManagement">
@@ -67,7 +74,8 @@
                     <DataGrid x:Name="dg_Details" HorizontalAlignment="Left" Margin="0,146,0,0" VerticalAlignment="Top" Height="164" Width="699" IsReadOnly="True"/>
                     <DataGrid x:Name="dg_Trademap" HorizontalAlignment="Left" Margin="0,327,0,0" VerticalAlignment="Top" Height="164" Width="699" IsReadOnly="True"/>
                     <Button x:Name="btn_getTrademap" Content="Show Trade Map" HorizontalAlignment="Left" VerticalAlignment="Top" Width="111" Margin="731,248,0,0" Height="42" Click="btn_getTrademap_Click"/>
-                    <Button x:Name="btn_closeParent" Content="Close Parent Position" HorizontalAlignment="Left" Margin="871,188,0,0" VerticalAlignment="Top" Width="114" Height="42" Click="btn_CloseParent_Click"/>
+                    <Button x:Name="btn_closeParent" Content="Close Parent Order" HorizontalAlignment="Left" Margin="871,188,0,0" VerticalAlignment="Top" Width="114" Height="42" Click="btn_CloseParent_Click"/>
+                    <Button x:Name="btn_closeParent_trailing" Content="Close Parent with&#xa;Trailing order" HorizontalAlignment="Left" Margin="871,247,0,0" VerticalAlignment="Top" Width="114" Height="42" Click="btn_CloseParentTrailing_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="WatchList">

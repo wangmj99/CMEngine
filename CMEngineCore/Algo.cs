@@ -28,11 +28,14 @@ namespace CMEngineCore
         public double ShareOrDollarAmt { get; set; }
         public bool IsShare { get; set; }
 
+        public double AdjQty { get; set; }
+        public bool IsAdjPct { get; set; }
+
         public bool BuyBackLvlZero { get; set; }
 
         public List<ITradeRule> TradeRules { get; set; }
 
-        public RollingAlgo(double beginPrice, double scaleLevel, double scaleFactor, bool isPct, double shareAmt, bool isShare, bool buyBackLvlZero)
+        public RollingAlgo(double beginPrice, double scaleLevel, double scaleFactor, bool isPct, double shareAmt, bool isShare, bool buyBackLvlZero, double adjQty, bool isAdjPct)
         {
             if (beginPrice <= 0) throw new Exception("Begin price cannot equal or less than zero!");
 
@@ -43,6 +46,8 @@ namespace CMEngineCore
             this.ShareOrDollarAmt = shareAmt;
             this.IsShare = isShare;
             this.BuyBackLvlZero = buyBackLvlZero;
+            this.AdjQty = adjQty;
+            this.IsAdjPct = isAdjPct;
 
             this.CurrentLevel = -1;
 
@@ -139,8 +144,15 @@ namespace CMEngineCore
                 else
                     entry.TargetQty = Math.Floor(this.ShareOrDollarAmt / entry.TargetBuyPrice);
 
+                double adj = 0d;
+                if (this.IsAdjPct) adj = entry.Level * entry.TargetQty * this.AdjQty / (double)100;
+                else adj = this.AdjQty * entry.Level;
+
+                entry.TargetQty += adj;
+                if (entry.TargetQty < 0) entry.TargetQty = 0;
+
                 TradeMap[entry.Level] = entry;
-                
+
             }
         }
 

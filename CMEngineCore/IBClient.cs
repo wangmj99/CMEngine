@@ -504,6 +504,21 @@ namespace CMEngineCore
 
         }
 
+        public int PlaceTrailStopOrder(string symbol, double qty, double trailStopPrice, double trailingPct, TradeType tradeType, string exchange = null) 
+        {
+            Contract contract = CreateContract(symbol, exchange);
+            Order order = CreateOrder(qty, tradeType);
+            order.TrailStopPrice = trailStopPrice;
+            order.TrailingPercent = trailingPct;
+            order.OrderType = OrderType.TRAIL.ToString();
+
+            this.ClientSocket.placeOrder(NextOrderId, contract, order);
+            int res = NextOrderId;
+            NextOrderId++;
+
+            return res;
+        }
+
 
         private Order CreateOrder(double qty, TradeType tradeType)
         {

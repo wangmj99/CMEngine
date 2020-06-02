@@ -19,7 +19,8 @@ namespace CMEngineCore.Models
     public enum OrderType
     {
         MKT,
-        LMT
+        LMT,
+        TRAIL
     }
 
     public enum TradeOrderStatus
@@ -58,7 +59,9 @@ namespace CMEngineCore.Models
         public string Notes { get; set; }
         public string Side { get; set; }
         public double Price { get; set; }
-        
+        public double TrailStopPrice { get; set; }
+        public double TrailingPct { get; set; }
+
     }
 
     public enum Broker
