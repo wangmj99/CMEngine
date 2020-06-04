@@ -227,12 +227,11 @@ namespace CMEngineCore
         {
             ParentOrder parent = GetParentOrderByParentID(ID);
             ParentOrderManager.Instance.StopParentOrder(ID);
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             //Please mkt order
             Log.Info(string.Format("Close parent order {0},  qty: {1}, market order ", parent.ID, parent.Qty));
-            TradeManager.Instance.PlaceOrder(ID, TradeType.Sell, parent.Symbol, 0, parent.Qty, null, OrderType.MKT);
-            Thread.Sleep(500);
-            //ParentOrderManager.Instance.RemoveParentOrderByID(parent.ID);
+            var res =TradeManager.Instance.PlaceOrder(ID, TradeType.Sell, parent.Symbol, 0, parent.Qty, null, OrderType.MKT);
+            
         }
 
         public void AddChildOrder(TradeOrder tradeOrder)
