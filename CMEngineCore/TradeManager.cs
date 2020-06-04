@@ -227,6 +227,8 @@ namespace CMEngineCore
                 res.TrailStopPrice = trailStopPrice;
                 res.TrailingPct = trailPct;
 
+                ParentOrderManager.Instance.AddChildOrder(res);
+
                 if (IsInitialized)
                     StateManager.Save();
             }

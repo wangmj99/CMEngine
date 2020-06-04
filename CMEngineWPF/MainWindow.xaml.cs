@@ -535,6 +535,7 @@ namespace CMEngineWPF
                     MessageBox.Show("Please select parent order");
                 else
                 {
+
                     ParentOrderManager.Instance.CloseParentOrderByID(parent.ID);
                     dg_ParentOrders.Items.Refresh();
                 }
@@ -552,7 +553,29 @@ namespace CMEngineWPF
         {
             //TODO open dialog and place trailing order
 
+            try
+            {
+                ParentOrder parent = (ParentOrder)dg_ParentOrders.SelectedItem;
 
+                if (parent == null)
+                    MessageBox.Show("Please select parent order");
+                else
+                {
+                    ParentOrderManager.Instance.StopParentOrder(parent.ID);
+                    Thread.Sleep(500);
+
+                    TrailingOrder trailingOrder = new TrailingOrder(parent);
+
+                    trailingOrder.ShowDialog();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                Log.Error(ex.StackTrace);
+                MessageBox.Show("Fail to retrieve parent order, error: " + ex.Message);
+            }
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
