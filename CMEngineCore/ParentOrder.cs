@@ -171,6 +171,7 @@ namespace CMEngineCore
                         };
                         break; 
                     case Constant.OrderSubmitted:
+                    case Constant.OrderPreSubmitted:
                         if (order.Status == TradeOrderStatus.PendingSubmit)
                         {
                             order.Status = TradeOrderStatus.Submitted;

@@ -47,6 +47,7 @@ namespace CMEngineCore.Models
         public const string OrderApiCancelled = "ApiCancelled";
         public const string OrderSubmitted = "Submitted";
         public const string OrderFilled = "Filled";
+        public const string OrderPreSubmitted = "PreSubmitted";
 
     }
 
