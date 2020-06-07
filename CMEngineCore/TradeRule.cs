@@ -1,4 +1,5 @@
 ﻿using CMEngineCore.Models;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -118,6 +119,9 @@ namespace CMEngineCore
         public double SellPct { get; set; }
         public double priceUpPct { get; set; }
 
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+
         //sell certain pct of shares when price goes up, sell remaining shares if price went down below entry price
         public RollingAlgoFirstLevelSellRule(double sellPct, double priceUpPct)
         {
@@ -141,13 +145,25 @@ namespace CMEngineCore
             if (entry.WasFilledSellOnPartial )
             {
                 double soldPct = 1 - entry.CurrentQty / entry.TargetQty;
-                if(SellPct-soldPct>0.001)
+                if (SellPct - soldPct > 0.001)
                 {
-                    double qty = SellPct * entry.TargetQty - (entry.TargetQty -entry.CurrentQty);
+                    double qty = SellPct * entry.TargetQty - (entry.TargetQty - entry.CurrentQty);
                     double price = Util.AdjustOrderPrice(TradeType.Sell, parentOrder.Symbol, entry.LastBuyPrice * (1 + priceUpPct));
-                    var order = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Sell, parentOrder.Symbol, price, qty);
-                    order.Notes = algo.CurrentLevel.ToString();
-                    res.Add(order);
+
+                    if (Util.IsLimitPriceInMktRange(TradeType.Sell, parentOrder.Symbol, price, lastPrice))
+                    {
+
+                        var order = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Sell, parentOrder.Symbol, price, qty);
+                        order.Notes = algo.CurrentLevel.ToString();
+                        res.Add(order);
+                    }
+                    else
+                    {
+                        Log.Info("Not place first level order due to outside last price range");
+                        Log.Info(string.Format("Symbol:{0}, TradeType: {1}, Price: {2}, MarketPx: {3}",
+                            parentOrder.Symbol, TradeType.Sell.ToString(), price, lastPrice
+                            ));
+                    }
                 }
             }
 

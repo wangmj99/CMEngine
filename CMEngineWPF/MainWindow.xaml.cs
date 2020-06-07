@@ -580,34 +580,7 @@ namespace CMEngineWPF
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            TDClient tdclient = TDClient.Instance;
-
-            var o = tdclient.GetOrderByID(675583167);
-            
-            var exe = TradeManager.Instance.GetTDTradeExecution(o);
-            exe.Sort();
-            
-            //tdclient.GetAccessToken();
-
-            //var orders = tdclient.GetOpenOrders();
-
-            List<int> ids = new List<int>();
-            int count = 1;
-            for (int i = 0; i < count; i++)
-            {
-                //double price = Math.Round(26.89 + i / (double)100,2);
-                double price = 26.01;
-                int qty = 150;
-                int id = tdclient.PlaceOrder("GDX", price, qty, TradeType.Buy, null, OrderType.LMT);
-                Thread.Sleep(200);
-                ids.Add(id);
-            }
-
-
-            tdclient.RequestGlobalCancel();
-            //int id = 675583175;
-            //foreach(int id in ids)
-            //    tdclient.CancelOrder(id);
+           double p= MarketDataManager.Instance.GetLastPrice("gdx");
         }
 
     }

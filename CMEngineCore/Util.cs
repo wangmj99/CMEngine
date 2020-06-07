@@ -59,11 +59,19 @@ namespace CMEngineCore
             return Math.Round(price, 2, MidpointRounding.AwayFromZero);
         }
 
-        public static bool IsLimitPriceInMktRange(TradeType tradeType, string symbol, double price)
+        public const double MarketRangeFactor = 0.05d;
+        public static bool IsLimitPriceInMktRange(TradeType tradeType, string symbol, double price, double mktPx)
         {
-            bool res = false;
+            bool res = true;
             double lastPrice = MarketDataManager.Instance.GetLastPrice(symbol);
 
+            if(tradeType == TradeType.Sell)
+            {
+                if (mktPx < price*(1-MarketRangeFactor)) res = false;
+            }else if (tradeType == TradeType.Buy)
+            {
+                if (mktPx > price * (1 * MarketRangeFactor)) res = false;
+            }
 
             return res;
         }
