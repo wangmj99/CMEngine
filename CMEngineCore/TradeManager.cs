@@ -159,7 +159,7 @@ namespace CMEngineCore
 
                         if (!matched)
                         {
-                            Log.Info(string.Format("Found new execution, apply to parentOrder. executionID: "+msg.Execution.ExecId));
+                            Log.Info(string.Format(string.Format("Found new execution, apply to parentOrder. executionID: {0}, parentOrder:{1}", msg.Execution.ExecId, parent.ID)));
                             parent.HandleExecutionMsg(msg);
                         }
 
