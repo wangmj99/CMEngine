@@ -156,7 +156,7 @@ namespace CMEngineCore
 
         public void execDetailsEnd(int reqId)
         {
-            throw new NotImplementedException();
+            //TODO
         }
 
         public void familyCodes(FamilyCode[] familyCodes)

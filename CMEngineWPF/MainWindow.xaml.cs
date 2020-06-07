@@ -79,6 +79,8 @@ namespace CMEngineWPF
                 ParentOrderManager.Instance.Init();
                 MessageBox.Show("System is resumed. All Parent Orders are stopped!");
 
+                TradeManager.Instance.RequestExecution();
+
             }
             else
             {

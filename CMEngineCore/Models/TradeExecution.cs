@@ -15,7 +15,7 @@ namespace CMEngineCore.Models
         public double Shares { get; set; }
         public double Price { get; set; }
         //public string Symbol { get; set; }
-        //public string ExecID { get { return Execution.ExecId; } }
+        public string ExecID { get; set; }
         public int OrderID { get; set; }
         public DateTime Time { get; set; }
         public string Side { get; set; }
@@ -31,6 +31,7 @@ namespace CMEngineCore.Models
             OrderID = ibExecution.OrderId;
             Time = DateTime.ParseExact(ibExecution.Time, "yyyyMMdd  HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
             Side = ibExecution.Side.ToUpper();
+            ExecID = ibExecution.ExecId;
         }
 
         public TradeExecution(TDExecutionLeg exe, TDOrder order)

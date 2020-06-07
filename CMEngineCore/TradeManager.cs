@@ -142,25 +142,62 @@ namespace CMEngineCore
         {
             Log.Info(string.Format("Receive Execution Msg. {0}", Util.PrintExecutionMsg(msg)));
 
-            try
-            {
-                var parent = ParentOrderManager.Instance.FindAssociatedParentOrderByChildID(msg.Execution.OrderId);
-                if (parent != null)
-                {
-                    parent.HandleExecutionMsg(msg);
-                }
-                else
-                {
-                    Log.Error(string.Format("Cannot find associated Parent Order."));
-                }
 
-                if (IsInitialized)
-                    StateManager.Save();
-            }
-            catch (Exception ex)
+            if (msg.ReqId == execRequestId)
             {
-                Log.Error("HandleExecutionMsg error: " + ex.Message);
-                Log.Error(ex.StackTrace);
+                //process requested Execution
+                try
+                {
+                    var parent = ParentOrderManager.Instance.FindAssociatedParentOrderByChildID(msg.Execution.OrderId);
+                    if (parent != null)
+                    {
+                        bool matched = false;
+                        foreach(var exec in parent.Executions)
+                        {
+                            if (exec.ExecID == msg.Execution.ExecId) { matched = true; break; }
+                        }
+
+                        if (!matched)
+                        {
+                            Log.Info(string.Format("Found new execution, apply to parentOrder. executionID: "+msg.Execution.ExecId));
+                            parent.HandleExecutionMsg(msg);
+                        }
+
+                    }
+
+
+                    if (IsInitialized)
+                        StateManager.Save();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("HandleExecutionMsg error: " + ex.Message);
+                    Log.Error(ex.StackTrace);
+                }
+            }
+            else
+            {
+                //process auto filled execution
+                try
+                {
+                    var parent = ParentOrderManager.Instance.FindAssociatedParentOrderByChildID(msg.Execution.OrderId);
+                    if (parent != null)
+                    {
+                        parent.HandleExecutionMsg(msg);
+                    }
+                    else
+                    {
+                        Log.Error(string.Format("Cannot find associated Parent Order."));
+                    }
+
+                    if (IsInitialized)
+                        StateManager.Save();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("HandleExecutionMsg error: " + ex.Message);
+                    Log.Error(ex.StackTrace);
+                }
             }
         }
 
@@ -325,6 +362,15 @@ namespace CMEngineCore
                 }
             }
             return res;
+        }
+
+        private const int execRequestId = 789987;
+        public void RequestExecution()
+        {
+            ExecutionFilter execFilter = new ExecutionFilter();
+            execFilter.Time = DateTime.Now.ToShortDateString();
+
+            IBClient.ClientSocket.reqExecutions(execRequestId, execFilter);
         }
 
 
