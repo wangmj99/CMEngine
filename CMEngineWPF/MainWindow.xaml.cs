@@ -3,6 +3,7 @@ using CMEngineCore.Models;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
@@ -295,6 +296,7 @@ namespace CMEngineWPF
         }
 
 
+        ObservableCollection<ParentOrder> parentOrderList = new ObservableCollection<ParentOrder>();
         private void btn_getparent_Click(object sender, RoutedEventArgs e)
         {
             //if (!TradeManager.Instance.IsConnected)
@@ -306,10 +308,17 @@ namespace CMEngineWPF
 
             try
             {
+                parentOrderList.Clear();
                 List<ParentOrder> parents = ParentOrderManager.Instance.GetAllParentOrders();
+                foreach (var p in parents)
+                    parentOrderList.Add(p);
+
+                dg_ParentOrders.ItemsSource = parentOrderList;
+
+
                 //ParentOrderList = ParentOrderManager.Instance.GetAllParentOrders();
-                dg_ParentOrders.ItemsSource = null;
-                dg_ParentOrders.ItemsSource = parents;
+                //dg_ParentOrders.ItemsSource = null;
+                //dg_ParentOrders.ItemsSource = parents;
 
                 //if (dg_ParentOrders.ItemsSource != null) dg_ParentOrders.Items.Refresh();
                 if (dg_Details.ItemsSource != null) dg_Details.Items.Refresh();
@@ -324,6 +333,7 @@ namespace CMEngineWPF
             }
         }
 
+        ObservableCollection<TradeOrder> childOrderList = new ObservableCollection<TradeOrder>();
         private void btn_getchild_Click(object sender, RoutedEventArgs e)
         {
             //if (!TradeManager.Instance.IsConnected)
@@ -344,7 +354,14 @@ namespace CMEngineWPF
                 }
                 else
                 {
-                    dg_Details.ItemsSource = parent.TradeOrders;
+                    childOrderList.Clear();
+                    foreach (var to in parent.TradeOrders)
+                        childOrderList.Add(to);
+
+
+                    dg_Details.ItemsSource = childOrderList;
+
+                    //dg_Details.ItemsSource = parent.TradeOrders;
 
                     if (dg_ParentOrders.ItemsSource != null) dg_ParentOrders.Items.Refresh();
                     //if (dg_Details.ItemsSource != null) dg_Details.Items.Refresh();
@@ -360,6 +377,7 @@ namespace CMEngineWPF
             }
         }
 
+        ObservableCollection<TradeExecution> executionList = new ObservableCollection<TradeExecution>();
         private void btn_getExecution_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -372,7 +390,13 @@ namespace CMEngineWPF
 
                 else
                 {
-                    dg_Details.ItemsSource = parent.Executions;
+                    executionList.Clear();
+                    foreach (var ex in parent.Executions)
+                        executionList.Add(ex);
+
+                    dg_Details.ItemsSource = executionList;
+
+                    //dg_Details.ItemsSource = parent.Executions;
                     if (dg_ParentOrders.ItemsSource != null) dg_ParentOrders.Items.Refresh();
                     //if (dg_Details.ItemsSource != null) dg_Details.Items.Refresh();
                     if (dg_Trademap.ItemsSource != null) dg_Trademap.Items.Refresh();
@@ -387,6 +411,7 @@ namespace CMEngineWPF
             }
         }
 
+        ObservableCollection<RollingAlgo> algoList = new ObservableCollection<RollingAlgo>();
         private void btn_getAlgo_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -398,7 +423,13 @@ namespace CMEngineWPF
                     Dispatcher.InvokeAsync(() => MessageBox.Show("Please select parent order"));
                 else
                 {
-                    dg_Details.ItemsSource = new List<RollingAlgo>() { (RollingAlgo)parent.Algo };
+                    algoList.Clear();
+
+                    algoList.Add((RollingAlgo)parent.Algo);
+
+                    dg_Details.ItemsSource = algoList;
+
+                    //dg_Details.ItemsSource = new List<RollingAlgo>() { (RollingAlgo)parent.Algo };
 
                     if (dg_ParentOrders.ItemsSource != null) dg_ParentOrders.Items.Refresh();
                     //if (dg_Details.ItemsSource != null) dg_Details.Items.Refresh();
