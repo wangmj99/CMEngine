@@ -6,11 +6,40 @@
         xmlns:local="clr-namespace:CMEngineWPF"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="CMEngineWPF.MainWindow"
         mc:Ignorable="d"
-        Title="CMEngine" Height="561.431" Width="1174.031" Background="#FF4B4B4B">
+        Title="CMEngine" Height="628.098" Width="1174.031" Background="#FF4B4B4B">
+    <Window.Resources>
+        <Style TargetType="TabItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border BorderThickness="1" BorderBrush="Black">
+                            <Grid Name="TabPanel">
+                                <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="10,2"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="TabPanel" Property="Background" Value="#FF491717" />
+                                <Setter Property="FontWeight" Value="Normal" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="TabPanel" Property="Background" Value="#FF603A3A" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="0,0,93.333,0.333">
-        <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="522" VerticalAlignment="Top" Width="1148" Background="#FF4B4B4B" Margin="0,0,-74,0">
-            <TabItem Header="RollingAlgo" FontSize="16">
-                <Grid Background="#FF4B4B4B" Margin="0,0,0,-9" Height="495" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="936">
+        <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="618" VerticalAlignment="Top" Width="1163" Background="#FF4B4B4B" Margin="0,0,-69,0">
+            <TabItem Header="RollingAlgo" FontSize="16" Foreground="LightGray">
+                <Grid Background="#FF4B4B4B" Margin="0,0,0,56.333" Height="495" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="936">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="153*"/>
                         <ColumnDefinition Width="494*"/>
@@ -18,15 +47,16 @@
                         <ColumnDefinition Width="11*"/>
                         <ColumnDefinition Width="116*"/>
                     </Grid.ColumnDefinitions>
-                    <Label x:Name="label" Content="Ticker" HorizontalAlignment="Left" Height="30" Margin="10,29,0,0" VerticalAlignment="Top" Width="102" Foreground="White"/>
-                    <Label x:Name="label_Copy" Content="Price" HorizontalAlignment="Left" Height="30" Margin="10,64,0,0" VerticalAlignment="Top" Width="102" Foreground="White"/>
-                    <Label x:Name="label_Copy1" Content="Scale Factor" HorizontalAlignment="Left" Height="30" Margin="10,99,0,0" VerticalAlignment="Top" Width="102" Foreground="White"/>
-                    <Label x:Name="label_Copy2" Content="Is Percentage" HorizontalAlignment="Left" Height="30" Margin="139.333,99,0,0" VerticalAlignment="Top" Width="116" Grid.Column="1" Foreground="White"/>
-                    <Label x:Name="label_Copy3" Content="Share/Amount" HorizontalAlignment="Left" Height="30" Margin="10,169,0,0" VerticalAlignment="Top" Width="116" Foreground="White"/>
-                    <Label x:Name="label_Copy4" Content="Is Share" HorizontalAlignment="Left" Height="30" Margin="141.333,167,0,0" VerticalAlignment="Top" Width="102" Grid.Column="1" Foreground="White"/>
-                    <Label x:Name="label_Copy5" Content="Pct gain sell level 0" HorizontalAlignment="Left" Height="32" Margin="10,254,0,0" VerticalAlignment="Top" Width="130" Foreground="White"/>
-                    <Label x:Name="label_Copy6" Content="Level 0 sell %" HorizontalAlignment="Left" Height="30" Margin="10,291,0,0" VerticalAlignment="Top" Width="116" Foreground="White"/>
-                    <Label x:Name="label_Copy7" Content="Level 0 buy?" HorizontalAlignment="Left" Height="30" Margin="10,334,0,0" VerticalAlignment="Top" Width="102" Foreground="White"/>
+                    <Frame x:Name="frame" Grid.ColumnSpan="2"  HorizontalAlignment="Left" Height="371" Margin="10,16,0,0" VerticalAlignment="Top" Width="398" BorderBrush="#FFC89898" BorderThickness="1" SnapsToDevicePixels="True" Opacity="0.5"/>
+                    <Label x:Name="label" Content="Ticker" HorizontalAlignment="Left" Height="30" Margin="10,29,0,0" VerticalAlignment="Top" Width="102" Foreground="Orange"/>
+                    <Label x:Name="label_Copy" Content="Price" HorizontalAlignment="Left" Height="30" Margin="10,64,0,0" VerticalAlignment="Top" Width="102" Foreground="Orange" />
+                    <Label x:Name="label_Copy1" Content="Scale Factor" HorizontalAlignment="Left" Height="30" Margin="10,99,0,0" VerticalAlignment="Top" Width="102" Foreground="Orange"/>
+                    <Label x:Name="label_Copy2" Content="Is Percentage" HorizontalAlignment="Left" Height="30" Margin="139.333,99,0,0" VerticalAlignment="Top" Width="116" Grid.Column="1" Foreground="Orange"/>
+                    <Label x:Name="label_Copy3" Content="Share/Amount" HorizontalAlignment="Left" Height="30" Margin="10,169,0,0" VerticalAlignment="Top" Width="116" Foreground="Orange"/>
+                    <Label x:Name="label_Copy4" Content="Is Share" HorizontalAlignment="Left" Height="30" Margin="141.333,167,0,0" VerticalAlignment="Top" Width="102" Grid.Column="1" Foreground="Orange"/>
+                    <Label x:Name="label_Copy5" Content="Pct gain sell level 0" HorizontalAlignment="Left" Height="32" Margin="10,254,0,0" VerticalAlignment="Top" Width="130" Foreground="Orange"/>
+                    <Label x:Name="label_Copy6" Content="Level 0 sell %" HorizontalAlignment="Left" Height="30" Margin="10,291,0,0" VerticalAlignment="Top" Width="116" Foreground="Orange"/>
+                    <Label x:Name="label_Copy7" Content="Level 0 buy?" HorizontalAlignment="Left" Height="30" Margin="10,334,0,0" VerticalAlignment="Top" Width="102" Foreground="Orange"/>
                     <TextBox x:Name="txt_symbol" HorizontalAlignment="Left" Height="21" Margin="12.333,33,0,0" TextWrapping="Wrap" Text="SOXL" VerticalAlignment="Top" Width="84" Grid.Column="1"/>
                     <TextBox x:Name="txt_price" HorizontalAlignment="Left" Height="21" Margin="12.333,72,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="84" Grid.Column="1"/>
                     <TextBox x:Name="txt_scaleFactor" HorizontalAlignment="Left" Height="21" Margin="12.333,102,0,0" TextWrapping="Wrap" Text="0.5" VerticalAlignment="Top" Width="84" Grid.Column="1"/>
@@ -36,7 +66,7 @@
                     <TextBox x:Name="txt_shareAmt" HorizontalAlignment="Left" Height="21" Margin="12.333,172,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="84" Grid.Column="1"/>
                     <CheckBox x:Name="chk_isShare" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="119.333,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.493,2.05" IsChecked="True" Height="15" Width="20"/>
                     <CheckBox x:Name="chk_buyback" Content="" HorizontalAlignment="Right" Margin="0,342,461.667,0" VerticalAlignment="Top" RenderTransformOrigin="0.493,2.05" Height="15" Width="20" Grid.Column="1"/>
-                    <Button x:Name="btn_new" Content="Submit" Grid.Column="4" HorizontalAlignment="Left" Margin="144,29,-117,0" VerticalAlignment="Top" Width="89" Height="66" Click="btn_submit_Click" Background="#FF676767" FontSize="14" BorderThickness="3" Foreground="White">
+                    <Button x:Name="btn_new" Content="Submit" Grid.Column="4" HorizontalAlignment="Left" Margin="144,29,-117,0" VerticalAlignment="Top" Width="89" Height="66" Click="btn_submit_Click" Background="#FF480505" FontSize="14" BorderThickness="3" Foreground="White">
                         <Button.OpacityMask>
                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                 <GradientStop Color="Black" Offset="0"/>
@@ -44,13 +74,11 @@
                             </LinearGradientBrush>
                         </Button.OpacityMask>
                     </Button>
-                    <Label x:Name="label_Copy8" Content="Max Scale" HorizontalAlignment="Left" Height="30" Margin="10,134,0,0" VerticalAlignment="Top" Width="102" Foreground="White"/>
+                    <Label x:Name="label_Copy8" Content="Max Scale" HorizontalAlignment="Left" Height="30" Margin="10,134,0,0" VerticalAlignment="Top" Width="102" Foreground="Orange"/>
                     <TextBox x:Name="txt_scalelvl" HorizontalAlignment="Left" Height="21" Margin="12.333,138,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="84" Grid.Column="1"/>
-                    <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="35" Margin="10,98,0,0" VerticalAlignment="Top" Width="386" Grid.ColumnSpan="2"/>
-                    <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="38" Margin="10,164,0,0" VerticalAlignment="Top" Width="386" Grid.ColumnSpan="2"/>
                     <Button x:Name="button" Content="Test" Grid.Column="4" HorizontalAlignment="Left" Margin="147,403,-117,0" VerticalAlignment="Top" Width="86" Height="29" Click="button_Click" Visibility="Hidden"/>
-                    <Label x:Name="lab_con_stats" Content="Connected" HorizontalAlignment="Left" Height="36" Margin="10,451,0,0" VerticalAlignment="Top" Width="102" Background="#FF76FB07" Foreground="White" FontSize="14"/>
-                    <Label x:Name="label_adj" Content="+/- each level" HorizontalAlignment="Left" Height="30" Margin="10,216,0,0" VerticalAlignment="Top" Width="116" Foreground="White"/>
+                    <Label x:Name="lab_con_stats" Content="Connected" HorizontalAlignment="Left" Height="34" Margin="10,474,0,-13" VerticalAlignment="Top" Width="102" Background="#FF76FB07" Foreground="White" FontSize="14"/>
+                    <Label x:Name="label_adj" Content="+/- each level" HorizontalAlignment="Left" Height="30" Margin="10,216,0,0" VerticalAlignment="Top" Width="116" Foreground="Orange"/>
                     <TextBox x:Name="txt_adj" HorizontalAlignment="Left" Height="21" Margin="12.333,220,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="84" Grid.Column="1" />
                     <ComboBox x:Name="comb_adj" Grid.Column="1" HorizontalAlignment="Left" Margin="119.333,216,0,0" VerticalAlignment="Top" Width="101" SelectedIndex="0" Height="27">
                         <System:String>Pct (%)</System:String>
@@ -58,14 +86,15 @@
                     </ComboBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="OrderManagement" FontSize="16">
-                <Grid Background="#FF4B4B4B" Margin="0,-4,0.333,-181" Height="671" VerticalAlignment="Top">
+            <TabItem Header="OrderManagement" FontSize="16"  Foreground="White">
+                <Grid Background="#FF4B4B4B" Margin="0,-4,0,-181"  VerticalAlignment="Top">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="19*"/>
-                        <ColumnDefinition Width="40*"/>
+                        <ColumnDefinition Width="131*"/>
+                        <ColumnDefinition Width="237*"/>
+                        <ColumnDefinition Width="774*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="btn_getParent" Content="Get Parent Orders" HorizontalAlignment="Left" VerticalAlignment="Top" Width="123" Margin="499.667,10,0,0" Height="42" Click="btn_getparent_Click" Grid.Column="1" FontSize="14"/>
-                    <DataGrid x:Name="dg_ParentOrders"   AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top" Height="159" Width="851" IsReadOnly="True" Grid.ColumnSpan="2" Background="Gray">
+                    <Button x:Name="btn_getParent" Content="Show Parent" HorizontalAlignment="Left" VerticalAlignment="Top" Width="123" Margin="507.333,28,0,0" Height="42" Click="btn_getparent_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
+                    <DataGrid x:Name="dg_ParentOrders"  AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top" Height="159" Width="851" IsReadOnly="True" Grid.ColumnSpan="3" Background="Gray" AlternatingRowBackground="LightGray" Margin="5,28,0,0" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header ="ID" Binding="{Binding ID}" />
                             <DataGridTextColumn Header ="Symbol" Binding="{Binding Symbol}" />
@@ -77,17 +106,20 @@
                             <DataGridTextColumn Header ="TotalGain" Binding="{Binding TotalGain}" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button x:Name="btn_getChildOrder" Content="Show Child Orders" HorizontalAlignment="Left" VerticalAlignment="Top" Width="123" Margin="499.667,70,0,0" Height="42" Click="btn_getchild_Click" Grid.Column="1" FontSize="14"/>
-                    <Button x:Name="btn_getExecution" Content="Show Executions" HorizontalAlignment="Left" VerticalAlignment="Top" Width="123" Margin="499.667,130,0,0" Height="42" Click="btn_getExecution_Click" Grid.Column="1" FontSize="14"/>
-                    <Button x:Name="btn_getAlgo" Content="Show Algo Details" HorizontalAlignment="Left" VerticalAlignment="Top" Width="123" Margin="499.667,189,0,0" Height="42" Click="btn_getAlgo_Click" Grid.Column="1" FontSize="14"/>
-                    <Button x:Name="btn_StartParent" Content="Start Parent" HorizontalAlignment="Left" Margin="638.667,10,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_StartParent_Click" Grid.Column="1" FontSize="14"/>
-                    <Button x:Name="btn_StopParent" Content="Stop Parent" HorizontalAlignment="Left" Margin="638.667,69,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_StopParent_Click" Grid.Column="1" FontSize="14"/>
-                    <Button x:Name="btn_RemoveParent" Content="Remove Parent" HorizontalAlignment="Left" Margin="638.667,131,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_RemoveParent_Click" Grid.Column="1"/>
-                    <DataGrid x:Name="dg_Details" HorizontalAlignment="Left" Margin="0,164,0,0" VerticalAlignment="Top" Height="174" Width="851" IsReadOnly="True" Grid.ColumnSpan="2" Background="Gray"/>
-                    <DataGrid x:Name="dg_Trademap" HorizontalAlignment="Left" Margin="0,343,0,0" VerticalAlignment="Top" Height="149" Width="851" IsReadOnly="True" Grid.ColumnSpan="2" Background="Gray"/>
-                    <Button x:Name="btn_getTrademap" Content="Show Trade Map" HorizontalAlignment="Left" VerticalAlignment="Top" Width="123" Margin="499.667,248,0,0" Height="42" Click="btn_getTrademap_Click" Grid.Column="1" FontSize="14"/>
-                    <Button x:Name="btn_closeParent" Content="Close Parent&#xa;Order" HorizontalAlignment="Left" Margin="638.667,188,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_CloseParent_Click" Grid.Column="1" FontSize="14"/>
-                    <Button x:Name="btn_closeParent_trailing" Content="Close Parent with&#xa;Trailing order" HorizontalAlignment="Left" Margin="638.667,247,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_CloseParentTrailing_Click" Grid.Column="1" FontSize="14"/>
+                    <Button x:Name="btn_getChildOrder" Content="Show Child" HorizontalAlignment="Left" VerticalAlignment="Top" Width="123" Margin="507.333,88,0,0" Height="42" Click="btn_getchild_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
+                    <Button x:Name="btn_getExecution" Content="Show Execution" HorizontalAlignment="Left" VerticalAlignment="Top" Width="123" Margin="507.333,148,0,0" Height="42" Click="btn_getExecution_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
+                    <Button x:Name="btn_getAlgo" Content="Show Algo" HorizontalAlignment="Left" VerticalAlignment="Top" Width="123" Margin="507.333,207,0,0" Height="42" Click="btn_getAlgo_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
+                    <Button x:Name="btn_StartParent" Content="Start Parent" HorizontalAlignment="Left" Margin="646.333,28,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_StartParent_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
+                    <Button x:Name="btn_StopParent" Content="Stop Parent" HorizontalAlignment="Left" Margin="646.333,87,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_StopParent_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
+                    <Button x:Name="btn_RemoveParent" Content="Remove Parent" HorizontalAlignment="Left" Margin="646.333,149,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_RemoveParent_Click" Grid.Column="2" Background="#FFFFDA94" FontSize="12"/>
+                    <DataGrid x:Name="dg_Details" HorizontalAlignment="Left" Margin="5,213,0,0" VerticalAlignment="Top" Height="174" Width="851" IsReadOnly="True" Grid.ColumnSpan="3" Background="Gray" AlternatingRowBackground="LightGray"/>
+                    <DataGrid x:Name="dg_Trademap" Margin="5,418,0,0" VerticalAlignment="Top" Height="128" IsReadOnly="True" Grid.ColumnSpan="3" Background="Gray" AlternatingRowBackground="LightGray" RenderTransformOrigin="0.505,0.94" HorizontalAlignment="Left" Width="851"/>
+                    <Button x:Name="btn_getTrademap" Content="Show TradeMap" HorizontalAlignment="Left" VerticalAlignment="Top" Width="123" Margin="507.333,265,0,0" Height="42" Click="btn_getTrademap_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
+                    <Button x:Name="btn_closeParent" Content="Close Parent" HorizontalAlignment="Left" Margin="646.333,207,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_CloseParent_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
+                    <Button x:Name="btn_closeParent_trailing" Content="Close Parent with&#xa;Trailing order" HorizontalAlignment="Left" Margin="646.333,265,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_CloseParentTrailing_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
+                    <Label x:Name="label1" Content="Parent Orders" HorizontalAlignment="Left" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2" FontSize="18" Foreground="#FFF8F8F8" FontWeight="Bold"/>
+                    <Label x:Name="label1_Copy" Content="Details" HorizontalAlignment="Left" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2" FontSize="18" Margin="0,184,0,0" Foreground="White" FontWeight="Bold"/>
+                    <Label x:Name="label1_Copy1" Content="TradeMap" HorizontalAlignment="Left" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2" FontSize="18" Margin="0,389,0,0" Foreground="White" FontWeight="Bold"/>
                 </Grid>
             </TabItem>
             <TabItem Header="WatchList" Visibility="Hidden">

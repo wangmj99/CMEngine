@@ -73,7 +73,7 @@ namespace CMEngineWPF
             if (TradeManager.Instance.IsConnected)
             {
                 lab_con_stats.Background = Brushes.LightGreen;
-                lab_con_stats.Content = "Connected";
+                lab_con_stats.Content = "   Connected";
 
 
                 ParentOrderManager.Instance.Init();
@@ -531,6 +531,7 @@ namespace CMEngineWPF
             try
             {
                 ParentOrder po = (ParentOrder)dg_ParentOrders.SelectedItem;
+
                 RollingAlgo algo = (RollingAlgo)po.Algo;
                 //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
 
