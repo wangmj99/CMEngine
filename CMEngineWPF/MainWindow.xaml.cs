@@ -72,8 +72,9 @@ namespace CMEngineWPF
             Thread.Sleep(1500);
             if (TradeManager.Instance.IsConnected)
             {
-                lab_con_stats.Background = Brushes.LightGreen;
-                lab_con_stats.Content = "   Connected";
+
+                lab_con_stats.Foreground = Brushes.LightGreen;
+                lab_con_stats.Content = "Connected";
 
 
                 ParentOrderManager.Instance.Init();
@@ -84,7 +85,8 @@ namespace CMEngineWPF
             }
             else
             {
-                lab_con_stats.Background = Brushes.LightCoral;
+                //lab_con_stats.Background = Brushes.LightCoral;
+                lab_con_stats.Foreground = Brushes.LightCoral;
                 lab_con_stats.Content = "Disconnected";
                 Log.Info("IB is not connected, failed to Resume system");
             }
@@ -115,7 +117,7 @@ namespace CMEngineWPF
                     if (lab_con_stats != null)
                     {
                         lab_con_stats.Content = "Disconnected";
-                        lab_con_stats.Background = Brushes.LightCoral;
+                        lab_con_stats.Foreground = Brushes.LightCoral;
                     }
                 });
 
@@ -150,7 +152,8 @@ namespace CMEngineWPF
                     if (lab_con_stats != null)
                     {
                         lab_con_stats.Content = "Connected";
-                        lab_con_stats.Background = Brushes.LightGreen;
+                        lab_con_stats.Foreground = Brushes.LightGreen;
+
                     }
                 });
             }
