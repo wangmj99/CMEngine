@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:CMEngineWPF"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="CMEngineWPF.MainWindow"
         mc:Ignorable="d"
-        Title="CMEngine" Height="628.098" Width="1174.031" Background="#FF4B4B4B">
+        Title="CMEngine" Height="628.098" Width="1174.031" Background="#FF4B4B4B"
+        Icon="icon.ico">
+    
     <Window.Resources>
         <Style TargetType="TabItem">
             <Setter Property="Template">
