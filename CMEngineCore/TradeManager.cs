@@ -209,8 +209,22 @@ namespace CMEngineCore
         public TradeOrder PlaceOrder(int parentOrderID, TradeType tradeType, string symbol, double price, double qty, string exchange = null, OrderType orderType = OrderType.LMT)
         {
             if (tradeType != TradeType.Buy && tradeType != TradeType.Sell) throw new Exception("Unsupported TradeType: " + tradeType);
-
             TradeOrder res = null;
+
+            var parent = ParentOrderManager.Instance.GetParentOrderByParentID(parentOrderID);
+            if (tradeType == TradeType.Sell && parent.Qty == 0)
+            {
+                Log.Error("Parent zero qty");
+                return res;
+            }
+            if (tradeType == TradeType.Sell && parent.Qty <= qty)
+            {
+                qty = parent.Qty;
+                Log.Info("Reduce qty to parent open qty " + qty);
+            }
+
+
+
                 lock (trade_locker)
             {
                 int orderID = -1;

@@ -245,7 +245,7 @@ namespace CMEngineWPF
                 symbol = txt_symbol.Text.Trim().ToUpper();
                 beginPrice = Convert.ToDouble(txt_price.Text);
                 double scaleFactor = Convert.ToDouble(txt_scaleFactor.Text);
-                int scaleLevel = Convert.ToInt32(txt_scalelvl.Text);
+                int scaleLevel = Convert.ToInt32(txt_scalelvl.Text) - 1;
                 double shareOrDollarAmt = Convert.ToDouble(txt_shareAmt.Text);
                 bool isPctScaleFactor = chk_scaleFactor.IsChecked.Value;
                 bool isShare = chk_isShare.IsChecked.Value;

@@ -50,8 +50,11 @@ namespace CMEngineCore
                 double price = Util.AdjustOrderPrice(TradeType.Buy, parentOrder.Symbol, entry.TargetBuyPrice);
                 double qty = entry.TargetQty - entry.CurrentQty;
                 var order = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Buy, parentOrder.Symbol, price, qty);
-                order.Notes = orderLevel.ToString();
-                res.Add(order);
+                if (order != null)
+                {
+                    order.Notes = orderLevel.ToString();
+                    res.Add(order);
+                }
             }
 
             return res;
@@ -82,8 +85,11 @@ namespace CMEngineCore
                 double price = Util.AdjustOrderPrice(TradeType.Sell, parentOrder.Symbol, entry.TargetSellPrice);
                 double qty = entry.CurrentQty;
                 var order = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Sell, parentOrder.Symbol, price, qty);
-                order.Notes = algo.CurrentLevel.ToString();
-                res.Add(order);
+                if (order != null)
+                {
+                    order.Notes = algo.CurrentLevel.ToString();
+                    res.Add(order);
+                }
             }
 
             return res;
@@ -105,8 +111,11 @@ namespace CMEngineCore
                     double price = Util.AdjustOrderPrice(TradeType.Buy, parentOrder.Symbol, entry.TargetBuyPrice);
                     double qty = entry.TargetQty - entry.CurrentQty;
                     var order = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Buy, parentOrder.Symbol, price, qty);
-                    order.Notes = algo.CurrentLevel.ToString();
-                    res.Add(order);
+                    if (order != null)
+                    {
+                        order.Notes = algo.CurrentLevel.ToString();
+                        res.Add(order);
+                    }
                 }
             }
 
@@ -154,8 +163,11 @@ namespace CMEngineCore
                     {
 
                         var order = TradeManager.Instance.PlaceOrder(parentOrder.ID, TradeType.Sell, parentOrder.Symbol, price, qty);
-                        order.Notes = algo.CurrentLevel.ToString();
-                        res.Add(order);
+                        if (order != null)
+                        {
+                            order.Notes = algo.CurrentLevel.ToString();
+                            res.Add(order);
+                        }
                     }
                     else
                     {
