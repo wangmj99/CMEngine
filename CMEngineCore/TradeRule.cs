@@ -102,7 +102,7 @@ namespace CMEngineCore
         {
             List<TradeOrder> res = new List<TradeOrder>();
             RollingAlgo algo = (RollingAlgo)parentOrder.Algo;
-            if (algo.BuyBackLvlZero)
+            if (algo.BuyBackLvlZero && algo.TradeMap.ContainsKey(algo.CurrentLevel))
             {
                 TradeMapEntry entry = algo.TradeMap[algo.CurrentLevel];
 

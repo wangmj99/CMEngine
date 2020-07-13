@@ -81,6 +81,7 @@ namespace CMEngineCore
                         {
                             Log.Info(string.Format("Start to evaluate parentOrder, ID: {0}, symbol {1}", p.ID, p.Symbol));
                             p.Eval();
+                            Log.Info(string.Format("End evaluate parentOrder, ID: {0}, symbol {1}", p.ID, p.Symbol));
                         }
                         catch (Exception ex)
                         {

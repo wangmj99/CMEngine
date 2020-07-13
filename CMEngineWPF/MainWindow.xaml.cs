@@ -224,6 +224,7 @@ namespace CMEngineWPF
 
             ParentOrderManager.Instance.Start();
             MessageBox.Show("System is resumed.");
+            Log.Info("System is resumed");
         }
 
         private void btn_submit_Click(object sender, RoutedEventArgs e)
@@ -464,7 +465,7 @@ namespace CMEngineWPF
                     ParentOrderManager.Instance.StartParentOrder(parent.ID);
                     dg_ParentOrders.Items.Refresh();
                 }
-
+                Log.Info(string.Format("Parent order {0} is started.", parent.ID));
             }
             catch (Exception ex)
             {
@@ -495,14 +496,17 @@ namespace CMEngineWPF
                     ParentOrderManager.Instance.StopParentOrder(parent.ID);
                     dg_ParentOrders.Items.Refresh();
                 }
+                Log.Info(string.Format("Parent order {0} is paused.", parent.ID));
 
             }
             catch (Exception ex)
             {
+                Log.Info(string.Format("Failed to pause parent order "));
                 Log.Error(ex.Message);
                 Log.Error(ex.StackTrace);
                 MessageBox.Show("Fail to retrieve parent order, error: " + ex.Message);
             }
+
         }
 
         private void btn_RemoveParent_Click(object sender, RoutedEventArgs e)
@@ -519,6 +523,7 @@ namespace CMEngineWPF
                     ParentOrderManager.Instance.RemoveParentOrderByID(parent.ID);
                     dg_ParentOrders.Items.Refresh();
                 }
+                Log.Info(string.Format("Parent order {0} is removed.", parent.ID));
 
             }
             catch (Exception ex)
@@ -576,6 +581,7 @@ namespace CMEngineWPF
                     ParentOrderManager.Instance.CloseParentOrderByID(parent.ID);
                     dg_ParentOrders.Items.Refresh();
                 }
+                Log.Info(string.Format("Parent order {0} is closed.", parent.ID));
 
             }
             catch (Exception ex)
@@ -605,6 +611,7 @@ namespace CMEngineWPF
 
                     trailingOrder.ShowDialog();
                 }
+                Log.Info(string.Format("Parent order {0} is paused.", parent.ID));
 
             }
             catch (Exception ex)
