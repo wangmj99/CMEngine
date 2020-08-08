@@ -68,6 +68,7 @@
     <Compile Include="TDClient.cs" />
     <Compile Include="TradeManager.cs" />
     <Compile Include="Algo.cs" />
+    <Compile Include="TradeMapManager.cs" />
     <Compile Include="TradeRule.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
