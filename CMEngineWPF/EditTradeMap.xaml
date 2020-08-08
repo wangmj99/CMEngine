@@ -7,13 +7,13 @@
         mc:Ignorable="d"
         Title="EditTradeMap" Height="450" Width="800">
     <Grid Background="Gray">
-        <Label x:Name="lbl_EditTradeMap" Content="Edit ParentOrder" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="37" Width="386" FontWeight="Bold" FontSize="16"/>
-        <DataGrid x:Name="dg_editTM" HorizontalAlignment="Left" Height="216" Margin="10,63,0,0" VerticalAlignment="Top" Width="595"/>
+        <Label x:Name="lbl_EditTradeMap" Content="Edit ParentOrder" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="37" Width="418" FontWeight="Bold" FontSize="16"/>
+        <DataGrid x:Name="dg_editTM" HorizontalAlignment="Left" Height="216" Margin="10,63,0,0" VerticalAlignment="Top" Width="743"/>
         <Button x:Name="btn_saveTM" Content="Save" HorizontalAlignment="Left" Margin="18,327,0,0" VerticalAlignment="Top" Width="86" Height="33" FontWeight="Bold" FontSize="14" Click="btn_saveTM_Click"/>
         <Button x:Name="btn_closeTM" Content="Close" HorizontalAlignment="Left" Margin="209,327,0,0" VerticalAlignment="Top" Width="86" Height="33" FontWeight="Bold" FontSize="14" Click="btn_closeTM_Click"/>
         <Button x:Name="btn_loadTM" Content="Refresh" HorizontalAlignment="Left" Margin="115,327,0,0" VerticalAlignment="Top" Width="86" Height="33" FontWeight="Bold" FontSize="14" Click="btn_refreshTM_Click"/>
-        <Label x:Name="label" Content="Current Level" HorizontalAlignment="Left" Margin="428,14,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold"/>
-        <TextBox x:Name="txt_editTM_lvl" HorizontalAlignment="Left" Height="23" Margin="554,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="51"/>
+        <Label x:Name="label" Content="Current Level" HorizontalAlignment="Left" Margin="605,10,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Background="#00000000" Foreground="#FF4DFB51"/>
+        <TextBox x:Name="txt_editTM_lvl" HorizontalAlignment="Left" Height="23" Margin="714,16,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="36" RenderTransformOrigin="0.524,0.091"/>
 
     </Grid>
 </Window>

@@ -108,8 +108,8 @@ namespace CMEngineCore
             return NormalizePrice(res);
         }
 
-        private static TimeSpan startTimeSpan = new TimeSpan(9, 30, 00);
-        private static TimeSpan endTimeSpan = new TimeSpan(16, 00, 00);
+        private static TimeSpan startTimeSpan = new TimeSpan(7, 30, 00);
+        private static TimeSpan endTimeSpan = new TimeSpan(22, 00, 00);
         private static TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
         public static bool IsTradingHour()
         {
