@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:CMEngineWPF"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="CMEngineWPF.MainWindow"
         mc:Ignorable="d"
-        Title="CMEngine" Height="628.098" Width="1174.031" Background="#FF4B4B4B"
+        Title="CMEngine" Height="862.098" Width="1328.031" Background="#FF4B4B4B"
         Icon="icon.ico">
-    
+
     <Window.Resources>
         <Style TargetType="TabItem">
             <Setter Property="Template">
@@ -38,10 +38,10 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="0,0,93.333,0.333">
-        <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="618" VerticalAlignment="Top" Width="1163" Background="#FF4B4B4B" Margin="0,0,-69,0">
+    <Grid Margin="0,0,3.333,0.667">
+        <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="810" VerticalAlignment="Top" Width="1308" Background="#FF4B4B4B">
             <TabItem Header="RollingAlgo" FontSize="16" Foreground="LightGray">
-                <Grid Background="#FF4B4B4B" Margin="0,0,0,56.333" Height="495" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="936">
+                <Grid Background="#FF4B4B4B" Margin="10,0,0,255.333" Height="495" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="936">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="153*"/>
                         <ColumnDefinition Width="494*"/>
@@ -79,7 +79,7 @@
                     <Label x:Name="label_Copy8" Content="Max Scale" HorizontalAlignment="Left" Height="30" Margin="10,134,0,0" VerticalAlignment="Top" Width="102" Foreground="Orange"/>
                     <TextBox x:Name="txt_scalelvl" HorizontalAlignment="Left" Height="21" Margin="12.333,138,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="84" Grid.Column="1"/>
                     <Button x:Name="button" Content="Test" Grid.Column="4" HorizontalAlignment="Left" Margin="147,403,-117,0" VerticalAlignment="Top" Width="86" Height="29" Click="button_Click" Visibility="Hidden"/>
-                    <Label x:Name="lab_con_stats" Content="Connected" HorizontalAlignment="Left" Height="34" Margin="10,488,0,-27" VerticalAlignment="Top" Width="102" Foreground="White" FontSize="14" FontWeight="Bold"/>
+                    <Label x:Name="lab_con_stats" Content="Connected" HorizontalAlignment="Left" Height="34" Margin="1,708,0,-247" VerticalAlignment="Top" Width="102" Foreground="White" FontSize="14" FontWeight="Bold"/>
                     <Label x:Name="label_adj" Content="+/- each level" HorizontalAlignment="Left" Height="30" Margin="10,216,0,0" VerticalAlignment="Top" Width="116" Foreground="Orange"/>
                     <TextBox x:Name="txt_adj" HorizontalAlignment="Left" Height="21" Margin="12.333,220,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="84" Grid.Column="1" />
                     <ComboBox x:Name="comb_adj" Grid.Column="1" HorizontalAlignment="Left" Margin="119.333,216,0,0" VerticalAlignment="Top" Width="101" SelectedIndex="0" Height="27">
@@ -89,7 +89,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="OrderManagement" FontSize="16"  Foreground="White">
-                <Grid Background="#FF4B4B4B" Margin="0,-4,0,-181"  VerticalAlignment="Top">
+                <Grid Background="#FF4B4B4B" Margin="0,-4,0.333,-181"  VerticalAlignment="Top" Height="781">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="131*"/>
                         <ColumnDefinition Width="237*"/>
@@ -114,14 +114,15 @@
                     <Button x:Name="btn_StartParent" Content="Start Parent" HorizontalAlignment="Left" Margin="646.333,28,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_StartParent_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
                     <Button x:Name="btn_StopParent" Content="Stop Parent" HorizontalAlignment="Left" Margin="646.333,87,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_StopParent_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
                     <Button x:Name="btn_RemoveParent" Content="Remove Parent" HorizontalAlignment="Left" Margin="646.333,149,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_RemoveParent_Click" Grid.Column="2" Background="#FFFFDA94" FontSize="12"/>
-                    <DataGrid x:Name="dg_Details" HorizontalAlignment="Left" Margin="5,213,0,0" VerticalAlignment="Top" Height="174" Width="851" IsReadOnly="True" Grid.ColumnSpan="3" Background="Gray" AlternatingRowBackground="LightGray"/>
-                    <DataGrid x:Name="dg_Trademap" Margin="5,418,0,0" VerticalAlignment="Top" Height="128" IsReadOnly="True" Grid.ColumnSpan="3" Background="Gray" AlternatingRowBackground="LightGray" RenderTransformOrigin="0.505,0.94" HorizontalAlignment="Left" Width="851"/>
+                    <DataGrid x:Name="dg_Details" HorizontalAlignment="Left" Margin="5,213,0,0" VerticalAlignment="Top" Height="319" Width="851" IsReadOnly="True" Grid.ColumnSpan="3" Background="Gray" AlternatingRowBackground="LightGray"/>
+                    <DataGrid x:Name="dg_Trademap" Margin="5,563,0,0" VerticalAlignment="Top" Height="208" IsReadOnly="True" Grid.ColumnSpan="3" Background="Gray" AlternatingRowBackground="LightGray" RenderTransformOrigin="0.505,0.94" HorizontalAlignment="Left" Width="851"/>
                     <Button x:Name="btn_getTrademap" Content="Show TradeMap" HorizontalAlignment="Left" VerticalAlignment="Top" Width="123" Margin="507.333,265,0,0" Height="42" Click="btn_getTrademap_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
                     <Button x:Name="btn_closeParent" Content="Close Parent&#xa; (Market)" HorizontalAlignment="Left" Margin="646.333,207,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_CloseParent_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
                     <Button x:Name="btn_closeParent_trailing" Content="Close Parent with&#xa;Trailing order" HorizontalAlignment="Left" Margin="646.333,265,0,0" VerticalAlignment="Top" Width="124" Height="42" Click="btn_CloseParentTrailing_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
                     <Label x:Name="label1" Content="Parent Orders" HorizontalAlignment="Left" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2" FontSize="18" Foreground="#FFF8F8F8" FontWeight="Bold"/>
                     <Label x:Name="label1_Copy" Content="Details" HorizontalAlignment="Left" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2" FontSize="18" Margin="0,184,0,0" Foreground="White" FontWeight="Bold"/>
-                    <Label x:Name="label1_Copy1" Content="TradeMap" HorizontalAlignment="Left" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2" FontSize="18" Margin="0,389,0,0" Foreground="White" FontWeight="Bold"/>
+                    <Label x:Name="label1_Copy1" Content="TradeMap" HorizontalAlignment="Left" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2" FontSize="18" Margin="5,529,0,0" Foreground="White" FontWeight="Bold"/>
+                    <Button x:Name="btn_editTrademap" Content="Edit TradeMap" HorizontalAlignment="Left" VerticalAlignment="Top" Width="123" Margin="507.667,326,0,0" Height="42" Click="btn_editTrademap_Click" Grid.Column="2" FontSize="12" Background="#FFFFDA94"/>
                 </Grid>
             </TabItem>
             <TabItem Header="WatchList" Visibility="Hidden">

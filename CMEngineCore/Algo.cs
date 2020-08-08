@@ -55,16 +55,21 @@ namespace CMEngineCore
 
         }
                       
+        //private void InitTradeMap()
+        //{
+        //    TradeMap = new Dictionary<int, TradeMapEntry>();
+        //    //CurrentLevel = -1;
+        //    TradeMapEntry entry = new TradeMapEntry();
+        //    entry.Level = 0;
+        //    entry.TargetBuyPrice = BeginPrice;
+        //    entry.TargetQty = (IsShare) ? ShareOrDollarAmt : Math.Floor(ShareOrDollarAmt / entry.TargetBuyPrice);
+        //    entry.TargetSellPrice = int.MaxValue;
+        //    TradeMap[entry.Level] = entry;
+        //}
+
         private void InitTradeMap()
         {
-            TradeMap = new Dictionary<int, TradeMapEntry>();
-            //CurrentLevel = -1;
-            TradeMapEntry entry = new TradeMapEntry();
-            entry.Level = 0;
-            entry.TargetBuyPrice = BeginPrice;
-            entry.TargetQty = (IsShare) ? ShareOrDollarAmt : Math.Floor(ShareOrDollarAmt / entry.TargetBuyPrice);
-            entry.TargetSellPrice = int.MaxValue;
-            TradeMap[entry.Level] = entry;
+            TradeMap = TradeMapManager.Instance.InitializeTradeMap(this);
         }
 
         public override List<TradeOrder> Eval(ParentOrder parentOrder)
@@ -112,14 +117,14 @@ namespace CMEngineCore
 
 
                 TradeMap[exeLevel].LastBuyPrice = execution.Price;
-                TradeMap[exeLevel].TargetSellPrice = (exeLevel == 0) ? int.MaxValue : TradeMap[exeLevel - 1].LastBuyPrice;
+                //TradeMap[exeLevel].TargetSellPrice = (exeLevel == 0) ? int.MaxValue : TradeMap[exeLevel - 1].LastBuyPrice;
 
                 CurrentLevel = Math.Max(CurrentLevel, exeLevel);
 
                 if (TradeMap[CurrentLevel].Filled)
                 {
                     TradeMap[CurrentLevel].WasFilledSellOnPartial = true;
-                    GenerateTradeMapNextLevel(TradeMap[CurrentLevel].LastBuyPrice);
+                    //GenerateTradeMapNextLevel(TradeMap[CurrentLevel].LastBuyPrice);
                 }
 
                 Log.Info("After bot execution." + Util.PrintTradeMapCurrLvl(this));
@@ -191,18 +196,20 @@ namespace CMEngineCore
 
                     if (TradeMap[exeLevel].CurrentQty <= 0)
                     {
-                        TradeMap.Remove(CurrentLevel);
+
                         CurrentLevel--;
 
-                        for (int i = CurrentLevel + 1; i <= ScaleLevel; i++)
-                        {
-                            if (TradeMap.ContainsKey(i)) TradeMap.Remove(i);
-                        }
+                        //TradeMap.Remove(CurrentLevel);
 
-                        if (CurrentLevel >= 0)
-                        {
-                            GenerateTradeMapNextLevel(TradeMap[CurrentLevel].LastBuyPrice);
-                        }
+                        //for (int i = CurrentLevel + 1; i <= ScaleLevel; i++)
+                        //{
+                        //    if (TradeMap.ContainsKey(i)) TradeMap.Remove(i);
+                        //}
+
+                        //if (CurrentLevel >= 0)
+                        //{
+                        //    GenerateTradeMapNextLevel(TradeMap[CurrentLevel].LastBuyPrice);
+                        //}
                     }
                 }
                 Log.Info("After sld execution." + Util.PrintTradeMapCurrLvl(this));

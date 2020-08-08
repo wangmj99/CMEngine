@@ -267,6 +267,7 @@ namespace CMEngineCore
         public void StopParentOrder(int parentOrderID)
         {
             var parentOrder = GetParentOrderByParentID(parentOrderID);
+            if (parentOrder == null) return;
             parentOrder.IsActive = false;
             StateManager.Save();
 

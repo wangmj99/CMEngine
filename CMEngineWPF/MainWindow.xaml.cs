@@ -362,7 +362,10 @@ namespace CMEngineWPF
                 {
                     childOrderList.Clear();
                     foreach (var to in parent.TradeOrders)
+                    {
+                        if(to.Status != TradeOrderStatus.Cancelled)
                         childOrderList.Add(to);
+                    }
 
 
                     dg_Details.ItemsSource = childOrderList;
@@ -540,13 +543,14 @@ namespace CMEngineWPF
             {
                 ParentOrder po = (ParentOrder)dg_ParentOrders.SelectedItem;
 
-                RollingAlgo algo = (RollingAlgo)po.Algo;
-                //ParentOrder parent = ParentOrderManager.Instance.GetParentOrderByParentID(po.ID);
 
-                if (algo == null)
+               
+
+                if (po == null)
                     Dispatcher.InvokeAsync(() => MessageBox.Show("Please select parent order"));
                 else
                 {
+                    RollingAlgo algo = (RollingAlgo)po.Algo;
                     dg_Trademap.ItemsSource = null;
                     if (algo.TradeMap != null && algo.TradeMap.Count > 0)
                     {
@@ -627,5 +631,34 @@ namespace CMEngineWPF
            double p= MarketDataManager.Instance.GetLastPrice("gdx");
         }
 
+        private void btn_editTrademap_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ParentOrder po = (ParentOrder)dg_ParentOrders.SelectedItem;
+
+                if (po == null)
+                    Dispatcher.InvokeAsync(() => MessageBox.Show("Please select parent order"));
+                else
+                {
+                    ParentOrderManager.Instance.StopParentOrder(po.ID);
+                    dg_ParentOrders.Items.Refresh();
+
+
+                    EditTradeMap editTradeMap = new EditTradeMap(po);
+                    editTradeMap.ShowDialog();
+
+                    RollingAlgo algo = (RollingAlgo)po.Algo;
+                    var list = algo.TradeMap.Values.OrderBy(o => o.Level).ToList();
+                    dg_Trademap.ItemsSource = list;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                Log.Error(ex.StackTrace);
+                MessageBox.Show("Fail to edit trademap, error: " + ex.Message);
+            }
+        }
     }
 }
