@@ -99,6 +99,12 @@ namespace CMEngineCore
 
         private void HandleTradeExecution( TradeExecution tradeExec)
         {
+            if(ContainExeution(tradeExec))
+            {
+                Log.Info(string.Format("Received duplicated Execution, ID: {0}, Side: {1}, Qty: {2}, Price: {3}", tradeExec.ExecID, tradeExec.Side, tradeExec.Shares, tradeExec.Price));
+                return;
+            }
+
             lock (locker)
             {
                 Algo.HandleExecutionMsg(this, tradeExec);
@@ -107,7 +113,6 @@ namespace CMEngineCore
 
                 if (tradeExec.Side == Constant.ExecutionBuy)
                 {
-
                     Qty += tradeExec.Shares;
 
                 }
@@ -117,6 +122,22 @@ namespace CMEngineCore
 
                 }
             }
+        }
+
+        private bool ContainExeution(TradeExecution tradeExec)
+        {
+            bool res = false;
+
+            foreach(var exe in Executions)
+            {
+                if(exe.ExecID.Trim() == tradeExec.ExecID.Trim())
+                {
+                    res = true;
+                    break;
+                }
+            }
+
+            return res;
         }
 
         internal TradeOrder GetChildOrderByID(int ID)
