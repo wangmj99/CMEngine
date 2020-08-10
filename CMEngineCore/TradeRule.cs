@@ -36,7 +36,7 @@ namespace CMEngineCore
                     //On partial filled, if buy, then buy current level
                     orderLevel = algo.CurrentLevel;
                 }
-                else if (currEntry.Filled && algo.CurrentLevel < algo.ScaleLevel - 1)
+                else if (currEntry.Filled && algo.CurrentLevel <= algo.ScaleLevel - 1)
                 {
                     //buy next level
                     orderLevel = algo.CurrentLevel + 1;
