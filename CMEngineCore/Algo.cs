@@ -196,9 +196,13 @@ namespace CMEngineCore
 
                     if (TradeMap[exeLevel].CurrentQty <= 0)
                     {
-
+                        if (TradeMap.ContainsKey(CurrentLevel))
+                        {
+                            TradeMap[CurrentLevel].WasFilledSellOnPartial = false;
+                            TradeMap[CurrentLevel].LastBuyPrice = 0;
+                        }
                         CurrentLevel--;
-
+                        
                         //TradeMap.Remove(CurrentLevel);
 
                         //for (int i = CurrentLevel + 1; i <= ScaleLevel; i++)

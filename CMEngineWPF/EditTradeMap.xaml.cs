@@ -46,12 +46,16 @@ namespace CMEngineWPF
 
             double totalQty = 0;
             double previousQty = 0;
-            int lvl = -1;
+            double currQty = 0;
+            int lvl = int.Parse(txt_editTM_lvl.Text);
+
             for (int i = 0; i<dict.Keys.Count; i++)
             {
-                double currQty = dict[i].CurrentQty;
+                previousQty = currQty;
+                currQty = dict[i].CurrentQty;
                 totalQty += currQty;
-                if(totalQty > parent.Qty || (currQty>0 && previousQty == 0))
+                 
+                if(totalQty > parent.Qty || (i>0 && currQty>0 && previousQty == 0))
                 {
                     valid = false;
                     MessageBox.Show(string.Format("Invalid TradeMap level. \r\nParentQty: {0}, TradeMapTotalQty: {1}, \r\nCurrLvlQty: {2}, PreviousLvlQty: {3}", parent.Qty, totalQty,currQty, previousQty ));
