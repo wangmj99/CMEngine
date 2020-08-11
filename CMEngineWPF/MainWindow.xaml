@@ -54,7 +54,6 @@
                     <Label x:Name="label_Copy" Content="Price" HorizontalAlignment="Left" Height="30" Margin="10,64,0,0" VerticalAlignment="Top" Width="102" Foreground="Orange" />
                     <Label x:Name="label_Copy1" Content="Scale Factor" HorizontalAlignment="Left" Height="30" Margin="10,99,0,0" VerticalAlignment="Top" Width="102" Foreground="Orange"/>
                     <Label x:Name="label_Copy3" Content="Share/Amount" HorizontalAlignment="Left" Height="30" Margin="10,169,0,0" VerticalAlignment="Top" Width="116" Foreground="Orange"/>
-                    <Label x:Name="label_Copy4" Content="Is Share" HorizontalAlignment="Left" Height="30" Margin="141.333,167,0,0" VerticalAlignment="Top" Width="102" Grid.Column="1" Foreground="Orange"/>
                     <Label x:Name="label_Copy5" Content="Pct gain sell level 0" HorizontalAlignment="Left" Height="32" Margin="10,254,0,0" VerticalAlignment="Top" Width="130" Foreground="Orange"/>
                     <Label x:Name="label_Copy6" Content="Level 0 sell %" HorizontalAlignment="Left" Height="30" Margin="10,291,0,0" VerticalAlignment="Top" Width="116" Foreground="Orange"/>
                     <Label x:Name="label_Copy7" Content="Level 0 buy?" HorizontalAlignment="Left" Height="30" Margin="10,334,0,0" VerticalAlignment="Top" Width="102" Foreground="Orange"/>
@@ -64,7 +63,6 @@
                     <TextBox x:Name="txt_pricegain" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="12.333,258,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="84"/>
                     <TextBox x:Name="txt_pctsell" HorizontalAlignment="Left" Height="21" Margin="12.333,298,0,0" TextWrapping="Wrap" Text="50" VerticalAlignment="Top" Width="84" Grid.Column="1"/>
                     <TextBox x:Name="txt_shareAmt" HorizontalAlignment="Left" Height="21" Margin="12.333,172,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="84" Grid.Column="1"/>
-                    <CheckBox x:Name="chk_isShare" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="119.333,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.493,2.05" IsChecked="True" Height="15" Width="20"/>
                     <CheckBox x:Name="chk_buyback" Content="" HorizontalAlignment="Right" Margin="0,342,461.667,0" VerticalAlignment="Top" RenderTransformOrigin="0.493,2.05" Height="15" Width="20" Grid.Column="1"/>
                     <Button x:Name="btn_new" Content="Submit" Grid.Column="4" HorizontalAlignment="Left" Margin="144,29,-117,0" VerticalAlignment="Top" Width="89" Height="66" Click="btn_submit_Click" Background="#FF480505" FontSize="14" BorderThickness="3" Foreground="White">
                         <Button.OpacityMask>
@@ -80,13 +78,17 @@
                     <Label x:Name="lab_con_stats" Content="Connected" HorizontalAlignment="Left" Height="34" Margin="1,708,0,-247" VerticalAlignment="Top" Width="102" Foreground="White" FontSize="14" FontWeight="Bold"/>
                     <Label x:Name="label_adj" Content="+/- each level" HorizontalAlignment="Left" Height="30" Margin="10,216,0,0" VerticalAlignment="Top" Width="116" Foreground="Orange"/>
                     <TextBox x:Name="txt_adj" HorizontalAlignment="Left" Height="21" Margin="12.333,220,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="84" Grid.Column="1" />
-                    <ComboBox x:Name="comb_adj" Grid.Column="1" HorizontalAlignment="Left" Margin="119.333,216,0,0" VerticalAlignment="Top" Width="101" SelectedIndex="0" Height="27">
+                    <ComboBox x:Name="comb_adj" Grid.Column="1" HorizontalAlignment="Left" Margin="119,220,0,0" VerticalAlignment="Top" Width="101" SelectedIndex="0" Height="27">
                         <System:String>Pct (%)</System:String>
                         <System:String>Qty</System:String>
                     </ComboBox>
-                    <ComboBox x:Name="comb_scale" Grid.Column="1" HorizontalAlignment="Left" Margin="119,101,0,0" VerticalAlignment="Top" Width="101" SelectedIndex="0" Height="27">
-                        <System:String>Amt</System:String>
+                    <ComboBox x:Name="comb_scale" Grid.Column="1" HorizontalAlignment="Left" Margin="119,102,0,0" VerticalAlignment="Top" Width="101" SelectedIndex="0" Height="27">
+                        <System:String>Dollar</System:String>
                         <System:String>Pct (%)</System:String>
+                    </ComboBox>
+                    <ComboBox x:Name="comb_shareAmt" Grid.Column="1" HorizontalAlignment="Left" Margin="119,172,0,0" VerticalAlignment="Top" Width="101" SelectedIndex="0" Height="27">
+                        <System:String>Qty</System:String>
+                        <System:String>Dollar</System:String>
                     </ComboBox>
                 </Grid>
             </TabItem>

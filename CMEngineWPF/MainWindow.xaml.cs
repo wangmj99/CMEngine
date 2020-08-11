@@ -249,11 +249,12 @@ namespace CMEngineWPF
                 int scaleLevel = Convert.ToInt32(txt_scalelvl.Text) - 1;
                 double shareOrDollarAmt = Convert.ToDouble(txt_shareAmt.Text);
                 bool isPctScaleFactor = comb_scale.SelectedIndex == 1;
-                bool isShare = chk_isShare.IsChecked.Value;
+                
                 bool buyBackLvlZero = chk_buyback.IsChecked.Value;
 
                 double adjQty = Convert.ToDouble(txt_adj.Text);
                 bool isAdjPct = comb_adj.SelectedIndex == 0;
+                bool isShare = comb_shareAmt.SelectedIndex == 0;
 
                 scaleFactor = isPctScaleFactor ? scaleFactor / 100 : scaleFactor;
 
