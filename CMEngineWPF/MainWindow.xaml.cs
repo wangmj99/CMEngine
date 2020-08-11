@@ -248,12 +248,14 @@ namespace CMEngineWPF
                 double scaleFactor = Convert.ToDouble(txt_scaleFactor.Text);
                 int scaleLevel = Convert.ToInt32(txt_scalelvl.Text) - 1;
                 double shareOrDollarAmt = Convert.ToDouble(txt_shareAmt.Text);
-                bool isPctScaleFactor = chk_scaleFactor.IsChecked.Value;
+                bool isPctScaleFactor = comb_scale.SelectedIndex == 1;
                 bool isShare = chk_isShare.IsChecked.Value;
                 bool buyBackLvlZero = chk_buyback.IsChecked.Value;
 
                 double adjQty = Convert.ToDouble(txt_adj.Text);
                 bool isAdjPct = comb_adj.SelectedIndex == 0;
+
+                scaleFactor = isPctScaleFactor ? scaleFactor / 100 : scaleFactor;
 
 
                 if (beginPrice<=0 || scaleLevel<=0 || scaleFactor<=0 || (isPctScaleFactor && scaleFactor >= 100) ||(isAdjPct && Math.Abs(adjQty)>=100))
@@ -660,5 +662,6 @@ namespace CMEngineWPF
                 MessageBox.Show("Fail to edit trademap, error: " + ex.Message);
             }
         }
+
     }
 }
