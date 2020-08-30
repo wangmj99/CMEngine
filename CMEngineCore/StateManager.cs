@@ -34,7 +34,11 @@ namespace CMEngineCore
             string saveDir = ConfigurationManager.AppSettings["SaveFolder"];
             DirectoryInfo dir = new DirectoryInfo(saveDir);
 
-            if (!dir.Exists) Directory.CreateDirectory(saveDir);
+            if (!dir.Exists)
+            {
+                Log.Info(string.Format("Create save directory {0}", dir.FullName));
+                Directory.CreateDirectory(saveDir);
+            }
 
             try
             {
