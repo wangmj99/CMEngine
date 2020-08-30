@@ -90,7 +90,7 @@
                         <System:String>Qty</System:String>
                         <System:String>Dollar</System:String>
                     </ComboBox>
-                    <Label x:Name="lab_ver" Content="Version" HorizontalAlignment="Left" Height="34" Margin="1,689,0,-228" VerticalAlignment="Top" Width="102" Foreground="White" FontSize="14" FontWeight="Bold"/>
+                    <Label x:Name="lab_ver" Content="Version" HorizontalAlignment="Left" Height="34" Margin="1,717,0,-256" VerticalAlignment="Top" Width="184" Foreground="#FFB49A00" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
             <TabItem Header="OrderManagement" FontSize="16"  Foreground="White">

@@ -47,7 +47,7 @@ namespace CMEngineWPF
             Log.Info("IB is Resumed");
 
             string version = ConfigurationManager.AppSettings["Version"];
-            lab_ver.Content = version;
+            lab_ver.Content = string.Format("Ver {0}", version);
 
             if (!TradeManager.Instance.IsConnected)
             {
