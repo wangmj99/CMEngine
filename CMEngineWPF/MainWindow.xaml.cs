@@ -46,6 +46,9 @@ namespace CMEngineWPF
             StateManager.Resume();
             Log.Info("IB is Resumed");
 
+            string version = ConfigurationManager.AppSettings["Version"];
+            lab_ver.Content = version;
+
             if (!TradeManager.Instance.IsConnected)
             {
                 try
@@ -501,8 +504,9 @@ namespace CMEngineWPF
                 {
                     ParentOrderManager.Instance.StopParentOrder(parent.ID);
                     dg_ParentOrders.Items.Refresh();
+                    Log.Info(string.Format("Parent order {0} is paused.", parent.ID));
                 }
-                Log.Info(string.Format("Parent order {0} is paused.", parent.ID));
+                
 
             }
             catch (Exception ex)
@@ -528,8 +532,9 @@ namespace CMEngineWPF
                 {
                     ParentOrderManager.Instance.RemoveParentOrderByID(parent.ID);
                     dg_ParentOrders.Items.Refresh();
+                    Log.Info(string.Format("Parent order {0} is removed.", parent.ID));
                 }
-                Log.Info(string.Format("Parent order {0} is removed.", parent.ID));
+                
 
             }
             catch (Exception ex)
@@ -587,8 +592,9 @@ namespace CMEngineWPF
 
                     ParentOrderManager.Instance.CloseParentOrderByID(parent.ID);
                     dg_ParentOrders.Items.Refresh();
+                    Log.Info(string.Format("Parent order {0} is closed.", parent.ID));
                 }
-                Log.Info(string.Format("Parent order {0} is closed.", parent.ID));
+               
 
             }
             catch (Exception ex)
@@ -617,8 +623,9 @@ namespace CMEngineWPF
                     TrailingOrder trailingOrder = new TrailingOrder(parent);
 
                     trailingOrder.ShowDialog();
+                    Log.Info(string.Format("Parent order {0} is paused.", parent.ID));
                 }
-                Log.Info(string.Format("Parent order {0} is paused.", parent.ID));
+                
 
             }
             catch (Exception ex)

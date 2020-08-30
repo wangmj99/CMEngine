@@ -75,7 +75,7 @@
                     <Label x:Name="label_Copy8" Content="Max Scale" HorizontalAlignment="Left" Height="30" Margin="10,134,0,0" VerticalAlignment="Top" Width="102" Foreground="Orange"/>
                     <TextBox x:Name="txt_scalelvl" HorizontalAlignment="Left" Height="21" Margin="12.333,138,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="84" Grid.Column="1"/>
                     <Button x:Name="button" Content="Test" Grid.Column="4" HorizontalAlignment="Left" Margin="147,403,-117,0" VerticalAlignment="Top" Width="86" Height="29" Click="button_Click" Visibility="Hidden"/>
-                    <Label x:Name="lab_con_stats" Content="Connected" HorizontalAlignment="Left" Height="34" Margin="1,708,0,-247" VerticalAlignment="Top" Width="102" Foreground="White" FontSize="14" FontWeight="Bold"/>
+                    <Label x:Name="lab_con_stats" Content="Connected" HorizontalAlignment="Left" Height="34" Margin="1,646,0,-185" VerticalAlignment="Top" Width="102" Foreground="White" FontSize="14" FontWeight="Bold"/>
                     <Label x:Name="label_adj" Content="+/- each level" HorizontalAlignment="Left" Height="30" Margin="10,216,0,0" VerticalAlignment="Top" Width="116" Foreground="Orange"/>
                     <TextBox x:Name="txt_adj" HorizontalAlignment="Left" Height="21" Margin="12.333,220,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="84" Grid.Column="1" />
                     <ComboBox x:Name="comb_adj" Grid.Column="1" HorizontalAlignment="Left" Margin="119,220,0,0" VerticalAlignment="Top" Width="101" SelectedIndex="0" Height="27">
@@ -90,6 +90,7 @@
                         <System:String>Qty</System:String>
                         <System:String>Dollar</System:String>
                     </ComboBox>
+                    <Label x:Name="lab_ver" Content="Version" HorizontalAlignment="Left" Height="34" Margin="1,689,0,-228" VerticalAlignment="Top" Width="102" Foreground="White" FontSize="14" FontWeight="Bold"/>
                 </Grid>
             </TabItem>
             <TabItem Header="OrderManagement" FontSize="16"  Foreground="White">
