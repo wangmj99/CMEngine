@@ -25,7 +25,10 @@ namespace CMEngineCore
             {
                 //double.TryParse(response, out res);
                 var quote = JsonConvert.DeserializeObject<List<Quote>>(response);
-                res = quote[0].price;
+                if (quote.Count > 0)
+                    res = quote[0].price;
+                else
+                    res = 0d;
             }
             else
             {

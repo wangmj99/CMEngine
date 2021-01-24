@@ -63,7 +63,8 @@ namespace CMEngineCore
         public static bool IsLimitPriceInMktRange(TradeType tradeType, string symbol, double price, double mktPx)
         {
             bool res = true;
-            double lastPrice = MarketDataManager.Instance.GetLastPrice(symbol);
+
+            if (mktPx == 0) return res;
 
             if(tradeType == TradeType.Sell)
             {
