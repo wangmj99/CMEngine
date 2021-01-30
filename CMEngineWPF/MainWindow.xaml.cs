@@ -486,12 +486,6 @@ namespace CMEngineWPF
 
         private void btn_StopParent_Click(object sender, RoutedEventArgs e)
         {
-            //if (!TradeManager.Instance.IsConnected)
-            //{
-            //    MessageBox.Show("IB is not connected, please reconnect first!");
-            //    Log.Error("IB is not connected, please reconnect first");
-            //    return;
-            //}
 
             try
             {
@@ -504,7 +498,10 @@ namespace CMEngineWPF
                 {
                     ParentOrderManager.Instance.StopParentOrder(parent.ID);
                     dg_ParentOrders.Items.Refresh();
-                    Log.Info(string.Format("Parent order {0} is paused.", parent.ID));
+                    Log.Info(string.Format("Parent order {0} is stopped.", parent.ID));
+                    MessageBox.Show(string.Format("Parent order {0} is stopped.", parent.Symbol));
+
+                    childOrderList.Clear();
                 }
                 
 
