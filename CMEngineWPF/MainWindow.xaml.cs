@@ -531,8 +531,19 @@ namespace CMEngineWPF
                 else
                 {
                     ParentOrderManager.Instance.RemoveParentOrderByID(parent.ID);
-                    dg_ParentOrders.Items.Refresh();
+
                     Log.Info(string.Format("Parent order {0} is removed.", parent.ID));
+                    MessageBox.Show(string.Format("Parent order of {0} is removed", parent.Symbol));
+
+                    parentOrderList.Clear();
+                    List<ParentOrder> parents = ParentOrderManager.Instance.GetAllParentOrders();
+                    foreach (var p in parents)
+                        parentOrderList.Add(p);
+
+                    dg_ParentOrders.ItemsSource = parentOrderList;
+
+                    if (dg_Details.ItemsSource != null) dg_Details.Items.Refresh();
+                    if (dg_Trademap.ItemsSource != null) dg_Trademap.Items.Refresh();
                 }
                 
 

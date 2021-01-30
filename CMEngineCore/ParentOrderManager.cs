@@ -230,8 +230,11 @@ namespace CMEngineCore
             ParentOrderManager.Instance.StopParentOrder(ID);
             Thread.Sleep(500);
             //Please mkt order
-            Log.Info(string.Format("Close parent order {0},  qty: {1}, market order ", parent.ID, parent.Qty));
-            var res =TradeManager.Instance.PlaceOrder(ID, TradeType.Sell, parent.Symbol, 0, parent.Qty, null, OrderType.MKT);
+            if (parent != null)
+            {
+                Log.Info(string.Format("Close parent order {0},  qty: {1}, market order ", parent.ID, parent.Qty));
+                var res = TradeManager.Instance.PlaceOrder(ID, TradeType.Sell, parent.Symbol, 0, parent.Qty, null, OrderType.MKT);
+            }
             
         }
 
