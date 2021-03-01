@@ -299,11 +299,11 @@ namespace CMEngineWPF
             }
 
             var result = MessageBox.Show(string.Format(@"Please confirm to Place order:
-                Symbol: {0}, 
-                Begin Px: {1}, 
-                Share/Amt: {2},
-                Levels: {3},
-                Scale factor: {4}",
+                Symbol: {0}
+                Begin Px: {1:0.00}
+                Share/Amt: {2}
+                Levels: {3}
+                Scale factor: {4:0.00}",
                 symbol, beginPrice, shareOrDollarAmt, scaleLevel+1, scaleFactor), "Order Confirmation", MessageBoxButton.YesNo);
 
             if (result == MessageBoxResult.No) return;
