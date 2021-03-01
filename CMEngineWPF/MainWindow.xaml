@@ -91,6 +91,7 @@
                         <System:String>Dollar</System:String>
                     </ComboBox>
                     <Label x:Name="lab_ver" Content="Version" HorizontalAlignment="Left" Height="34" Margin="1,717,0,-256" VerticalAlignment="Top" Width="184" Foreground="#FFB49A00" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2"/>
+                    <Label x:Name="lab_tradeAcct" Content="TradeAccount" HorizontalAlignment="Left" Height="34" Margin="138,-10,-206,0" VerticalAlignment="Top" Width="184" Foreground="#FF00B414" FontSize="14" Grid.Column="4" FontWeight="Bold"/>
                 </Grid>
             </TabItem>
             <TabItem Header="OrderManagement" FontSize="16"  Foreground="White">

@@ -49,6 +49,11 @@ namespace CMEngineWPF
             string version = ConfigurationManager.AppSettings["Version"];
             lab_ver.Content = string.Format("Ver {0}", version);
 
+
+            string tradeAccount = ConfigurationManager.AppSettings["TradeAccount"];
+            lab_tradeAcct.Content = string.Format("TradeAccount: {0}", tradeAccount);
+
+
             if (!TradeManager.Instance.IsConnected)
             {
                 try
@@ -243,14 +248,17 @@ namespace CMEngineWPF
             RollingAlgo algo = null;
             string symbol;
             double beginPrice;
+            double shareOrDollarAmt;
+            double scaleFactor;
+            int scaleLevel;
 
             try
             {
                 symbol = txt_symbol.Text.Trim().ToUpper();
                 beginPrice = Convert.ToDouble(txt_price.Text);
-                double scaleFactor = Convert.ToDouble(txt_scaleFactor.Text);
-                int scaleLevel = Convert.ToInt32(txt_scalelvl.Text) - 1;
-                double shareOrDollarAmt = Convert.ToDouble(txt_shareAmt.Text);
+                scaleFactor = Convert.ToDouble(txt_scaleFactor.Text);
+                scaleLevel = Convert.ToInt32(txt_scalelvl.Text) - 1;
+                shareOrDollarAmt = Convert.ToDouble(txt_shareAmt.Text);
                 bool isPctScaleFactor = comb_scale.SelectedIndex == 1;
                 
                 bool buyBackLvlZero = chk_buyback.IsChecked.Value;
@@ -290,6 +298,16 @@ namespace CMEngineWPF
                 return;
             }
 
+            var result = MessageBox.Show(string.Format(@"Please confirm to Place order:
+                Symbol: {0}, 
+                Begin Px: {1}, 
+                Share/Amt: {2},
+                Levels: {3},
+                Scale factor: {4}",
+                symbol, beginPrice, shareOrDollarAmt, scaleLevel+1, scaleFactor), "Order Confirmation", MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.No) return;
+
             ParentOrder order = ParentOrderManager.Instance.CreateParentOrder(symbol, 0, algo);
             order.IsActive = true;
             ParentOrderManager.Instance.AddParentOrder(order);
@@ -304,7 +322,7 @@ namespace CMEngineWPF
             if (dg_Trademap.ItemsSource != null)  dg_Trademap.Items.Refresh();
 
             Dispatcher.InvokeAsync(() => 
-            MessageBox.Show(string.Format("Parent order created. Symbol {0}, Begine price {1}", symbol, beginPrice)));
+            MessageBox.Show(string.Format("Parent order created. Symbol {0}, Begin price {1}, share/amt {2}", symbol, beginPrice, shareOrDollarAmt)));
         }
 
 
