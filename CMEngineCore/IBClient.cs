@@ -9,6 +9,7 @@ using log4net;
 using System.IO;
 using System.Net.Sockets;
 using CMEngineCore.Models;
+using System.Configuration;
 
 namespace CMEngineCore
 {
@@ -19,6 +20,8 @@ namespace CMEngineCore
         public SynchronizationContext sc { get; set; }
 
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        string tradeAccount = string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["TradeAccount"]) ? string.Empty : ConfigurationManager.AppSettings["TradeAccount"].Trim();
 
         public IBClient(EReaderSignal signal)
         {
@@ -529,6 +532,8 @@ namespace CMEngineCore
             order.Account = "";
             order.ModelCode = "";
             order.Tif = "DAY";
+            if (!string.IsNullOrEmpty(tradeAccount))
+                order.Account = tradeAccount;
             return order;
         }
 

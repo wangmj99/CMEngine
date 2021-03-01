@@ -473,8 +473,9 @@ namespace CMEngineWPF
                 {
                     ParentOrderManager.Instance.StartParentOrder(parent.ID);
                     dg_ParentOrders.Items.Refresh();
+                    Log.Info(string.Format("Parent order {0} is started.", parent.ID));
                 }
-                Log.Info(string.Format("Parent order {0} is started.", parent.ID));
+                
             }
             catch (Exception ex)
             {
