@@ -65,7 +65,7 @@ namespace CMEngineCore
         //    entry.TargetQty = (IsShare) ? ShareOrDollarAmt : Math.Floor(ShareOrDollarAmt / entry.TargetBuyPrice);
         //    entry.TargetSellPrice = int.MaxValue;
         //    TradeMap[entry.Level] = entry;
-        //}
+        ////}
 
         private void InitTradeMap()
         {
