@@ -44,7 +44,7 @@ namespace CMEngineCore
         public static string PrintExecutionMsg(ExecutionMessage msg)
         {
             Execution exe = msg.Execution;
-            return string.Format("executioID {0}, orderID {1}, side {2}, price {3}, qty {4}, reqeustID {5}", exe.ExecId, exe.OrderId, exe.Side, exe.Price, exe.Shares, msg.ReqId);
+            return string.Format("executioID {0}, orderID {1}, side {2}, price {3}, qty {4}, reqeustID {5}.", exe.ExecId, exe.OrderId, exe.Side, exe.Price, exe.Shares, msg.ReqId);
         }
 
         public static string PrintTradeMapCurrLvl(RollingAlgo algo)
